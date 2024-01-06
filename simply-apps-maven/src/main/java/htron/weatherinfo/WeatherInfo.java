@@ -23,7 +23,9 @@ public class WeatherInfo extends JPanel{
     private WeatherMeasureIcon wind; 
     private WeatherMeasureIcon cloud; 
     private WeatherMeasureIcon pressure;
-
+    private WeatherMeasureIcon sunrise;
+    private WeatherMeasureIcon sunset;
+    
     private final Component[] componentActiveList = new Component[]{null};
 
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
@@ -37,12 +39,14 @@ public class WeatherInfo extends JPanel{
         this.setVisible(false);
         
         this.setTemp(WeatherInfoClient.weatherApi);
-        this.setpercip(WeatherInfoClient.weatherApi);
-        this.setwind(WeatherInfoClient.weatherApi);
-        this.setcloud(WeatherInfoClient.weatherApi);
-        this.setpressure(WeatherInfoClient.weatherApi);
-        this.setsunrise(WeatherInfoClient.weatherApi);
-        this.setsunset(WeatherInfoClient.weatherApi);
+        this.setHumid(WeatherInfoClient.weatherApi);
+
+        this.setPercip(WeatherInfoClient.weatherApi);
+        this.setWind(WeatherInfoClient.weatherApi);
+        this.setCloud(WeatherInfoClient.weatherApi);
+        this.setPressure(WeatherInfoClient.weatherApi);
+        this.setSunrise(WeatherInfoClient.weatherApi);
+        this.setSunset(WeatherInfoClient.weatherApi);
 
         this.componentActiveList [0] = (this);
 
@@ -52,34 +56,71 @@ public class WeatherInfo extends JPanel{
 
     }
 
-    public void setTemp(WeatherInfoClient weatherApiClient) {
+    private void setTemp(WeatherInfoClient weatherApiClient) {
         this.temp = new WeatherMeasureIcon("temp", weatherApiClient);
     }
+
+    public final WeatherMeasureIcon getTemp() {
+        return this.temp;
+    }
     
-    public void setpercip(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("percip", weatherApiClient);
+
+    private void setHumid(WeatherInfoClient weatherApiClient) {
+        this.humidity = new WeatherMeasureIcon("humid", weatherApiClient);
     }
 
-    public void setwind(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("wind", weatherApiClient);
+    public final WeatherMeasureIcon getHumid() {
+        return this.humidity;
     }
 
-    public void setcloud(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("cloud", weatherApiClient);
+    private void setPercip(WeatherInfoClient weatherApiClient) {
+        this.percipitation = new WeatherMeasureIcon("percip", weatherApiClient);
     }
 
-    public void setpressure(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("pressure", weatherApiClient);
+    public final WeatherMeasureIcon getPercip() {
+        return this.percipitation;
+    }
+    
+    private void setWind(WeatherInfoClient weatherApiClient) {
+        this.wind = new WeatherMeasureIcon("wind", weatherApiClient);
     }
 
-    public void setsunrise(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("sunrise", weatherApiClient);
+    public final WeatherMeasureIcon getWind() {
+        return this.wind;
     }
 
-    public void setsunset(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("sunset", weatherApiClient);
+  private void setCloud(WeatherInfoClient weatherApiClient) {
+        this.cloud = new WeatherMeasureIcon("cloud", weatherApiClient);
     }
 
+    public final WeatherMeasureIcon getCloud() {
+        return this.cloud;
+    }
+
+    private void setPressure(WeatherInfoClient weatherApiClient) {
+        this.pressure = new WeatherMeasureIcon("pressure", weatherApiClient);
+    }
+
+    public final WeatherMeasureIcon getPressure() {
+        return this.pressure;
+    }
+
+
+    private void setSunrise(WeatherInfoClient weatherApiClient) {
+        this.sunrise = new WeatherMeasureIcon("sunrise", weatherApiClient);
+    }
+
+    public final WeatherMeasureIcon getSunrise() {
+        return this.sunrise;
+    }
+
+    private void setSunset(WeatherInfoClient weatherApiClient) {
+        this.sunset = new WeatherMeasureIcon("sunset", weatherApiClient);
+    }
+
+    public final WeatherMeasureIcon getSunset() {
+        return this.sunset;
+    }
 
     public void setWeatherInfoWindow(Windowise w) {
         GridBagConstraints gc = new GridBagConstraints();
