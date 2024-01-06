@@ -15,7 +15,6 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import htron.FileHelper;
-import htron.weatherinfo.*;
 
 public class WeatherInfoClient {
     public static final WeatherInfoClient weatherApi = null;
@@ -25,7 +24,15 @@ public class WeatherInfoClient {
     private float longitude;
     private float latitude; 
     private ArrayList<String[]> routes = new ArrayList<>();
-    public static  Map<String, String> map = new HashMap<>() ;
+    private static final Map<String, String> map = new HashMap<>() ;
+    private static final  String RAIN = "rain";
+    private static final String SPEED = "speed";
+    private static final String ALL = "all";
+    private static final String PRESSURE = "pressure";
+    private static final String SUNRISE = "sunrise";
+    private static final String SUNSET = "sunset";
+    private static final String HUMIDITY = "humidity";
+    private static final String TEMP = "temp";
 
     WeatherInfoClient() {
 
@@ -74,9 +81,8 @@ public class WeatherInfoClient {
             e.printStackTrace();
         } catch(IOException ioe) {
             ioe.printStackTrace();
-        } finally {
-
-        }
+        } 
+        
 
         return rcvd;
     }
@@ -92,40 +98,40 @@ public class WeatherInfoClient {
 
     public void updateDayInfo(WeatherInfo weatherInfo) {
 
-        // temp kelvin to farenheit
-        weatherInfo.temp.updateLabelName( String.valueOf(String.valueOf( (int) (1.8* ( Double.valueOf(this.map.get("temp"))-273) + 32)   )   ), null);
+        // TEMP kelvin to farenheit
+        weatherInfo.getTemp().updateLabelName( String.valueOf(String.valueOf( (int) (1.8* ( Double.valueOf(WeatherInfoClient.map.get(TEMP))-273) + 32)   )   ), null);
     
-        //  humidity
-        weatherInfo.humidity.updateLabelName( String.valueOf(Double.valueOf(this.mapnfoClient.map.get("humidity"))), null);
+        //  HUMIDITY
+        weatherInfo.getHumid().updateLabelName( String.valueOf(Double.valueOf(WeatherInfoClient.map.get(HUMIDITY))), null);
 
-        // rain  
-        if (WeatherInfoClient.map.get("rain") != null) {
-            weatherInfo.percipitation.updateLabelName(  String.valueOf( (Integer.valueOf(WeatherInfoClient.map.get("rain")) )   ), null);
+        // RAIN  
+        if (WeatherInfoClient.map.get(RAIN) != null) {
+            weatherInfo.getPercip().updateLabelName(  String.valueOf( (Integer.valueOf(WeatherInfoClient.map.get(RAIN)) )   ), null);
         } 
 
         // // windw 
-        if (WeatherInfoClient.map.get("speed") != null) {
-            weatherInfo.wind.updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get("speed")) ), null);
+        if (WeatherInfoClient.map.get(SPEED) != null) {
+            weatherInfo.getWind().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(SPEED)) ), null);
         } 
         
         // // cloud
-        if (WeatherInfoClient.map.get("all") != null) {
-            weatherInfo.cloud.updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get("all")) ), null);
+        if (WeatherInfoClient.map.get(ALL) != null) {
+            weatherInfo.getCloud().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(ALL)) ), null);
         } 
 
-          // // pressure 
-        if (WeatherInfoClient.map.get("pressure") != null) {
-            weatherInfo.pressure.updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get("pressure")) ), null);
+          // // PRESSURE 
+        if (WeatherInfoClient.map.get(PRESSURE) != null) {
+            weatherInfo.getPressure().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(PRESSURE)) ), null);
         } 
 
-        // sunrise
-        if (WeatherInfoClient.map.get("sunrise") != null) {
-            weatherInfo.sunRiseTime.updateLabelName(  String.valueOf( weatherInfo.sunRiseTime.calculatedTime(Long.valueOf(WeatherInfoClient.map.get("sunrise")  )))  , null);
+        // SUNRISE
+        if (WeatherInfoClient.map.get(SUNRISE) != null) {
+            weatherInfo.getSunrise().updateLabelName(  String.valueOf( weatherInfo.getSunrise().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNRISE)  )))  , null);
         } 
         
-         // sunset
-            if (WeatherInfoClient.map.get("sunset") != null) {
-            weatherInfo.sunSetTime.updateLabelName(  String.valueOf( weatherInfo.sunSetTime.calculatedTime(Long.valueOf(WeatherInfoClient.map.get("sunset")    ))), null);
+         // SUNSET
+            if (WeatherInfoClient.map.get(SUNSET) != null) {
+            weatherInfo.getSunset().updateLabelName(  String.valueOf( weatherInfo.getSunset().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNSET)    ))), null);
         } 
 
     }
@@ -140,14 +146,14 @@ public class WeatherInfoClient {
         this.latitude = latitude; 
         
         this.routes.clear();
-        this.routes.add( new String[] {"main", "temp"} ); //kelvin 
-        this.routes.add( new String[] {"main", "humidity"} );
-        this.routes.add( new String[] {"rain"} ); // volume for 1 hour, mm 
-        this.routes.add( new String[] {"wind", "speed"} ); // meters /sec 
-        this.routes.add( new String[] {"clouds", "all"} ); // percent 
-        this.routes.add( new String[] {"main", "pressure"} ); // percent hPa
-        this.routes.add( new String[] {"sys", "sunrise"} ); // UTC
-        this.routes.add( new String[] {"sys", "sunset"} ); // UTC
+        this.routes.add( new String[] {"main", TEMP} ); //kelvin 
+        this.routes.add( new String[] {"main", HUMIDITY} );
+        this.routes.add( new String[] {"RAIN"} ); // volume for 1 hour, mm 
+        this.routes.add( new String[] {"wind", SPEED} ); // meters /sec 
+        this.routes.add( new String[] {"clouds", ALL} ); // percent 
+        this.routes.add( new String[] {"main", PRESSURE} ); // percent hPa
+        this.routes.add( new String[] {"sys", SUNRISE} ); // UTC
+        this.routes.add( new String[] {"sys", SUNSET} ); // UTC
         this.routes.add( new String[] {"timezone"} ); // UTC
         
         this.parseDataRequest(); // maps hashmap 
