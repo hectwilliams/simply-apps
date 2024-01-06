@@ -38,15 +38,15 @@ public class WeatherInfo extends JPanel{
         
         this.setVisible(false);
         
-        this.setTemp(WeatherInfoClient.weatherApi);
-        this.setHumid(WeatherInfoClient.weatherApi);
+        this.setTemp();
+        this.setHumid();
 
-        this.setPercip(WeatherInfoClient.weatherApi);
-        this.setWind(WeatherInfoClient.weatherApi);
-        this.setCloud(WeatherInfoClient.weatherApi);
-        this.setPressure(WeatherInfoClient.weatherApi);
-        this.setSunrise(WeatherInfoClient.weatherApi);
-        this.setSunset(WeatherInfoClient.weatherApi);
+        this.setPercip();
+        this.setWind();
+        this.setCloud();
+        this.setPressure();
+        this.setSunrise();
+        this.setSunset();
 
         this.componentActiveList [0] = (this);
 
@@ -56,8 +56,8 @@ public class WeatherInfo extends JPanel{
 
     }
 
-    private void setTemp(WeatherInfoClient weatherApiClient) {
-        this.temp = new WeatherMeasureIcon("temp", weatherApiClient);
+    private void setTemp() {
+        this.temp = new WeatherMeasureIcon("temp");
     }
 
     public final WeatherMeasureIcon getTemp() {
@@ -65,40 +65,40 @@ public class WeatherInfo extends JPanel{
     }
     
 
-    private void setHumid(WeatherInfoClient weatherApiClient) {
-        this.humidity = new WeatherMeasureIcon("humid", weatherApiClient);
+    private void setHumid() {
+        this.humidity = new WeatherMeasureIcon("humid");
     }
 
     public final WeatherMeasureIcon getHumid() {
         return this.humidity;
     }
 
-    private void setPercip(WeatherInfoClient weatherApiClient) {
-        this.percipitation = new WeatherMeasureIcon("percip", weatherApiClient);
+    private void setPercip() {
+        this.percipitation = new WeatherMeasureIcon("percip");
     }
 
     public final WeatherMeasureIcon getPercip() {
         return this.percipitation;
     }
     
-    private void setWind(WeatherInfoClient weatherApiClient) {
-        this.wind = new WeatherMeasureIcon("wind", weatherApiClient);
+    private void setWind() {
+        this.wind = new WeatherMeasureIcon("wind");
     }
 
     public final WeatherMeasureIcon getWind() {
         return this.wind;
     }
 
-  private void setCloud(WeatherInfoClient weatherApiClient) {
-        this.cloud = new WeatherMeasureIcon("cloud", weatherApiClient);
+  private void setCloud() {
+        this.cloud = new WeatherMeasureIcon("cloud");
     }
 
     public final WeatherMeasureIcon getCloud() {
         return this.cloud;
     }
 
-    private void setPressure(WeatherInfoClient weatherApiClient) {
-        this.pressure = new WeatherMeasureIcon("pressure", weatherApiClient);
+    private void setPressure() {
+        this.pressure = new WeatherMeasureIcon("pressure");
     }
 
     public final WeatherMeasureIcon getPressure() {
@@ -106,16 +106,16 @@ public class WeatherInfo extends JPanel{
     }
 
 
-    private void setSunrise(WeatherInfoClient weatherApiClient) {
-        this.sunrise = new WeatherMeasureIcon("sunrise", weatherApiClient);
+    private void setSunrise() {
+        this.sunrise = new WeatherMeasureIcon("sunrise");
     }
 
     public final WeatherMeasureIcon getSunrise() {
         return this.sunrise;
     }
 
-    private void setSunset(WeatherInfoClient weatherApiClient) {
-        this.sunset = new WeatherMeasureIcon("sunset", weatherApiClient);
+    private void setSunset() {
+        this.sunset = new WeatherMeasureIcon("sunset");
     }
 
     public final WeatherMeasureIcon getSunset() {

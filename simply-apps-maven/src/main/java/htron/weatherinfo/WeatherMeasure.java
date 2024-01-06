@@ -143,7 +143,7 @@ public class WeatherMeasure extends JPanel {
     }
 
     public void updateValue() {
-        this.labelMeasurement.setText(this.weatherMeasureIcon.value + " " + this.weatherMeasureIcon.symbol);
+        this.labelMeasurement.setText(this.weatherMeasureIcon.getValue() + " " + this.weatherMeasureIcon.getSymbol());
     }
 
     private void setPicture(WeatherMeasureIcon w) {
@@ -160,8 +160,8 @@ public class WeatherMeasure extends JPanel {
         gc.gridheight = 5;
 
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.panel.add(w.pic, gc);
-        this.panel.setComponentZOrder(w.pic, 1);
+        this.panel.add(w.getPic(), gc);
+        this.panel.setComponentZOrder(w.getPic(), 1);
 
     }
 
@@ -178,7 +178,7 @@ public class WeatherMeasure extends JPanel {
         gc.gridwidth = 9;
         gc.gridheight = 5;
 
-        this.labelMeasurement.setText(w.value + " " + w.symbol);
+        this.labelMeasurement.setText(w.getValue() + " " + w.getSymbol());
         this.labelMeasurement.setFont((modes[0]));
         this.labelMeasurement.setHorizontalAlignment(SwingConstants.CENTER);
 

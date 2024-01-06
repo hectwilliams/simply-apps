@@ -99,39 +99,39 @@ public class WeatherInfoClient {
     public void updateDayInfo(WeatherInfo weatherInfo) {
 
         // TEMP kelvin to farenheit
-        weatherInfo.getTemp().updateLabelName( String.valueOf(String.valueOf( (int) (1.8* ( Double.valueOf(WeatherInfoClient.map.get(TEMP))-273) + 32)   )   ), null);
+        weatherInfo.getTemp().updateLabelName( String.valueOf(String.valueOf( (int) (1.8* ( Double.valueOf(WeatherInfoClient.map.get(TEMP))-273) + 32)   )   ));
     
         //  HUMIDITY
-        weatherInfo.getHumid().updateLabelName( String.valueOf(Double.valueOf(WeatherInfoClient.map.get(HUMIDITY))), null);
+        weatherInfo.getHumid().updateLabelName( String.valueOf(Double.valueOf(WeatherInfoClient.map.get(HUMIDITY))));
 
         // RAIN  
         if (WeatherInfoClient.map.get(RAIN) != null) {
-            weatherInfo.getPercip().updateLabelName(  String.valueOf( (Integer.valueOf(WeatherInfoClient.map.get(RAIN)) )   ), null);
+            weatherInfo.getPercip().updateLabelName(  String.valueOf( (Integer.valueOf(WeatherInfoClient.map.get(RAIN)) )   ));
         } 
 
         // // windw 
         if (WeatherInfoClient.map.get(SPEED) != null) {
-            weatherInfo.getWind().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(SPEED)) ), null);
+            weatherInfo.getWind().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(SPEED)) ));
         } 
         
         // // cloud
         if (WeatherInfoClient.map.get(ALL) != null) {
-            weatherInfo.getCloud().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(ALL)) ), null);
+            weatherInfo.getCloud().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(ALL)) ));
         } 
 
           // // PRESSURE 
         if (WeatherInfoClient.map.get(PRESSURE) != null) {
-            weatherInfo.getPressure().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(PRESSURE)) ), null);
+            weatherInfo.getPressure().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(PRESSURE)) ));
         } 
 
         // SUNRISE
         if (WeatherInfoClient.map.get(SUNRISE) != null) {
-            weatherInfo.getSunrise().updateLabelName(  String.valueOf( weatherInfo.getSunrise().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNRISE)  )))  , null);
+            weatherInfo.getSunrise().updateLabelName(  String.valueOf( weatherInfo.getSunrise().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNRISE)  )))  );
         } 
         
          // SUNSET
             if (WeatherInfoClient.map.get(SUNSET) != null) {
-            weatherInfo.getSunset().updateLabelName(  String.valueOf( weatherInfo.getSunset().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNSET)    ))), null);
+            weatherInfo.getSunset().updateLabelName(  String.valueOf( weatherInfo.getSunset().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNSET)    ))));
         } 
 
     }
@@ -162,7 +162,7 @@ public class WeatherInfoClient {
 
     public void getStateDayMeasurement(String stateName, WeatherInfo weatherInfo) {
 
-        this.setLatitude((float) 0.0);;
+        this.setLatitude((float) 0.0);
         this.setLongitude((float) 0.0);
 
         this.setLatitude(Float.valueOf(this.searchRoute( new String[] {stateName.toLowerCase(), "capital", "latitude"}) )); 
@@ -178,11 +178,8 @@ public class WeatherInfoClient {
 
     }
     
-    public void getState30DayMeasurementQuery(String stateName) {
-        String targetURL = "https://api.openweathermap.org/data/2.5/forecast/climate";
-        String query = "lat="+latitude + "&" + "lon="+longitude + "&" + "cnt=10" + "&" +"appid=" +this.configJson.get("key") ;
-        String q = targetURL + "?" + query; 
-         q = "api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&lon=10.99&cnt=7&appid=" + this.configJson.get("key") ;
+    public void getState30DayMeasurementQuery( ) {
+        String q = "api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&lon=10.99&cnt=7&appid=" + this.configJson.get("key") ;
         this.jsonRcvdOpenApi = this.requestWeather(q);
     }
     
@@ -229,7 +226,7 @@ public class WeatherInfoClient {
                     if ( !(obj instanceof JSONObject)  )  {
                         value =  String.valueOf( obj );
                     } else  {
-                         jsonCurr = (JSONObject) obj ; ;
+                         jsonCurr = (JSONObject) obj ; 
                     }
                 } 
             }                
