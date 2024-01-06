@@ -18,80 +18,140 @@ import htron.FileHelper;
 
 public class WeatherMeasureIcon extends JLabel{
 
-    Font font;
+    Font myFont;
     JLabel picIcon =  null; 
-    public String symbol = "\u0000";
-    public String value;
+    private String symbol = "\u0000";
+    private static final  String PERCENT_SYMBOL =  " \u0025";
+    private String value;
+    private static final String ASSETS = "assets";
+    private static final String WEATHER = "weather";
 
     public static final  Dimension DIMENSION = new Dimension(100, 12); 
-    public ImageIcon iconImage;
-    public JButton tempFarenheitButton;
-    public JButton tempCelciusButton;
-    private String id, tmp;
-    public String temp_faren; 
+    private ImageIcon iconImage;
+    
+    private JButton tempFarenheitButton;
+    private JButton tempCelciusButton;
+    private final Dimension tempButtonDimension = new Dimension(10, 10);
+    private final Font tempButtonFont = new Font(Font.SANS_SERIF, Font.PLAIN, 8); 
+
+    private String id;
+
+    private String tempFarenString; 
+
     private JButton prevButton;
     private Color darkGrey  = new Color(64  , 64, 64, 128 );
-    private WeatherInfoClient weatherInfoClient;
-    private Image img;
-    public Picture pic; 
+    
+    private Picture pic; 
 
-    public WeatherMeasureIcon (String id, WeatherInfoClient weatherInfoClient) {
+    private void setPic (Picture pic) {
+        this.pic = pic;
+        this.pic.setPreferredSize(new Dimension(5, 5));
+    }
+
+    public final Picture getPic() {
+        return this.pic; 
+    }
+
+    public String getSymbol() {
+        return this.symbol;
+    }
+    private void setValue(String s) {
+        this.value = s;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    private void setPrevButton (JButton button) {
+        this.prevButton = button;
+        this.prevButton.setForeground(this.darkGrey);
+    }
+
+    private void setTempFarenString (String s) {
+        this.tempFarenString = s;
+    }
+
+    private String getTempFarenString () {
+        return this.tempFarenString;
+    }
+
+    private void setIconImage(ImageIcon imgIcon) {
+        this.iconImage = imgIcon;
+    }
+
+     public final ImageIcon getIconImage() {
+        return this.iconImage;
+    }
+    
+    private void setTempFarenheitButton(JButton button) {
+        this.tempFarenheitButton = button;
+        this.tempFarenheitButton.setMinimumSize(tempButtonDimension);
+        this.tempFarenheitButton.setFont(tempButtonFont);
+    }
+
+    public final JButton getTempFarenheitButton() {
+        return this.tempFarenheitButton;
+    }
+    
+    private void setTempCelciusButton(JButton button) {
+        this.tempCelciusButton = button;
+        this.tempCelciusButton.setMinimumSize(tempButtonDimension);
+        this.tempCelciusButton.setFont(tempButtonFont);
+    }
+
+    public final JButton getTempCelciusButton() {
+        return this.tempCelciusButton;
+    }
+
+
+    public WeatherMeasureIcon (String id) {
         int w = 20;
         int h = 15;
-        String picFileName= ""; 
 
-        this.font = new Font(Font.SANS_SERIF, Font.BOLD, 7);
-        this.setFont(this.font);
+        this.myFont = new Font(Font.SANS_SERIF, Font.BOLD, 7);
+        this.setFont(this.myFont);
         this.setPreferredSize(DIMENSION);
         this.setAlignmentX((SwingConstants.CENTER));
         this.id = id;
-        this.temp_faren = "0";
+        this.setTempFarenString("0");
         this.pic = null;
-        this.weatherInfoClient = weatherInfoClient;
-        this.img = null; 
+
+
         switch (this.id ) {
 
             case "temp" : 
                 this.tempIconInit();    
-                picFileName = "temp";
                 break;
             
             case "humid" : 
-                this.humidIconInit();
-                picFileName = "temp";
-                break;
-
             case "percip":
-                this.percipIconInit();
-                picFileName = "temp";
+            case "cloud":
+                this.humidIconInit();
                 break;
 
             case "wind":
                 this.windIconInit();
-                picFileName = "temp";
-                break;
-            
-            case "cloud":
-                this.cloudIconInit();
-                picFileName = "temp";
                 break;
             
             case "pressure":
                 this.pressureIconInit();
-                picFileName = "temp";
                 break;
  
             case "sunrise":
             case "sunset":
                 this.sunIconInit();
-                picFileName = "temp";
                 break;
-
+            
+            default:
+                break;
         }
              try {
-                this.iconImage = new ImageIcon(ImageIO.read(new File(    Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  "assets", "Weather", this.id + ".png" ).toAbsolutePath().normalize().toString() )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) ;
-                this.pic =  new Picture( (    Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  "assets", "Weather", this.id + ".png" ).toAbsolutePath().normalize().toString() )  );
-                this.pic.setPreferredSize(new Dimension(5, 5));
+                this.setIconImage(
+                    new ImageIcon(ImageIO.read(new File(    Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) 
+                );
+
+                this.setPic(new Picture( (    Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ) ) );
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -99,76 +159,55 @@ public class WeatherMeasureIcon extends JLabel{
 
     private  void tempIconInit() {
         this.symbol = "\u00B0F";
-        this.tempFarenheitButton = new JButton("F" );
-        
-        this.tempFarenheitButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 8));
-        
-        this.tempCelciusButton = new JButton("C" );
-        this.tempCelciusButton.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 8));
-        
-        this.tempCelciusButton.setMinimumSize(new Dimension(10, 10));
-        this.tempFarenheitButton.setMinimumSize(new Dimension(10, 10));
-        
-        this.prevButton = this.tempFarenheitButton;
-        
 
-        // this.temp_faren = String.valueOf((int) (1.8 * ( Double.valueOf( weatherInfoClient.map.get(id))  -273)) + 32); // map.get(return Kevlin value)
-        this.updateLabelName( String.valueOf(this.temp_faren), "\u00B0" + "F" );
+        this.setTempFarenheitButton(new JButton("F" ));
+        this.setTempCelciusButton(new JButton("C" ));
+         this.setPrevButton(this.getTempFarenheitButton());
+  
+        
+        // this.tempFarenString = String.valueOf((int) (1.8 * ( Double.valueOf( weatherInfoClient.map.get(id))  -273)) + 32); // map.get(return Kevlin value)
+        this.updateLabelName( String.valueOf(this.getTempFarenString()) );
         this.setToolTipText(this.id);
-        this.prevButton.setForeground(this.darkGrey);
 
-        {
-
-            JButton [] arr = {this.tempFarenheitButton, this.tempCelciusButton};
+        JButton [] arr = {this.getTempFarenheitButton(), this.tempCelciusButton};
+        
+        for (JButton button :  arr ) {
             
-            for (JButton button :  arr ) {
+            button.addActionListener( e -> {
                 
-                button.addActionListener((e) -> {
-                    
-                    JButton curr = ((JButton) e.getSource());
-                    
-                    if (this.prevButton != curr) {
+                JButton curr = ((JButton) e.getSource());
+                
+                if (this.prevButton != curr) {
 
-                        this.prevButton.setForeground(Color.BLACK);
-                        
-                        if (  curr == tempFarenheitButton)  {
-                            this.updateLabelName(this.temp_faren,  "\u00B0" + "F");
-                        } else if ( curr == this.tempCelciusButton ) {
-                            this.updateLabelName (   String.valueOf((int)((( Integer.valueOf(this.temp_faren) - 32) * 5) / 9))            ,  "\u00B0" + "C"  ) ; 
-                        }
-                        curr.setForeground(this.darkGrey);
-                        this.prevButton = curr;
-                    }
+                    this.prevButton.setForeground(Color.BLACK);
                     
-                });
-            }
-        } 
+                    if (  curr == this.getTempFarenheitButton())  {
+                        this.updateLabelName(this.getTempFarenString());
+                    } else if ( curr == this.tempCelciusButton ) {
+                        this.updateLabelName (   String.valueOf( ((( Integer.valueOf(this.getTempFarenString()) - 32) * 5) / 9))            ) ; 
+                    }
+                    curr.setForeground(this.darkGrey);
+                    this.prevButton = curr;
+                }
+                
+            });
+        }
     }
 
     private void humidIconInit() {
-        this.symbol = " \u0025";
-        this.updateLabelName(null, this.symbol);
+        this.symbol = WeatherMeasureIcon.PERCENT_SYMBOL;
+        this.updateLabelName(null);
     }
 
-
-    private void percipIconInit() {
-        this.symbol = " \u0025";
-        this.updateLabelName(null , this.symbol);
-    }
 
     private void windIconInit() {
         this.symbol = " m/s";
-        this.updateLabelName(null , this.symbol);
-    }
-
-    private void cloudIconInit() {
-            this.symbol = " \u0025";
-        this.updateLabelName(null , this.symbol);
+        this.updateLabelName(null );
     }
 
     private void pressureIconInit() {
             this.symbol = " hPa";
-        this.updateLabelName(null , this.symbol);
+        this.updateLabelName(null );
     }
 
     private void sunIconInit() {
@@ -178,8 +217,8 @@ public class WeatherMeasureIcon extends JLabel{
 
         try {
             this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-            str = Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  "assets", "Weather", this.id + ".png" ).toAbsolutePath().normalize().toString();
-            this.iconImage = new ImageIcon(ImageIO.read(new File(  str )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) ;
+            str = Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString();
+            this.setIconImage(new ImageIcon(ImageIO.read(new File(  str )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) );
         } catch (IOException e) {
             e.printStackTrace();
         }   
@@ -187,17 +226,18 @@ public class WeatherMeasureIcon extends JLabel{
     }
 
 
-    public void updateLabelName(String value, String unit) {
+    public void updateLabelName(String valueIn) {
 
-        if (value == null)  {
-            value = "0";
+        if (valueIn == null)  {
+            valueIn = "0";
         }
-        this.value = value;
-        this.setText(value + this.symbol );
+
+        this.setValue(valueIn);
+        this.setText(this.getValue() + this.symbol );
     }
 
     public void updateTempFaren(String value) {
-        this.temp_faren = value;
+        this.setTempFarenString(value);
     }
 
     public String calculatedTime(long t ) {
