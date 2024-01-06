@@ -19,13 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import htron.statelist.*;
+
+import htron.weatherinfo.*;
 import htron.Banner;
 import htron.BannerPage;
 import htron.IdleScreen.IdlePage;
+import htron.weatherinfo.*;
 import htron.Search;
-import htron.StateList;
-import htron.WeatherMeasure;
-import htron.weatherinfo;
 
 public class Windowise extends JPanel {
 
@@ -66,13 +67,13 @@ public class Windowise extends JPanel {
 
         idlePage = new IdlePage(this);
 
-        this.banner = new Banner(this, stateList); // sychronous + async
+        this.banner = new Banner(this, statelist); // sychronous + async
 
         // app1
         this.weatherInfo = new WeatherInfo(this); // sychronous + async
         this.search = new Search(this, this.weatherInfo); // sychronous + async
 
-        // app2
+        // s
         this.stateList = new StateList(this);
 
         sched.schedule(() -> {
@@ -136,7 +137,7 @@ public class Windowise extends JPanel {
 
         // arbitrarily event required to show viewport :( -- To Be Determined
         {
-            label = ((WeatherMeasure) this.weatherInfo.getComponent(0)).labelMeasurement;
+            label = ((WeatherMeasure) this.weatherInfo.getComponent(0)).getLabelMeasurement();
             label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),
                     MouseEvent.NOBUTTON, 0, 0, 1, false));
             label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,
