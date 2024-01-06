@@ -1,4 +1,4 @@
-package htron.weatherinfo
+package htron.weatherinfo;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,7 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -21,11 +20,11 @@ import javax.swing.SwingConstants;
 
 public class WeatherMeasure extends JPanel {
     
-    public class TimerTask_ implements Runnable {
+    public class TimerTaskT implements Runnable {
         
         public Object obj;
 
-        TimerTask_ ( Object obj ){ 
+        TimerTaskT ( Object obj ){ 
             this.obj = obj;
         }
 
@@ -34,12 +33,33 @@ public class WeatherMeasure extends JPanel {
     }
 
     public class LabelMeasurementMouseListener implements MouseListener {
-        public TimerTask_ task1, task2;
-        public ScheduledFuture<?> future1, future2;
+        private  final TimerTaskT[] tasksList = {null, null}; // object at fixed memory with dynamic entries 
+        private  final ScheduledFuture<?>[] futureList = {null, null}; // object at fixed memory with dynamic entries 
 
         public LabelMeasurementMouseListener () {
             super();
         }
+
+        private final TimerTaskT getTask(int id) {
+            return tasksList[id];
+        }
+        
+        private final void setFutures(int id) {
+            futureList[id] = sched.schedule(this.getTask(id), 0, TimeUnit.MILLISECONDS);
+        }
+
+        private final void setTask(JLabel label, int id) {
+
+            tasksList[id] = new TimerTaskT(this ) {
+                @Override
+                public void run() {
+                    label.setFont(modes[~id] );
+                }
+            };
+
+            setFutures(id);
+        }
+
 
         @Override
         public void mouseClicked(MouseEvent e) {}
@@ -52,50 +72,47 @@ public class WeatherMeasure extends JPanel {
       
         @Override
         public void mouseEntered(MouseEvent e) {
-
-            this.task1 = new TimerTask_(this ) {
-                @Override
-                public void run() {
-                    System.out.println("entered block");
-                    ((JLabel ) e.getSource() ).setFont(modes[1] );
-                    // ((JLabel ) e.getSource() ).setBorder(BorderFactory.createLineBorder(Color.GRAY)); 
-                }
-            };
-            this.future1 = sched.schedule(this.task1, 0, TimeUnit.MILLISECONDS);
-
+            JLabel label = (JLabel ) e.getSource();
+            this.setTask(label, 0);
          }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            this.task2 = new TimerTask_(this ) {
-                @Override
-                public void run() {
-                    ((JLabel ) e.getSource() ).setFont(modes[0] );
-                    // ((JLabel ) e.getSource() ).setBorder(null);;
-
-                }
-            };
-            this.future2 = sched.schedule(this.task2, 0, TimeUnit.MILLISECONDS);
-        };
+            JLabel label = (JLabel ) e.getSource();
+            this.setTask(label, 1);
+        }
 
     }
 
 
-    public LabelMeasurementMouseListener labelMeasurementMouseListener;
+    // private LabelMeasurementMouseListener labelMeasurementMouseListener;
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
     Font [] modes = {new Font(Font.SERIF, Font.PLAIN, 12  ),  (new Font(Font.SERIF , Font.BOLD, 12) ) };
     JPanel panel = new JPanel(new GridBagLayout()); 
     WeatherMeasureIcon weatherMeasureIcon;
-    public JLabel labelMeasurement;
+    private JLabel labelMeasurement;
 
+    private final void setLabelMeasurementMouseListener (LabelMeasurementMouseListener newListener) {
+        // this.labelMeasurementMouseListener = newListener;
+        this.labelMeasurement.addMouseListener( newListener) ;
+    }
+
+    public final JLabel getLabelMeasurement () {
+        return this.labelMeasurement;
+    }
+
+    private final void setLabelMeasurement(JLabel label) {
+        this.labelMeasurement = label; 
+    }
 
     public WeatherMeasure (WeatherMeasureIcon weatherMeasureIcon) {
         this.weatherMeasureIcon = weatherMeasureIcon;
-        this.labelMeasurement = new JLabel();
+        
+        this.setLabelMeasurement(new JLabel());
         
         this.setGrid();
         this.setPicture(this.weatherMeasureIcon);           // sef grid object  
-        this.setLabelMeasurement(this.weatherMeasureIcon); // set grid object
+        this.setLabelMeasurementGrid(this.weatherMeasureIcon); // set grid object
         
     }
 
@@ -147,7 +164,7 @@ public class WeatherMeasure extends JPanel {
 
     }
 
-    private void setLabelMeasurement(WeatherMeasureIcon w) {
+    private void setLabelMeasurementGrid(WeatherMeasureIcon w) {
         GridBagConstraints gc = new GridBagConstraints();
         gc .anchor = GridBagConstraints.FIRST_LINE_START;
         gc.weightx = 1;
@@ -164,12 +181,11 @@ public class WeatherMeasure extends JPanel {
         this.labelMeasurement.setFont(( modes[0] ) );
         this.labelMeasurement.setHorizontalAlignment(SwingConstants.CENTER);
         
-        this.labelMeasurementMouseListener = new LabelMeasurementMouseListener();
-        this.labelMeasurement.addMouseListener( this.labelMeasurementMouseListener ) ;
+        this.setLabelMeasurementMouseListener(new LabelMeasurementMouseListener());
 
         this.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.panel.add(this.labelMeasurement,gc);
-        this.panel.setComponentZOrder(this.labelMeasurement, 1);
+        this.panel.add(this.getLabelMeasurement(),gc);
+        this.panel.setComponentZOrder(this.getLabelMeasurement(), 1);
         this.panel.validate();
     }
 
