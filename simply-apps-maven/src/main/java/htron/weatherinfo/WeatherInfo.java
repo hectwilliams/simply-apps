@@ -10,7 +10,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JPanel;
 import htron.Windowise;
-// import htron.weatherinfo.WeatherMeasureIcon;
 
 
 public class WeatherInfo extends JPanel{
@@ -24,11 +23,9 @@ public class WeatherInfo extends JPanel{
     private WeatherMeasureIcon wind; 
     private WeatherMeasureIcon cloud; 
     private WeatherMeasureIcon pressure;
-    // private WeatherMeasureIcon sunRiseTime;
-    // private WeatherMeasureIcon sunSetTime;
-    
 
-    public Component[] componentActiveList;
+    private final Component[] componentActiveList = new Component[]{null};
+
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
     static final int N_SIZE = 50;  
     public static final  Dimension DIMENSION = new Dimension(200, 100); 
@@ -39,8 +36,6 @@ public class WeatherInfo extends JPanel{
         
         this.setVisible(false);
         
-        this.componentActiveList = new Component[]{null};
-        
         this.setTemp(WeatherInfoClient.weatherApi);
         this.setpercip(WeatherInfoClient.weatherApi);
         this.setwind(WeatherInfoClient.weatherApi);
@@ -49,20 +44,11 @@ public class WeatherInfo extends JPanel{
         this.setsunrise(WeatherInfoClient.weatherApi);
         this.setsunset(WeatherInfoClient.weatherApi);
 
-
-        // this.humidity = new WeatherMeasureIcon("humid", this.weatherApi); 
-        // this.percipitation = new WeatherMeasureIcon("percip", this.weatherApi);
-        // this.wind = new WeatherMeasureIcon("wind", this.weatherApi); 
-        // this.cloud = new WeatherMeasureIcon("cloud", this.weatherApi);
-        // this.pressure  = new WeatherMeasureIcon("pressure", this.weatherApi);
-        // this.sunRiseTime  = new WeatherMeasureIcon("sunrise", this.weatherApi);
-        // this.sunSetTime  = new WeatherMeasureIcon("sunset", this.weatherApi);
-        
         this.componentActiveList [0] = (this);
 
         this.setWeatherInfoWindow(w);
         
-        this.windowFutures(w);
+        this.windowFutures();
 
     }
 
@@ -111,7 +97,7 @@ public class WeatherInfo extends JPanel{
         w.setComponentZOrder( this , 0);
     }
 
-     public void windowFutures(Windowise w) {
+     public void windowFutures() {
 
         ScheduledFuture<?>[] futures =  {
             sched.schedule(() -> { this.add(new WeatherMeasure(this.temp)); } , 0, TimeUnit.MILLISECONDS) ,
@@ -128,23 +114,30 @@ public class WeatherInfo extends JPanel{
                 int sum = 0;
 
                 while ( sum != futures.length) {
+                    
                     sum = 0;
-                    for (ScheduledFuture<?> f: futures) 
-                        sum +=  (f.isDone()) ? 1: 0;
 
-                    if (sum == futures.length) 
-                        break;
+                    for (ScheduledFuture<?> f: futures) {
+                        sum +=  (f.isDone()) ? 1: 0;
+                    }
+
+                    // if (sum == futures.length) {
+                    //     break;
+                    // }
                 
-                    // sleep thread, allow other threads to work 
                     try {
+                        /*  sleep thread, allow other threads to work  */
                         Thread.sleep(0);
                     } catch (InterruptedException e) {
+                        /* interrupted thread currently handling above interrupt */
                         e.printStackTrace();
+                        Thread.currentThread().interrupt(); 
+                    } catch (SecurityException  ee) {
+                        /* security interrupt, interrupted have dwelled */
+                        ee.printStackTrace();
                     }
                 }
 
-                // // kills current thread pool in use 
-                // sched.close();
 
             }, 0, TimeUnit.MILLISECONDS );
         
