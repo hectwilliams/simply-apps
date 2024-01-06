@@ -111,33 +111,30 @@ public class WeatherInfo extends JPanel{
         sched.schedule (
 
             () -> {
-                int sum = 0;
-
-                while ( sum != futures.length) {
-                    
-                    sum = 0;
-
-                    for (ScheduledFuture<?> f: futures) {
-                        sum +=  (f.isDone()) ? 1: 0;
-                    }
-
-                    // if (sum == futures.length) {
-                    //     break;
-                    // }
                 
-                    try {
-                        /*  sleep thread, allow other threads to work  */
-                        Thread.sleep(0);
-                    } catch (InterruptedException e) {
-                        /* interrupted thread currently handling above interrupt */
-                        e.printStackTrace();
-                        Thread.currentThread().interrupt(); 
-                    } catch (SecurityException  ee) {
-                        /* security interrupt, interrupted have dwelled */
-                        ee.printStackTrace();
-                    }
-                }
+                try {
 
+                    int sum = 0;
+
+                    while ( sum != futures.length) {
+
+                        sum = 0;
+
+                        for (ScheduledFuture<?> f: futures) {
+                            sum +=  (f.isDone()) ? 1: 0;
+                        }
+                    }     
+                    
+                    /*  sleep thread, allow other threads to work  */
+                    Thread.sleep(0);
+                } catch (InterruptedException e) {
+                    /* interrupted thread currently handling above interrupt */
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt(); 
+                } catch (SecurityException  ee) {
+                    /* security interrupt, interrupted have dwelled */
+                    ee.printStackTrace();
+                }
 
             }, 0, TimeUnit.MILLISECONDS );
         
