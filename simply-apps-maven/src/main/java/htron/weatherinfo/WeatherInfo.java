@@ -26,7 +26,7 @@ public class WeatherInfo extends JPanel{
     private WeatherMeasureIcon sunrise;
     private WeatherMeasureIcon sunset;
     
-    private final Component[] componentActiveList = new Component[]{null};
+    public final Component[] componentActiveList = new Component[]{null};
 
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
     static final int N_SIZE = 50;  

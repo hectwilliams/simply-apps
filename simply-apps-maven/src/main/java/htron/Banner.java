@@ -15,8 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import Windowise;
-import StateList.StateList;
+import htron.Windowise;
+import htron.stateList.StateList;
 import MouseListenerBanner;
 
 
@@ -88,11 +88,9 @@ public class Banner extends JPanel{
             label.setBorder(new EmptyBorder(0, 20,0,  20));
             label.addMouseListener(this.appButtonSelectListener ); // mouse listener
             
-            // label.setForeground(new Color(255, 255, 255, 40 ));
             label.setEnabled(false);
             this.setBorder( BorderFactory.createCompoundBorder ( BorderFactory.createMatteBorder(0,0,1,0,Color.gray), new EmptyBorder(3, 0, 0, 0)));
             this.add(label);
-            // this.revalidate();
         }
             
     }
@@ -101,46 +99,5 @@ public class Banner extends JPanel{
         ((JLabel) this.getComponent(idx)).setEnabled(true);
 
     }
-
-
-
-
-
-    // public void setLogo()  {
-
-    //     Image img;
-
-    //     // get first label component 
-    //     this.label = (JLabel) componenetsLabels[0]; // first label  
-    //     this.label.setBorder(BorderFactory.createLineBorder(Color.orange, 1));
-    //     this.label.setVisible(true);
-        
-    //     // path to file 
-    //     this.pathToImg = Paths.get(this.workingdir, "../",  "assets", "Banner",  "atlas.jpeg").toAbsolutePath().normalize().toString();
-        
-    //     // read image and load into Jlabel component 
-    //     try {
-            
-    //         img = ImageIO.read(new File(  this.pathToImg)  );
-    //         img = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH)    ;
-
-    //         // panel
-    //         // .getGraphics()
-    //         // .drawImage(img /*scaled image*/ , 0, 0, panel);
-
-    //         ImageIcon icon = new ImageIcon(img);
-    //         this.label.setIcon((icon));
-            
-    //     } catch (IOException ioe) {
-            
-    //         ioe.printStackTrace();
-            
-    //     }
-        
-
-    // }
-
-
-
 
 }
