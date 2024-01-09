@@ -38,7 +38,7 @@ public class Testimonial extends JPanel{
             
             setVisible(true);
             
-            String path_img = Paths.get(FileHelper.rootPath, "assets", "Statelist", "icons", "her.png").toAbsolutePath().normalize().toString();
+            String path_img = Paths.get(FileHelper.ROOTPATH, "assets", "Statelist", "icons", "her.png").toAbsolutePath().normalize().toString();
             this.circleSize = new Dimension(40, 50);
             this.setPreferredSize(circleSize);
             this.setMaximumSize(circleSize);

@@ -119,7 +119,7 @@ public class StateList  extends JScrollPane {
 
         // force smallscrollpane size to show scroll bars 
         this .setMaximumSize(d); this .setMinimumSize(d); this .setPreferredSize(d);
-        path50Images = Paths.get(FileHelper.rootPath, "assets", "Statelist", "imgs").toAbsolutePath().normalize().toString();
+        path50Images = Paths.get(FileHelper.ROOTPATH, "assets", "Statelist", "imgs").toAbsolutePath().normalize().toString();
     }
 
     public void listStates (Windowise w) {

@@ -137,7 +137,7 @@ public class Windowise extends JPanel {
         label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,
                 MouseEvent.NOBUTTON, 0, 0, 1, false));
 
-        sched.shutdown();
+        // sched.shutdown();
 
     }
 

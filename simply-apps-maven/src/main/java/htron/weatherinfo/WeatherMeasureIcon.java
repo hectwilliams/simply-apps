@@ -120,37 +120,40 @@ public class WeatherMeasureIcon extends JLabel{
 
         switch (this.id ) {
 
-            case "temp" : 
+            case "temp" : {
                 this.tempIconInit();    
                 break;
+            }
+            
             
             case "humid" : 
             case "percip":
-            case "cloud":
+            case "cloud": {
                 this.humidIconInit();
                 break;
+            }
 
-            case "wind":
+            case "wind": {
                 this.windIconInit();
                 break;
+            }
             
-            case "pressure":
+            case "pressure": {
                 this.pressureIconInit();
                 break;
+            }
  
             case "sunrise":
-            case "sunset":
+            case "sunset": {
                 this.sunIconInit();
                 break;
+            }
             
             default:
                 break;
         }
              try {
-                //  System.out.println(FileHelper.rootPath + "\t" + this.id);
-                pathToAssetImg = Paths.get(FileHelper.rootPath,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
-                // System.out.println(pathToAssetImg);
-
+                pathToAssetImg = Paths.get(FileHelper.ROOTPATH,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
                 this.setIconImage(
                     new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) 
                 );
@@ -220,7 +223,7 @@ public class WeatherMeasureIcon extends JLabel{
 
         try {
             this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-            pathToAssetImg = Paths.get(FileHelper.rootPath,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
+            pathToAssetImg = Paths.get(FileHelper.ROOTPATH,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
             this.setIconImage(new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) );
         } catch (IOException e) {
             e.printStackTrace();

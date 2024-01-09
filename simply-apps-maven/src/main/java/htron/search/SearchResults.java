@@ -54,7 +54,7 @@ public class SearchResults  extends JPanel{   // scrollable client
         
         for ( String key: collection) {
             
-            this.pathToImg = Paths.get(FileHelper.rootPath,   "assets", "States", key + ".jpeg").toAbsolutePath().normalize().toString();
+            this.pathToImg = Paths.get(FileHelper.ROOTPATH,   "assets", "States", key + ".jpeg").toAbsolutePath().normalize().toString();
 
             try {
                 img = ImageIO.read(new File(  this.pathToImg)  ).getScaledInstance(200, 200, Image.SCALE_SMOOTH) ;

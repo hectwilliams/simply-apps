@@ -86,7 +86,7 @@ public class Trie {
     }
 
     private void initLoadStates () {
-        String filePath = Paths.get(FileHelper.rootPath, "assets",  "Search",  "states.json").toAbsolutePath().normalize().toString();
+        String filePath = Paths.get(FileHelper.ROOTPATH, "assets",  "Search",  "states.json").toAbsolutePath().normalize().toString();
         String content;
         
         try {

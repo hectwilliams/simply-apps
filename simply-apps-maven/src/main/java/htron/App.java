@@ -1,10 +1,7 @@
 package htron;
 
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Paths;
-
 import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class App {
     
@@ -13,7 +10,7 @@ public class App {
     
     public App() {
         frame = new JFrame("App Friendly");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         this.myWindow = new Windowise(frame);
         frame.addFocusListener(new FocusListenerApp(this.myWindow));
@@ -21,8 +18,7 @@ public class App {
     }
 
     public static void main (String [] args) {
-        App app = new App();
-
+        // new App();
     }
 
 }
