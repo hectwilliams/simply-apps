@@ -2,8 +2,6 @@ package htron;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GraphicsDevice;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,12 +18,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import htron.statelist.*;
-
 import htron.weatherinfo.*;
-import htron.Banner;
-import htron.BannerPage;
-import htron.search;
-import htron.weatherinfo.*;
+import htron.search.*;
+import htron.banner.Banner;
+import htron.banner.BannerPage;
 import htron.idlescreen.IdlePage;
 
 public class Windowise extends JPanel {
@@ -36,10 +32,7 @@ public class Windowise extends JPanel {
     public JPanel gridPanel = null;
     public JFrame frame;
     public Search search;
-    public WeatherInfo weatherInfo;
-    // Plot plot;
-    // public stateList TempListPage;
-    // public WeatherQueryState WeatherQuaeryPage;
+    public WeatherInfo weatherinfo;
     public JScrollPane scrollPane;
     public BannerPage bannerPage;
     public ArrayList<Component> activeComponents;
@@ -48,6 +41,9 @@ public class Windowise extends JPanel {
     public Banner banner;
     public IdlePage idlePage;
     public long time_start;
+    // Plot plot;
+    // public stateList TempListPage;
+    // public WeatherQueryState WeatherQuaeryPage;
 
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
 
@@ -58,23 +54,22 @@ public class Windowise extends JPanel {
 
         this.ready = false;
 
-        this.activeComponents = new ArrayList<Component>();
-
-        // this.setPreferredSize((new Dimension(25060, 1600)));
+        this.activeComponents = new ArrayList<>();
 
         this.setFrameScrollable();
         this.setWindowFrameGrid(); // sychronous
 
         idlePage = new IdlePage(this);
 
-        this.banner = new Banner(this, statelist); // sychronous + async
+        this.stateList = new StateList(this);
+
+        this.banner = new Banner(this, this.stateList); // sychronous + async
 
         // app1
-        this.weatherInfo = new WeatherInfo(this); // sychronous + async
-        this.search = new Search(this, this.weatherInfo); // sychronous + async
+        this.weatherinfo = new WeatherInfo(this); // sychronous + async
+        this.search = new Search(this, this.weatherinfo); // sychronous + async
 
         // s
-        this.stateList = new StateList(this);
 
         sched.schedule(() -> {
             this.wakeSearchWindow();
@@ -122,7 +117,7 @@ public class Windowise extends JPanel {
         this.validate();
     }
 
-    final private void wakeSearchWindow() {
+    private final  void wakeSearchWindow() {
         JLabel label;
 
         while (!this.search.searchScrollView.isVisible()) {
@@ -136,16 +131,13 @@ public class Windowise extends JPanel {
         this.frame.requestFocus();
 
         // arbitrarily event required to show viewport :( -- To Be Determined
-        {
-            label = ((WeatherMeasure) this.weatherInfo.getComponent(0)).getLabelMeasurement();
-            label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),
-                    MouseEvent.NOBUTTON, 0, 0, 1, false));
-            label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,
-                    MouseEvent.NOBUTTON, 0, 0, 1, false));
+        label = ((WeatherMeasure) this.weatherinfo.getComponent(0)).getLabelMeasurement();
+        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),
+                MouseEvent.NOBUTTON, 0, 0, 1, false));
+        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,
+                MouseEvent.NOBUTTON, 0, 0, 1, false));
 
-        }
-
-        sched.shutdown();
+        // sched.shutdown();
 
     }
 

@@ -15,8 +15,6 @@ import htron.Windowise;
 public class WeatherInfo extends JPanel{
     GridBagConstraints gd = null;
     
-    public static final WeatherInfoClient weatherApi = new WeatherInfoClient(); 
-
     private WeatherMeasureIcon temp;
     private WeatherMeasureIcon humidity;
     private WeatherMeasureIcon percipitation;
@@ -175,7 +173,7 @@ public class WeatherInfo extends JPanel{
                 } catch (SecurityException  ee) {
                     /* security interrupt, interrupted have dwelled */
                     ee.printStackTrace();
-                }
+                } 
 
             }, 0, TimeUnit.MILLISECONDS );
         

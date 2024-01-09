@@ -26,6 +26,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.BorderFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,14 +38,14 @@ public class StateLabel extends JPanel {
     GridBagLayout grid;
     JLabel labelName ;
     String working; 
-    static final int N = 40;
+    static final int N = 60;
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
     Image currImg;
     private JSONObject configJson;
     String filePathJson;
     ArrayList<String> stateArrayList;
     private static int cnt = 0;
-    StateListMetricsModule metrics; 
+    StateListMetricsModuleWrapper metrics; 
     private  Map<String, Boolean > usageMapIcon;
     
     private  IconBlock[] icons = {null, null, null};
@@ -74,7 +75,7 @@ public class StateLabel extends JPanel {
         Color circleColor;
         boolean mouseEventsValid; 
         IconBlock iconx;
-         Color alphaRed = new Color(255, 0, 0, 0 );
+        Color alphaRed = new Color(255, 0, 0, 0 );
         StateLabel statelabel;
         Color currentColor; 
         Ellipse2D dotEllipse2d;
@@ -83,7 +84,7 @@ public class StateLabel extends JPanel {
             this.paint(this.getGraphics());
             this.setBorder(null);
             this.setBackground( new Color(255, 255, 255, 0 ) );
-            this.setPreferredSize(new Dimension(10, 10));
+            this.setPreferredSize(new Dimension(7, 7));
             this.setIgnoreRepaint(true);
             this.mouseEventsValid = false;
             this.iconx = iconx;
@@ -134,10 +135,10 @@ public class StateLabel extends JPanel {
     public class IconBlock extends JLabel {
         private int count;
         StateLabel stateLabel;
-        int n = 20;
+        int n = 25;
         private String id = "";
         private CircleIcon circleIcon;
-        private static final String STATELIST = "StateList";
+        private static final String STATELIST = "Statelist";
         private static final String ASSETS = "assets";
         private static final String HEART = "heart";
 
@@ -180,36 +181,38 @@ public class StateLabel extends JPanel {
             }
             
             count = 0;
-            imgUrl = Paths.get(FileHelper.getWorkingDirectoryPath(), IconBlock.STATELIST, IconBlock.ASSETS, "icons", nameOfFile + ".png").toAbsolutePath().normalize().toString();
+            imgUrl = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS, IconBlock.STATELIST, "icons", nameOfFile + ".png").toAbsolutePath().normalize().toString();
             this.addMouseListener(new MouseOverIcon(stateLabel));
             this.setIcon(new ImageIcon(new ImageIcon(imgUrl).getImage().getScaledInstance(n, n, Image.SCALE_SMOOTH) ));
             this.setBorder(null);
 
+            // active indicator (i.e. color green)
             for (int i = 0; i < 1; i++) {
                 gbc = new GridBagConstraints();
                 gbc .anchor = GridBagConstraints.FIRST_LINE_START;
                 gbc .fill = GridBagConstraints.BOTH;
                 gbc .weightx = 1;
                 gbc .weighty = 1;
-                gbc.gridy = 40;
+                gbc.gridy = 48;
                 gbc.gridx = offset;
                 stateLabel.add(this.circleIcon, gbc);
             }
 
-
+            // add heart , like icon, or dislike 
             gbc = new GridBagConstraints();
             gbc .anchor = GridBagConstraints.FIRST_LINE_START;
             gbc .fill = GridBagConstraints.BOTH;
-            gbc .weightx = 0.5;
+            gbc .weightx = 1;
             gbc .weighty = 1;
             gbc.gridx =  offset;
-            gbc.gridy = 40;
+            gbc.gridy = 48;
             gbc.gridwidth = 1;
-            gbc.gridheight = 4;
+            gbc.gridheight = 6;
             stateLabel.add(this, gbc);
             stateLabel.setComponentZOrder( this , 1);
 
             stateLabel.validate();
+            
         }
 
         public void updateCounter () {
@@ -263,46 +266,38 @@ public class StateLabel extends JPanel {
 
     public StateLabel () {
         String fileNameImage;
-
-            this.usageMapIcon = new HashMap<>(Map.of(
-                IconBlock.HEART, false,
-                "up", false,
-                "down", false
-            ));
-
-        
-
-        // loads metric module slot 
-        sched.schedule(
-            () -> {
-                this.metrics = new StateListMetricsModule(this);
-                this.loadMetricGrid();
-            }    
-        , 0, TimeUnit.MILLISECONDS);
-        
-        // state image + button select 
-        this.filePathJson = Paths.get(FileHelper.getWorkingDirectoryPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
-        this.stateArrayList = new ArrayList<>();
-
-        this.working = Paths.get(FileHelper.getWorkingDirectoryPath(), IconBlock.STATELIST, "icons").toAbsolutePath().normalize().toString();
-
-        // this.setBorder(  BorderFactory.createCompoundBorder(  BorderFactory.createEmptyBorder(0, 0, 16, 0)  ,  BorderFactory.createLineBorder(Color.BLACK) ));
-        this.setBorder(null);
-        Dimension d = new Dimension(1000,180);  // Monitor Size needed here
+        Dimension d = new Dimension(1000,160);  // Monitor Size needed here
         
         this.setMaximumSize(d);
         this.setPreferredSize(d);
         this.setMinimumSize(d);
 
+        this.usageMapIcon = new HashMap<>(Map.of(
+            IconBlock.HEART, false,
+            "up", false,
+            "down", false
+        ));
+
+ 
+        sched.schedule(
+            () -> {
+            }    
+        , 0, TimeUnit.MILLISECONDS);
+        
+        // state image + button select 
+        this.filePathJson = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS, "Search",  "states.json").toAbsolutePath().normalize().toString();
+        this.stateArrayList = new ArrayList<>();
+        this.working = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS,  IconBlock.STATELIST, "icons").toAbsolutePath().normalize().toString();
+        this.setBorder(null);
+   
         this.setLayout(new GridBagLayout());
         this.setupGrid();
         this.setVisible(true);
 
         // icons 
-        this.icons[0] =  (new IconBlock(this, "heart"));
+        this.icons[0] =  (new IconBlock(this, IconBlock.HEART));
         this.icons[1] = new IconBlock(this, "up");
         this.icons[2] = new IconBlock(this, "down");
-
 
         //  label image 
         try {
@@ -310,9 +305,8 @@ public class StateLabel extends JPanel {
             this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(this.filePathJson)))  );
             this.configJson.keys().forEachRemaining(stateArrayList::add); // add keys to array list 
             Collections.sort(stateArrayList );
-            fileNameImage = Paths.get(FileHelper.getWorkingDirectoryPath(), IconBlock.STATELIST, IconBlock.ASSETS, "imgs", stateArrayList.get(StateLabel.cnt) + ".png" ).toAbsolutePath().normalize().toString();
+            fileNameImage = Paths.get(FileHelper.ROOTPATH , IconBlock.ASSETS,  IconBlock.STATELIST, "imgs", stateArrayList.get(StateLabel.cnt) + ".png" ).toAbsolutePath().normalize().toString();
             this.currImg = ImageIO.read(new File(fileNameImage)) ;      
-            
             StateLabel.incrementCnt(StateLabel.cnt );
 
         } catch (JSONException | IOException e) {
@@ -321,16 +315,19 @@ public class StateLabel extends JPanel {
 
         }
 
-        this.loadImage(this.currImg);
+        this.loadImage(this.currImg);        
+        
+        // loads metric module slot 
+        this.metrics = new StateListMetricsModuleWrapper(this);
+        this.loadMetricGrid(this.metrics );
+
 
 
     }
-    
-
 
     private void loadImage(Image img) {
 
-        JLabel label = new JLabel(name) {
+        JLabel labelImage = new JLabel(name) {
             
             @Override 
             protected void paintComponent(Graphics g) {
@@ -349,19 +346,17 @@ public class StateLabel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 27;
-        gbc.gridheight = 38;
+        gbc.gridheight = 45;
 
-
-        this.add(label, gbc);
-        this.setComponentZOrder( label , 2);
-        
+        this.add(labelImage, gbc);
+        this.setComponentZOrder( labelImage , 2);
     }
 
     private void setupGrid() {
 
         for (int x = 0; x < StateLabel.N; x++) {
 
-            for (int y = 0; y < StateLabel.N; y++) {
+            for (int y = 0; y < StateLabel.N ; y++) {
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc .anchor = GridBagConstraints.FIRST_LINE_START;
@@ -373,6 +368,7 @@ public class StateLabel extends JPanel {
                 gbc.gridy = y;
                 
                 JPanel cell = new JPanel();
+                // cell.setBorder(BorderFactory.createLineBorder(Color.PINK));
                 this.add(cell, gbc);
             }
 
@@ -383,15 +379,17 @@ public class StateLabel extends JPanel {
     }
 
 
-    private void loadMetricGrid () {
+    private void loadMetricGrid (StateListMetricsModuleWrapper jpanel) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc .anchor = GridBagConstraints.FIRST_LINE_START;
         gbc .fill = GridBagConstraints.BOTH;
-        gbc.gridwidth = 15;
-        gbc.gridheight = 40;
-        gbc.gridx = 27;
-        gbc.gridy = 1;
-        this.add(this.metrics , gbc);
+        gbc.gridy = 3;
+        gbc.gridx = 29; 
+        gbc.gridwidth = 25;
+        gbc.gridheight = 48; 
+        this.add(jpanel , gbc);
+        this.setComponentZOrder( jpanel , 3);
+
     }
     
 }

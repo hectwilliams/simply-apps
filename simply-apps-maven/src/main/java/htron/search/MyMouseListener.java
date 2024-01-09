@@ -1,10 +1,9 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.Picture;
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.WeatherInfo;
+import htron.weatherinfo.*;
 
 public class MyMouseListener implements MouseListener {
     WeatherInfo weatherInfo;
@@ -14,9 +13,8 @@ public class MyMouseListener implements MouseListener {
         this.weatherInfo = weatherInfo;
         this.debounce = new DebounceFirst<Object>(1400, (Object obj1, Object obj2) -> {
             WeatherInfo winfo = (WeatherInfo) obj1;
-            Picture pic = (Picture) obj2;
-            this.weatherInfo.weatherApi.getStateDayMeasurement(pic.getToolTipText() /*state*/, winfo);
-            this.debounce.scheduledFuture  = null; 
+            // Picture pic = (Picture) obj2;
+            // this.weatherInfo.weatherApi.getStateDayMeasurement(pic.getToolTipText() /*state*/, winfo);
         });
     }
 

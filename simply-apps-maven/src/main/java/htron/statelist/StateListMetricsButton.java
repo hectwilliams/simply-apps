@@ -12,28 +12,31 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
 import javax.swing.SwingConstants;
 
     public class StateListMetricsButton extends JLabel implements MouseListener {
         
         private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);;
-        private static  Font boldfont = new Font("Dialog", Font.BOLD, 12);
-        private static  Font defaultFont = new Font("Dialog", Font.PLAIN, 12);
+        private static  Font boldfont = new Font("Dialog", Font.BOLD, 11);
+        private static  Font defaultFont = new Font("Dialog", Font.PLAIN, 11);
         private static final float[] hsbSet = Color.RGBtoHSB(173,216,230,null); // sky blue
         private static final Color activeColor = Color.getHSBColor(hsbSet[0], hsbSet[1], hsbSet[2]);
-
+        private JScrollBar scrollbar; 
+        
         Color defaultBackgroundColor;
         StateListMetricsModule metricPanel;
 
         public final static Color getActiveColor () {
             return StateListMetricsButton.activeColor;
         }
+
         public StateListMetricsButton(String name , StateListMetricsModule metricPanel  )   {
             super(name);
             this.addMouseListener(this);    // register listener to JButton 
             this.setHorizontalAlignment(SwingConstants.CENTER);
             this.setOpaque(true);
-            this.metricPanel = metricPanel;
+            this.metricPanel = metricPanel.getMetricPanel();
             this.setFont(defaultFont); 
         }
         
@@ -58,17 +61,20 @@ import javax.swing.SwingConstants;
                     
                     sched.schedule(
                         
-                    () -> {System.out.println();
-                    
-                        if (tmp.getText() == "Like") {
-                            // System.out.println("change the like");
+                    () -> {
+                        
+                        if (tmp.getText().equals( "Like") ) {
+                            System.out.println("change the like");
                             ((StateListMetricsButton)tmp.getParent().getComponent(0)).setBackground(StateListMetricsButton.activeColor);
                             ((StateListMetricsButton)tmp.getParent().getComponent(1)).setBackground(this.defaultBackgroundColor);
                             metricPanel.testimonialList.setVisible(false);
                             metricPanel.graphy.setVisible(true);
+                            scrollbar = metricPanel.getVerticalScrollBar();
+                            scrollbar.setValue(scrollbar.getMaximum());
+                            metricPanel.setVerticalScrollBar(scrollbar);
 
                         } else {
-                            // System.out.println("change the testimonial");
+                            System.out.println("change the testimonial");
                             ((StateListMetricsButton)tmp.getParent().getComponent(1)).setBackground(StateListMetricsButton.activeColor);
                             ((StateListMetricsButton)tmp.getParent().getComponent(0)).setBackground(this.defaultBackgroundColor);
                             metricPanel.testimonialList.setVisible(true);

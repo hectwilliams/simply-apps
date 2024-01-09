@@ -17,4 +17,10 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    @Test 
+    public void appOpens() {
+        new App();
+        assertTrue(true);
+    }
 }

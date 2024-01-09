@@ -4,8 +4,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
-import htron.search.Callback;
-
 public class DocumentListenerV2 implements DocumentListener {
     
     DebounceLast<Object> debounce = null; // debounce textField "onchange" updates 
@@ -13,27 +11,12 @@ public class DocumentListenerV2 implements DocumentListener {
 
     public DocumentListenerV2 ( SearchResults searchResults)  {
 
-        this.debounce = new DebounceLast<>( 300,
-        
-    
-        // (Object obj ) -> {
-        //     String ss = (String) obj; 
-        //     if (ss.length() > 0) { 
-        //         // System.out.println(s + " callback");
-        //         this.searchResults.searchtree(ss);
-        //     }
-        // }
-            
-            new Callback<Object>() {
-                @Override
-                public void execute(Object objStr) {
-                    String ss = (String) objStr; 
-                    if (ss.length() > 0) { 
-                        searchResults.searchtree(ss);
-                    }
+        this.debounce = new DebounceLast<>( 300, (Object obj ) -> {
+                String ss = (String) obj; 
+                if (ss.length() > 0) { 
+                    searchResults.searchtree(ss);
                 }
             }
-        
         );
 
     }

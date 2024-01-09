@@ -12,15 +12,17 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
+public class StateListMetricsModule extends JScrollPane {
 
-public class StateListMetricsModule extends JScrollPane{
-
-      private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);;
-    JPanel metricsPanel;
+    private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
+    private JPanel metricsPanel;
     JPanel metricsPanelGrid;
     JScrollPane testimonialList;
     JPanel testimonialListClient;
@@ -30,12 +32,14 @@ public class StateListMetricsModule extends JScrollPane{
     StateLabel stateLabel; 
 
     public StateListMetricsModule (StateLabel stateLabel) {
+        
         metricsPanel = new JPanel(new GridBagLayout());
-        // metricsPanel.setBorder(BorderFactory.createLineBorder(Color.PINK));
-        this.setViewportView(metricsPanel);
         metricsPanelGrid = new JPanel(new GridBagLayout());
+
         this.metricsPanelGrid.setToolTipText("Metrics Canvas");
-        this.metricsPanelGrid.setPreferredSize(new Dimension(20, 25));
+        
+        this.setViewportView(metricsPanel);
+        
         this.setBorder(  BorderFactory.createCompoundBorder ((BorderFactory.createLineBorder( new Color(255, 255, 255, 149) , 4)) ,BorderFactory.createMatteBorder(0,0,4,0,new Color(255, 255, 255, 149) )) ) ;
         this.stateLabel = stateLabel;   
                 
@@ -49,6 +53,13 @@ public class StateListMetricsModule extends JScrollPane{
         
     }
 
+    public final StateListMetricsModule getMetricPanel() {
+        return this;
+    }
+
+    /*
+     * adds 'like' and 'testimonial' buttons to subpanel 
+     */
     private void loadButtons( ) {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -69,13 +80,16 @@ public class StateListMetricsModule extends JScrollPane{
         this.metricsPanel.add(new StateListMetricsButton("Testimonial", this), c); 
 
         for (Component button_: this.metricsPanel.getComponents()) {
-            ((StateListMetricsButton) button_).setPreferredSize(new Dimension(5, 13));
+            ((StateListMetricsButton) button_).setPreferredSize(new Dimension(4, 12));
         }
 
         // default testimonial 
         ((StateListMetricsButton)this.metricsPanel.getComponent(1)).setBackground( StateListMetricsButton.getActiveColor());
     }
 
+    /*
+     * add support grid via gridbaglayout layout manager  
+     */
     private void loadActiveGrid() {
         GridBagConstraints c = new GridBagConstraints();
         GridBagConstraints cc = new GridBagConstraints();
@@ -90,7 +104,6 @@ public class StateListMetricsModule extends JScrollPane{
         c.gridheight = 3;
         c.insets = new Insets(14, 0, 0, 0);
         
-        // this.metricsPanelGrid.setBorder(BorderFactory.createLineBorder(Color.RED));
         this.metricsPanel.add( this.metricsPanelGrid, c);
 
         // setup grid
@@ -111,9 +124,37 @@ public class StateListMetricsModule extends JScrollPane{
     }
 
     public void loadActiveMetricComp() {
+        JScrollBar scrollbar;
 
         // load testomonial 
         this.testimonialList = new JScrollPane();
+
+        // make inner scrollbar thinner  
+        scrollbar =  this.testimonialList .getVerticalScrollBar();
+        scrollbar.setPreferredSize(  new Dimension(  6 , 8 ) );
+
+        // change scrllbar color        
+        this.testimonialList.getVerticalScrollBar().setUI(new  BasicScrollBarUI() {
+            @Override
+            protected void configureScrollBarColors() {
+                this.thumbColor = new Color(178,190,181);
+                this.maximumThumbSize = new Dimension(  9,40); 
+            }
+               @Override
+            protected JButton createDecreaseButton(int orientation) {
+                JButton button = super.createDecreaseButton(orientation);
+                button.setBackground(Color.LIGHT_GRAY);
+                return button;
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+                JButton button = super.createIncreaseButton(orientation);
+                button.setBackground(Color.LIGHT_GRAY);
+                return button;
+            }
+        });
+
         this.testimonialList.getVerticalScrollBar().setUnitIncrement(20);
         this.testimonialList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.testimonialList.setPreferredSize(new Dimension(5, 5));
@@ -133,9 +174,16 @@ public class StateListMetricsModule extends JScrollPane{
         c.gridy = 0;
         c.gridheight = 19;
         c.gridwidth = 20;    
+        c.insets = new Insets(0,0,0,10);
         
-        testimonialListClient.add( new Testimonial(true) );
-        testimonialListClient.add( new Testimonial(true) );
+        /* 
+         * placeholders, method to add testimonial string inputs
+         */
+        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );
+        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );
+        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );
+        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );
+        /*dummy testimonial needed for equal spacing of 'active' testimonial blocks  */
         testimonialListClient.add( new Testimonial(false) );    
 
         this.metricsPanelGrid.add( this.testimonialList, c);
@@ -143,7 +191,6 @@ public class StateListMetricsModule extends JScrollPane{
         this.metricsPanelGrid.validate();
 
         // load graphy 
-
         this.graphy = new Graphy(this.stateLabel );
         this.graphy.setVisible(false);
         this.metricsPanelGrid.add( this.graphy, c);

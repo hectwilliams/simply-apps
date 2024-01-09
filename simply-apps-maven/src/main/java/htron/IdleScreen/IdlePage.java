@@ -1,4 +1,4 @@
-package htron.IdleScreen;
+package htron.idlescreen;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -144,8 +144,9 @@ public class IdlePage extends JLabel {
                     this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -3, this.buffer, new Color(255, 215, 0));
                     this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -4, this.buffer, Color.MAGENTA);
 
+                    // make weather UI components visible 
                     this.w.search.setVisible(true);
-
+                    this.w.weatherinfo.setVisible(true);
                 }
                 
             } else {
