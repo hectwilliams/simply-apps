@@ -1,4 +1,4 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.List;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Queue;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import jx_review.java_fun_child.weather_app.src.FileHelper;
+import htron.FileHelper;
 
 
 public class Trie {
@@ -86,7 +86,7 @@ public class Trie {
     }
 
     private void initLoadStates () {
-        String filePath = Paths.get(FileHelper.getWorkingDirectoryPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
+        String filePath = Paths.get(FileHelper.rootPath, "assets",  "Search",  "states.json").toAbsolutePath().normalize().toString();
         String content;
         
         try {

@@ -2,27 +2,21 @@ package htron.statelist;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import htron.FileHelper;
 import htron.Windowise;
-import org.json.JSONObject;
-
 
 public class StateList  extends JScrollPane {
 
@@ -125,20 +119,24 @@ public class StateList  extends JScrollPane {
 
         // force smallscrollpane size to show scroll bars 
         this .setMaximumSize(d); this .setMinimumSize(d); this .setPreferredSize(d);
-        path50Images = Paths.get(FileHelper.getWorkingDirectoryPath(), "StateList", "assets", "imgs").toAbsolutePath().normalize().toString();
-
+        path50Images = Paths.get(FileHelper.rootPath, "assets", "Statelist", "imgs").toAbsolutePath().normalize().toString();
     }
 
     public void listStates (Windowise w) {
     
         // load 50 dummy state images (placeholder)
-                
-            sched.schedule( ()-> { 
-                    for (int i =0; i < new File(path50Images).listFiles().length    ; i++) {  // TODO: change to 50 states 
-                        // w.stateList.panelView.add(new StateLabel());
+
+        sched.schedule( ()-> { 
+            for (int i =0; i < new File(path50Images).listFiles().length; i++) {  
+                        // System.out.println("state list");
+                        // TODO: change to 50 states 
+                        w.stateList.panelView.add(new StateLabel());
+                        w.stateList.panelView.add(new JPanel());
+
+                        w.stateList.revalidate();
+                        w.stateList.repaint();
                     }
-                    // w.stateList.revalidate();
-                    // w.stateList.repaint();
+
                     this.setReadyStatus(true);
                     w.banner.enableButton(1);
                 }, 10, TimeUnit.MILLISECONDS);
@@ -155,7 +153,7 @@ public class StateList  extends JScrollPane {
         this.gc.gridx = 1;
         this.gc.gridy = 11;
         this.gc.gridwidth = 120;
-        this.gc.gridheight = 50;
+        this.gc.gridheight = 55;
         w.add( this  , this.gc);
         w.setComponentZOrder( this  , 2);
         this .validate();
@@ -164,7 +162,7 @@ public class StateList  extends JScrollPane {
     public void extendListHeight(Windowise w) {
         this.gc.gridheight += 30;
         this.gc = new GridBagConstraints();
-        w.revalidate(); // revalidate + repaint container 
+        w.revalidate(); 
         w.repaint();
         sched.notifyAll();
     }

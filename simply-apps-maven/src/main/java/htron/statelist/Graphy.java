@@ -68,7 +68,6 @@ public class Graphy extends JPanel {
         // paint point color (marker)
         graph2D.setPaint(Color.RED);
 
-
         // graph2D = (Graphics2D) g.create(); // create new instance (safer)
 
         // old stroke 

@@ -1,4 +1,4 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.Picture;
+import htron.weatherinfo.Picture;
 
 public class SearchScrollBlock extends JScrollPane {
     final public JPanel client;

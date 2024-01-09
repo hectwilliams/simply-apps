@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JLabel;
 
 import htron.Windowise;
-import htron.Banner;
+import htron.banner.Banner;
 
 public class MouseListenerBanner implements MouseListener{
     
@@ -42,7 +42,7 @@ public class MouseListenerBanner implements MouseListener{
                                 break;
                     
                             case "weather" : 
-                                this.w.weatherInfo.setVisible(false); //  componentActiveList[0].setVisible(false);
+                                this.w.weatherinfo.setVisible(false); //  componentActiveList[0].setVisible(false);
                                 this.w.search.setVisible(false);
                                 break;
                         }
@@ -54,7 +54,7 @@ public class MouseListenerBanner implements MouseListener{
                                 break;
                     
                             case "weather" : 
-                                this.w.weatherInfo.setVisible(true); //  componentActiveList[0].setVisible(false);
+                                this.w.weatherinfo.setVisible(true); //  componentActiveList[0].setVisible(false);
                                 this.w.search.setVisible(true);
                                 break;
                         }

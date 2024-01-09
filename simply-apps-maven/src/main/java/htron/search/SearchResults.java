@@ -1,4 +1,4 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,9 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import jx_review.java_fun_child.weather_app.src.FileHelper;
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.Picture;
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.WeatherInfo;
+import htron.FileHelper;
+import htron.weatherinfo.*;
 
 public class SearchResults  extends JPanel{   // scrollable client 
     BoxLayout layout;
@@ -55,7 +54,7 @@ public class SearchResults  extends JPanel{   // scrollable client
         
         for ( String key: collection) {
             
-            this.pathToImg = Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  "assets", "States", key + ".jpeg").toAbsolutePath().normalize().toString();
+            this.pathToImg = Paths.get(FileHelper.rootPath,   "assets", "States", key + ".jpeg").toAbsolutePath().normalize().toString();
 
             try {
                 img = ImageIO.read(new File(  this.pathToImg)  ).getScaledInstance(200, 200, Image.SCALE_SMOOTH) ;

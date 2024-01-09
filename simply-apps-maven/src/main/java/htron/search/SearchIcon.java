@@ -1,4 +1,4 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,20 +11,20 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
-import jx_review.java_fun_child.weather_app.src.FileHelper;
+import htron.FileHelper;
 
 public class SearchIcon extends JLabel{
     
     ImageIcon icon = null;
-    String workingdir, imgPath;
+    String workingdir;
+    String imgPath;
     Image img; 
     int pixelsPerCellX = 10; 
     int pixelsPerCellY = 10;
     
     public SearchIcon() {
         
-        workingdir = FileHelper.getWorkingDirectoryPath();
-        this.imgPath = Paths.get(this.workingdir, "../",  "assets", "Search", "search_icon.jpeg").toAbsolutePath().normalize().toString();
+        this.imgPath = Paths.get(FileHelper.rootPath,   "assets", "Search", "search_icon.jpeg").toAbsolutePath().normalize().toString();
         
         Dimension d = new Dimension(this.pixelsPerCellX, this.pixelsPerCellY);
         this.setMinimumSize(d);

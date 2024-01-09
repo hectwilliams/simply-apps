@@ -1,17 +1,16 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Window;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JPanel;
 
-import jx_review.java_fun_child.weather_app.src.Windowise;
-import jx_review.java_fun_child.weather_app.src.WeatherInfo.WeatherInfo;
+import htron.Windowise;
+import htron.weatherinfo.*;
 
 public class Search extends JPanel{ //could extend panel
 

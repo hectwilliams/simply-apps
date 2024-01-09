@@ -1,26 +1,19 @@
-package jx_review.java_fun_child.weather_app.src.Search;
+package htron.search;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
-import jx_review.java_fun_child.weather_app.src.FileHelper;
+import htron.FileHelper;
 
 public class SearchClear extends JPanel{
     JButton button; 
@@ -39,7 +32,7 @@ public class SearchClear extends JPanel{
         this.setMaximumSize(d);
         this.setPreferredSize(d);
 
-        this.path = Paths.get(FileHelper.getWorkingDirectoryPath(), "../",  "assets", "Search", "click2.jpeg").toAbsolutePath().normalize().toString();
+        this.path = Paths.get(FileHelper.rootPath, "assets", "Search", "click2.jpeg").toAbsolutePath().normalize().toString();
         this.textbox = textbox; 
         this.searchResults = searchResults ;
         
