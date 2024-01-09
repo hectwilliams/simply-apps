@@ -24,9 +24,9 @@ import htron.statelist.*;
 import htron.weatherinfo.*;
 import htron.Banner;
 import htron.BannerPage;
-import htron.IdleScreen.IdlePage;
+import htron.search;
 import htron.weatherinfo.*;
-import htron.Search;
+import htron.idlescreen.IdlePage;
 
 public class Windowise extends JPanel {
 
