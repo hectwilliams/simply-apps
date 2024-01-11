@@ -1,24 +1,14 @@
 #!/bin/bash
 
-# Requirements 
+# Requirements #
 # - maven command line (mvn) 
 
-result=${PWD##*/}          # to assign to a variable
-result=${result:-/}        # to correct for the case where PWD=/
+SCRIPTPATH=${PWD%%/scripts}/demo
+TARGETPATH=${SCRIPTPATH}/target
 
-# configuration management root (maven)
-cd ../simply-apps-maven
+mv clean -f ${SCRIPTPATH}/pom.xml
+mvn package -f ${SCRIPTPATH}/pom.xml
 
-mvn clean -f pom.xml
-mvn package -f pom.xml
-
-echo ${PWD}
-
-# change directory to compiled artifacts 
-cd target/
-
-# run java jar 
-java -cp simply-apps-maven-1.0-SNAPSHOT.jar ../simply-apps-maven/target/classes/htron/htron.App 
-
-
+# jar file bundled dependencies 
+java -cp  $TARGETPATH/demo-1.0-SNAPSHOT.jar htron.App 
 

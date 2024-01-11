@@ -116,6 +116,7 @@
                   </manifestEntries>
                 </transformer>
               </transformers>
+              <outputDirectory>${project.build.directory}</outputDirectory>
             </configuration>
           </execution>
         </executions>
