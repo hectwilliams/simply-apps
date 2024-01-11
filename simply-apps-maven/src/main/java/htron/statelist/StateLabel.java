@@ -181,7 +181,7 @@ public class StateLabel extends JPanel {
             }
             
             count = 0;
-            imgUrl = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS, IconBlock.STATELIST, "icons", nameOfFile + ".png").toAbsolutePath().normalize().toString();
+            imgUrl = Paths.get(FileHelper.getAssetsPath(), IconBlock.STATELIST, "icons", nameOfFile + ".png").toAbsolutePath().normalize().toString();
             this.addMouseListener(new MouseOverIcon(stateLabel));
             this.setIcon(new ImageIcon(new ImageIcon(imgUrl).getImage().getScaledInstance(n, n, Image.SCALE_SMOOTH) ));
             this.setBorder(null);
@@ -285,9 +285,9 @@ public class StateLabel extends JPanel {
         , 0, TimeUnit.MILLISECONDS);
         
         // state image + button select 
-        this.filePathJson = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS, "Search",  "states.json").toAbsolutePath().normalize().toString();
+        this.filePathJson = Paths.get(FileHelper.getAssetsPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
         this.stateArrayList = new ArrayList<>();
-        this.working = Paths.get(FileHelper.ROOTPATH, IconBlock.ASSETS,  IconBlock.STATELIST, "icons").toAbsolutePath().normalize().toString();
+        this.working = Paths.get(FileHelper.getAssetsPath() , IconBlock.STATELIST, "icons").toAbsolutePath().normalize().toString();
         this.setBorder(null);
    
         this.setLayout(new GridBagLayout());
@@ -305,7 +305,7 @@ public class StateLabel extends JPanel {
             this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(this.filePathJson)))  );
             this.configJson.keys().forEachRemaining(stateArrayList::add); // add keys to array list 
             Collections.sort(stateArrayList );
-            fileNameImage = Paths.get(FileHelper.ROOTPATH , IconBlock.ASSETS,  IconBlock.STATELIST, "imgs", stateArrayList.get(StateLabel.cnt) + ".png" ).toAbsolutePath().normalize().toString();
+            fileNameImage = Paths.get(FileHelper.getAssetsPath() ,  IconBlock.STATELIST, "imgs", stateArrayList.get(StateLabel.cnt) + ".png" ).toAbsolutePath().normalize().toString();
             this.currImg = ImageIO.read(new File(fileNameImage)) ;      
             StateLabel.incrementCnt(StateLabel.cnt );
 

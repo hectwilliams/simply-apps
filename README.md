@@ -12,10 +12,11 @@ Java apps created out of boredom
 
 ## Backlog
 
-- TBD 
+- TBD
+    
     - serve up database like data (temp) 
     - create mysql db with mock data 
     - create footer 
     - fix 'green' active indicator 
 
-    
+## Backlog

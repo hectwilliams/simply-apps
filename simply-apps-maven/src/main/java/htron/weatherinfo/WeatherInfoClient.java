@@ -40,10 +40,10 @@ public class WeatherInfoClient {
         
         try {
 
-            filePath = Paths.get(FileHelper.ROOTPATH, "assets" , "config",  "weather_config.json").toAbsolutePath().normalize().toString();
+            filePath = Paths.get(FileHelper.getConfigPath(),  "config.json").toAbsolutePath().normalize().toString();
             this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
             
-            filePath = Paths.get(FileHelper.ROOTPATH, "assets", "Search",  "states.json").toAbsolutePath().normalize().toString();
+            filePath = Paths.get(FileHelper.getAssetsPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
 
             this.jsonStates =  new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
 
@@ -127,7 +127,7 @@ public class WeatherInfoClient {
         // SUNRISE
         if (WeatherInfoClient.map.get(SUNRISE) != null) {
             weatherInfo.getSunrise().updateLabelName(  String.valueOf( weatherInfo.getSunrise().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNRISE)  )))  );
-        } 
+        }  
         
          // SUNSET
             if (WeatherInfoClient.map.get(SUNSET) != null) {

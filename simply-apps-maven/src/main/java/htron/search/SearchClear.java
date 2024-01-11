@@ -32,7 +32,7 @@ public class SearchClear extends JPanel{
         this.setMaximumSize(d);
         this.setPreferredSize(d);
 
-        this.path = Paths.get(FileHelper.ROOTPATH, "assets", "Search", "click2.jpeg").toAbsolutePath().normalize().toString();
+        this.path = Paths.get(FileHelper.getAssetsPath(), "Search", "click2.jpeg").toAbsolutePath().normalize().toString();
         this.textbox = textbox; 
         this.searchResults = searchResults ;
         

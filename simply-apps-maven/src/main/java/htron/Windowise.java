@@ -59,7 +59,7 @@ public class Windowise extends JPanel {
         this.setFrameScrollable();
         this.setWindowFrameGrid(); // sychronous
 
-        idlePage = new IdlePage(this);
+        idlePage = new IdlePage(this); 
 
         this.stateList = new StateList(this);
 

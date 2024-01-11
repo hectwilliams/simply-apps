@@ -24,7 +24,7 @@ public class SearchIcon extends JLabel{
     
     public SearchIcon() {
         
-        this.imgPath = Paths.get(FileHelper.ROOTPATH,   "assets", "Search", "search_icon.jpeg").toAbsolutePath().normalize().toString();
+        this.imgPath = Paths.get(FileHelper.getAssetsPath(), "Search", "search_icon.jpeg").toAbsolutePath().normalize().toString();
         
         Dimension d = new Dimension(this.pixelsPerCellX, this.pixelsPerCellY);
         this.setMinimumSize(d);

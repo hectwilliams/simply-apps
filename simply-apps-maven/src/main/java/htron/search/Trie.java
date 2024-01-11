@@ -1,15 +1,10 @@
 package htron.search;
 
-import java.awt.List;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import htron.FileHelper;
@@ -51,6 +46,7 @@ public class Trie {
     public Trie() {
         this.trieNode = new Node(' ');
         this.initLoadStates();
+        this.json = StatesJsonAccessor.get(); 
     }
 
     public void insert (String word) {
@@ -86,23 +82,27 @@ public class Trie {
     }
 
     private void initLoadStates () {
-        String filePath = Paths.get(FileHelper.ROOTPATH, "assets",  "Search",  "states.json").toAbsolutePath().normalize().toString();
+        String filePath = Paths.get(FileHelper.getAssetsPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
         String content;
         
-        try {
+        // try {
             
-            content = new String(Files.readAllBytes(Paths.get(filePath)));
-            this.json = new JSONObject(content);
+            // content = new String(Files.readAllBytes(Paths.get(filePath)));
+            
+            // System.out.println(content);
+
+            
+            this.json = StatesJsonAccessor.get(); //  new JSONObject(content);
 
             for (String key : json.keySet()) {
                 this.insert(key.toLowerCase());
             }
 
-        } catch (IOException e) {
+        // } catch (IOException e) {
 
-            e.printStackTrace();
+        //     e.printStackTrace();
 
-        }
+        // }
 
     }
 

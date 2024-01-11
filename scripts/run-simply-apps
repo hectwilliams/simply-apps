@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Requirements 
+# - maven command line (mvn) 
+
+result=${PWD##*/}          # to assign to a variable
+result=${result:-/}        # to correct for the case where PWD=/
+
+# configuration management root (maven)
+cd ../simply-apps-maven
+
+mvn clean -f pom.xml
+mvn install -f pom.xml
+
+echo ${PWD}
+
+# change directory to compiled artifacts 
+cd target/
+
+# run java jar 
+java -cp simply-apps-maven-1.0-SNAPSHOT.jar htron.App 

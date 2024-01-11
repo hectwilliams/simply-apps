@@ -21,7 +21,7 @@ public class WeatherMeasureIcon extends JLabel{
     Font myFont;
     JLabel picIcon =  null; 
     private String symbol = "\u0000";
-    private static final  String PERCENT_SYMBOL =  " \u0025";
+    private static final  String PERCENT_SYMBOL =  " \u0025"; 
     private String value;
     private static final String ASSETS = "assets";
     private static final String WEATHER = "Weather";
@@ -153,7 +153,7 @@ public class WeatherMeasureIcon extends JLabel{
                 break;
         }
              try {
-                pathToAssetImg = Paths.get(FileHelper.ROOTPATH,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
+                pathToAssetImg = Paths.get(FileHelper.getAssetsPath(), WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
                 this.setIconImage(
                     new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) 
                 );
@@ -223,7 +223,7 @@ public class WeatherMeasureIcon extends JLabel{
 
         try {
             this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-            pathToAssetImg = Paths.get(FileHelper.ROOTPATH,  ASSETS, WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
+            pathToAssetImg = Paths.get(FileHelper.getAssetsPath(), WEATHER, this.id + ".png" ).toAbsolutePath().normalize().toString() ;
             this.setIconImage(new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) );
         } catch (IOException e) {
             e.printStackTrace();
