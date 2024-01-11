@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeatherMeasure.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.weatherinfo</a> &gt; <span class="el_source">WeatherMeasure.java</span></div><h1>WeatherMeasure.java</h1><pre class="source lang-java linenums">package htron.weatherinfo;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+public class WeatherMeasure extends JPanel {
+
+    public class TimerTaskT implements Runnable {
+
+<span class="nc" id="L24">        TimerTaskT() {</span>
+<span class="nc" id="L25">        }</span>
+
+        @Override
+        public void run() {
+            /* scheduler class handles 'running' of task */
+<span class="nc" id="L30">        }</span>
+
+    }
+
+    public class LabelMeasurementMouseListener implements MouseListener {
+<span class="nc" id="L35">        private final TimerTaskT[] tasksList = { null, null }; // object at fixed memory with dynamic entries</span>
+<span class="nc" id="L36">        private final ScheduledFuture&lt;?&gt;[] futureList = { null, null }; // object at fixed memory with dynamic entries</span>
+
+<span class="nc" id="L38">        public LabelMeasurementMouseListener() {</span>
+<span class="nc" id="L39">            super();</span>
+<span class="nc" id="L40">        }</span>
+
+        private final TimerTaskT getTask(int id) {
+<span class="nc" id="L43">            return tasksList[id];</span>
+        }
+
+        private final void setFutures(int id) {
+<span class="nc" id="L47">            futureList[id] = sched.schedule(this.getTask(id), 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L48">        }</span>
+
+        private final void setTask(JLabel label, int id) {
+
+<span class="nc" id="L52">            tasksList[id] = new TimerTaskT() {</span>
+                @Override
+                public void run() {
+<span class="nc" id="L55">                    label.setFont(modes[~id]);</span>
+<span class="nc" id="L56">                }</span>
+            };
+
+<span class="nc" id="L59">            setFutures(id);</span>
+<span class="nc" id="L60">        }</span>
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            /* not used */
+<span class="nc" id="L65">        }</span>
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            /* not used */
+<span class="nc" id="L70">        }</span>
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            /* not used */
+<span class="nc" id="L75">        }</span>
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+<span class="nc" id="L79">            JLabel label = (JLabel) e.getSource();</span>
+<span class="nc" id="L80">            this.setTask(label, 0);</span>
+<span class="nc" id="L81">        }</span>
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+<span class="nc" id="L85">            JLabel label = (JLabel) e.getSource();</span>
+<span class="nc" id="L86">            this.setTask(label, 1);</span>
+<span class="nc" id="L87">        }</span>
+
+    }
+
+<span class="nc" id="L91">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+<span class="nc" id="L92">    Font[] modes = { new Font(Font.SERIF, Font.PLAIN, 12), (new Font(Font.SERIF, Font.BOLD, 12)) };</span>
+<span class="nc" id="L93">    JPanel panel = new JPanel(new GridBagLayout());</span>
+    WeatherMeasureIcon weatherMeasureIcon;
+    private JLabel labelMeasurement;
+
+    private final void setLabelMeasurementMouseListener(LabelMeasurementMouseListener newListener) {
+<span class="nc" id="L98">        this.labelMeasurement.addMouseListener(newListener);</span>
+<span class="nc" id="L99">    }</span>
+
+    public final JLabel getLabelMeasurement() {
+<span class="nc" id="L102">        return this.labelMeasurement;</span>
+    }
+
+    private final void setLabelMeasurement(JLabel label) {
+<span class="nc" id="L106">        this.labelMeasurement = label;</span>
+<span class="nc" id="L107">    }</span>
+
+<span class="nc" id="L109">    public WeatherMeasure(WeatherMeasureIcon weatherMeasureIcon) {</span>
+<span class="nc" id="L110">        this.weatherMeasureIcon = weatherMeasureIcon;</span>
+
+<span class="nc" id="L112">        this.setLabelMeasurement(new JLabel());</span>
+
+<span class="nc" id="L114">        this.setGrid();</span>
+<span class="nc" id="L115">        this.setPicture(this.weatherMeasureIcon); // sef grid object</span>
+<span class="nc" id="L116">        this.setLabelMeasurementGrid(this.weatherMeasureIcon); // set grid object</span>
+
+<span class="nc" id="L118">    }</span>
+
+    private void setGrid() {
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        for (int x = 0; x &lt; 10; x++) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            for (int y = 0; y &lt; 10; y++) {</span>
+
+<span class="nc" id="L124">                GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L125">                gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L126">                gc.weightx = 1;</span>
+<span class="nc" id="L127">                gc.weighty = 1;</span>
+<span class="nc" id="L128">                gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L129">                gc.gridx = x;</span>
+<span class="nc" id="L130">                gc.gridy = y;</span>
+<span class="nc" id="L131">                gc.ipadx = 0;</span>
+<span class="nc" id="L132">                gc.ipady = 0;</span>
+
+<span class="nc" id="L134">                JPanel p = new JPanel();</span>
+<span class="nc" id="L135">                p.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 150), 1));</span>
+<span class="nc" id="L136">                p.setMinimumSize(new Dimension(20, 20));</span>
+<span class="nc" id="L137">                panel.add(p, gc);</span>
+
+            }
+        }
+
+<span class="nc" id="L142">        this.add(panel);</span>
+<span class="nc" id="L143">    }</span>
+
+    public void updateValue() {
+<span class="nc" id="L146">        this.labelMeasurement.setText(this.weatherMeasureIcon.getValue() + &quot; &quot; + this.weatherMeasureIcon.getSymbol());</span>
+<span class="nc" id="L147">    }</span>
+
+    private void setPicture(WeatherMeasureIcon w) {
+<span class="nc" id="L150">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L151">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L152">        gc.weightx = 1;</span>
+<span class="nc" id="L153">        gc.weighty = 1;</span>
+<span class="nc" id="L154">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L155">        gc.gridx = 2;</span>
+<span class="nc" id="L156">        gc.gridy = 2;</span>
+<span class="nc" id="L157">        gc.ipadx = 0;</span>
+<span class="nc" id="L158">        gc.ipady = 0;</span>
+<span class="nc" id="L159">        gc.gridwidth = 6;</span>
+<span class="nc" id="L160">        gc.gridheight = 5;</span>
+
+<span class="nc" id="L162">        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));</span>
+<span class="nc" id="L163">        this.panel.add(w.getPic(), gc);</span>
+<span class="nc" id="L164">        this.panel.setComponentZOrder(w.getPic(), 1);</span>
+
+<span class="nc" id="L166">    }</span>
+
+    private void setLabelMeasurementGrid(WeatherMeasureIcon w) {
+<span class="nc" id="L169">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L170">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L171">        gc.weightx = 1;</span>
+<span class="nc" id="L172">        gc.weighty = 1;</span>
+<span class="nc" id="L173">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L174">        gc.gridx = 0;</span>
+<span class="nc" id="L175">        gc.gridy = 7;</span>
+<span class="nc" id="L176">        gc.ipadx = 0;</span>
+<span class="nc" id="L177">        gc.ipady = 0;</span>
+<span class="nc" id="L178">        gc.gridwidth = 9;</span>
+<span class="nc" id="L179">        gc.gridheight = 5;</span>
+
+<span class="nc" id="L181">        this.labelMeasurement.setText(w.getValue() + &quot; &quot; + w.getSymbol());</span>
+<span class="nc" id="L182">        this.labelMeasurement.setFont((modes[0]));</span>
+<span class="nc" id="L183">        this.labelMeasurement.setHorizontalAlignment(SwingConstants.CENTER);</span>
+
+<span class="nc" id="L185">        this.setLabelMeasurementMouseListener(new LabelMeasurementMouseListener());</span>
+
+<span class="nc" id="L187">        this.panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));</span>
+<span class="nc" id="L188">        this.panel.add(this.getLabelMeasurement(), gc);</span>
+<span class="nc" id="L189">        this.panel.setComponentZOrder(this.getLabelMeasurement(), 1);</span>
+<span class="nc" id="L190">        this.panel.validate();</span>
+<span class="nc" id="L191">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

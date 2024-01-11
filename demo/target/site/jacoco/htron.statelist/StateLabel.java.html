@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateLabel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.statelist</a> &gt; <span class="el_source">StateLabel.java</span></div><h1>StateLabel.java</h1><pre class="source lang-java linenums">package htron.statelist;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Ellipse2D;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.BorderFactory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import htron.FileHelper;
+
+public class StateLabel extends JPanel {
+<span class="nc" id="L37">    String name = &quot;&quot;;</span>
+    GridBagLayout grid;
+    JLabel labelName ;
+    String working; 
+    static final int N = 60;
+<span class="nc" id="L42">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+    Image currImg;
+    private JSONObject configJson;
+    String filePathJson;
+    ArrayList&lt;String&gt; stateArrayList;
+<span class="nc" id="L47">    private static int cnt = 0;</span>
+    StateListMetricsModuleWrapper metrics; 
+    private  Map&lt;String, Boolean &gt; usageMapIcon;
+    
+<span class="nc" id="L51">    private  IconBlock[] icons = {null, null, null};</span>
+
+    // private void setIcon (IconBlock label, int index) {
+    //     this.icons[index] = label;
+    // }   
+    
+    public IconBlock getIcon (int index) {
+<span class="nc" id="L58">        return this.icons[index];</span>
+    }   
+
+    public int getIconCollectionLength () {
+<span class="nc" id="L62">        return this.icons.length;</span>
+    }   
+
+    private static final void incrementCnt(int current) {
+        /* static because cnt variable is static */
+<span class="nc" id="L67">        StateLabel.cnt = current + 1;</span>
+<span class="nc" id="L68">    }    </span>
+
+    public final int getCnt () {
+<span class="nc" id="L71">        return StateLabel.cnt; </span>
+    }
+
+    public class CircleIcon  extends JPanel {
+        Color circleColor;
+        boolean mouseEventsValid; 
+        IconBlock iconx;
+<span class="nc" id="L78">        Color alphaRed = new Color(255, 0, 0, 0 );</span>
+        StateLabel statelabel;
+        Color currentColor; 
+        Ellipse2D dotEllipse2d;
+
+<span class="nc" id="L83">        public CircleIcon (IconBlock iconx, StateLabel statelabel) {</span>
+<span class="nc" id="L84">            this.paint(this.getGraphics());</span>
+<span class="nc" id="L85">            this.setBorder(null);</span>
+<span class="nc" id="L86">            this.setBackground( new Color(255, 255, 255, 0 ) );</span>
+<span class="nc" id="L87">            this.setPreferredSize(new Dimension(7, 7));</span>
+<span class="nc" id="L88">            this.setIgnoreRepaint(true);</span>
+<span class="nc" id="L89">            this.mouseEventsValid = false;</span>
+<span class="nc" id="L90">            this.iconx = iconx;</span>
+<span class="nc" id="L91">            this.statelabel = statelabel;</span>
+<span class="nc" id="L92">            this.currentColor = this.statelabel.getBackground();</span>
+<span class="nc" id="L93">            this.dotEllipse2d = new Ellipse2D.Double(0,0,4,4);</span>
+<span class="nc" id="L94">        }   </span>
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+<span class="nc" id="L98">            Graphics2D g2d = (Graphics2D) g;</span>
+<span class="nc" id="L99">            Graphics2D g2d1 = null;</span>
+            IconBlock iconxLocal;
+            boolean bool; 
+
+             // clear dots 
+<span class="nc" id="L104">            g2d.setColor(this.currentColor );</span>
+<span class="nc" id="L105">            g2d.fill(this.dotEllipse2d);</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (this.mouseEventsValid) {</span>
+
+<span class="nc bnc" id="L109" title="All 12 branches missed.">                if ( (iconx.id.equals( &quot;up&quot;) &amp;&amp;  (!statelabel.usageMapIcon.get(&quot;up&quot;) &amp;&amp; statelabel.usageMapIcon.get(&quot;down&quot;) ) )  || ( iconx.id.equals( &quot;down&quot;) &amp;&amp;  (!statelabel.usageMapIcon.get(&quot;down&quot;) ) &amp;&amp; statelabel.usageMapIcon.get(&quot;up&quot;) ))   {  </span>
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                    iconxLocal = statelabel.icons[ iconx.id.equals(&quot;up&quot;) ? 2 : 1 ]; </span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                    statelabel.usageMapIcon.put( iconxLocal.id,  !statelabel.usageMapIcon.get(iconxLocal.id) );</span>
+<span class="nc" id="L113">                    g2d1= (Graphics2D) iconxLocal.circleIcon.getGraphics();</span>
+
+                }
+                
+                // main icon graphic2D object 
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                statelabel.usageMapIcon.put( iconx.id,  !statelabel.usageMapIcon.get(iconx.id) );</span>
+<span class="nc" id="L119">                bool = this.statelabel.usageMapIcon.get(iconx.id);</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                g2d.setColor( bool  ? Color.green  : alphaRed);</span>
+<span class="nc" id="L121">                g2d.fill( this.dotEllipse2d);</span>
+            
+                // thumpy graphic2D object 
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if (g2d1 != null) {</span>
+<span class="nc" id="L125">                    g2d1.setColor( this.currentColor);</span>
+<span class="nc" id="L126">                    g2d1.fill( this.dotEllipse2d);</span>
+                }
+
+            } 
+
+<span class="nc" id="L131">        }</span>
+        
+    }
+
+    public class IconBlock extends JLabel {
+        private int count;
+        StateLabel stateLabel;
+<span class="nc" id="L138">        int n = 25;</span>
+<span class="nc" id="L139">        private String id = &quot;&quot;;</span>
+        private CircleIcon circleIcon;
+        private static final String STATELIST = &quot;Statelist&quot;;
+        private static final String ASSETS = &quot;assets&quot;;
+        private static final String HEART = &quot;heart&quot;;
+
+        private void setID (String s) {
+<span class="nc" id="L146">            this.id = s; </span>
+<span class="nc" id="L147">        }</span>
+
+        public String getID () {
+<span class="nc" id="L150">            return this.id;</span>
+        }
+
+        public int getCount () {
+<span class="nc" id="L154">            return this.count;</span>
+        }
+
+
+<span class="nc" id="L158">        public IconBlock(StateLabel stateLabel, String nameOfFile) {</span>
+            String imgUrl;
+            int offset; 
+            GridBagConstraints gbc;
+
+<span class="nc" id="L163">            this.setID(nameOfFile);</span>
+
+<span class="nc" id="L165">            this.stateLabel = stateLabel;</span>
+<span class="nc" id="L166">            this.circleIcon = new CircleIcon(this, stateLabel);</span>
+<span class="nc bnc" id="L167" title="All 4 branches missed.">            switch(nameOfFile) {</span>
+                case IconBlock.HEART:
+<span class="nc" id="L169">                    offset = 0;</span>
+<span class="nc" id="L170">                    n = 30;</span>
+<span class="nc" id="L171">                    break;</span>
+                case &quot;up&quot;:
+<span class="nc" id="L173">                    offset = 1;</span>
+<span class="nc" id="L174">                    break;</span>
+                case &quot;down&quot;:
+<span class="nc" id="L176">                    offset = 2;</span>
+<span class="nc" id="L177">                    break;</span>
+                default:
+<span class="nc" id="L179">                    offset = 0;</span>
+                    break;
+            }
+            
+<span class="nc" id="L183">            count = 0;</span>
+<span class="nc" id="L184">            imgUrl = Paths.get(FileHelper.getAssetsPath(), IconBlock.STATELIST, &quot;icons&quot;, nameOfFile + &quot;.png&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L185">            this.addMouseListener(new MouseOverIcon(stateLabel));</span>
+<span class="nc" id="L186">            this.setIcon(new ImageIcon(new ImageIcon(imgUrl).getImage().getScaledInstance(n, n, Image.SCALE_SMOOTH) ));</span>
+<span class="nc" id="L187">            this.setBorder(null);</span>
+
+            // active indicator (i.e. color green)
+<span class="nc bnc" id="L190" title="All 2 branches missed.">            for (int i = 0; i &lt; 1; i++) {</span>
+<span class="nc" id="L191">                gbc = new GridBagConstraints();</span>
+<span class="nc" id="L192">                gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L193">                gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L194">                gbc .weightx = 1;</span>
+<span class="nc" id="L195">                gbc .weighty = 1;</span>
+<span class="nc" id="L196">                gbc.gridy = 48;</span>
+<span class="nc" id="L197">                gbc.gridx = offset;</span>
+<span class="nc" id="L198">                stateLabel.add(this.circleIcon, gbc);</span>
+            }
+
+            // add heart , like icon, or dislike 
+<span class="nc" id="L202">            gbc = new GridBagConstraints();</span>
+<span class="nc" id="L203">            gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L204">            gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L205">            gbc .weightx = 1;</span>
+<span class="nc" id="L206">            gbc .weighty = 1;</span>
+<span class="nc" id="L207">            gbc.gridx =  offset;</span>
+<span class="nc" id="L208">            gbc.gridy = 48;</span>
+<span class="nc" id="L209">            gbc.gridwidth = 1;</span>
+<span class="nc" id="L210">            gbc.gridheight = 6;</span>
+<span class="nc" id="L211">            stateLabel.add(this, gbc);</span>
+<span class="nc" id="L212">            stateLabel.setComponentZOrder( this , 1);</span>
+
+<span class="nc" id="L214">            stateLabel.validate();</span>
+            
+<span class="nc" id="L216">        }</span>
+
+        public void updateCounter () {
+<span class="nc" id="L219">            this.count += 1;</span>
+<span class="nc" id="L220">        }</span>
+    }
+
+    public class MouseOverIcon implements MouseListener
+    {   
+        StateLabel self;
+<span class="nc" id="L226">        public MouseOverIcon (StateLabel self) {</span>
+<span class="nc" id="L227">            this.self = self; </span>
+<span class="nc" id="L228">        }</span>
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L232">            sched.schedule(</span>
+                () -&gt; { 
+<span class="nc" id="L234">                    IconBlock ele = (IconBlock) e.getSource();</span>
+<span class="nc" id="L235">                    ele.circleIcon.requestFocus();</span>
+<span class="nc" id="L236">                    ele.circleIcon.mouseEventsValid = true;</span>
+<span class="nc" id="L237">                    ele.circleIcon.paintComponent(ele.circleIcon.getGraphics());</span>
+                    
+<span class="nc" id="L239">                } , 1, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L240">            }</span>
+            
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            /* no op */
+<span class="nc" id="L246">        }</span>
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            /* no op */
+
+<span class="nc" id="L252">        }</span>
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            /* no op */
+<span class="nc" id="L257">        }</span>
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            /* no op */
+<span class="nc" id="L262">        }</span>
+
+    }
+    
+
+<span class="nc" id="L267">    public StateLabel () {</span>
+        String fileNameImage;
+<span class="nc" id="L269">        Dimension d = new Dimension(1000,160);  // Monitor Size needed here</span>
+        
+<span class="nc" id="L271">        this.setMaximumSize(d);</span>
+<span class="nc" id="L272">        this.setPreferredSize(d);</span>
+<span class="nc" id="L273">        this.setMinimumSize(d);</span>
+
+<span class="nc" id="L275">        this.usageMapIcon = new HashMap&lt;&gt;(Map.of(</span>
+<span class="nc" id="L276">            IconBlock.HEART, false,</span>
+<span class="nc" id="L277">            &quot;up&quot;, false,</span>
+<span class="nc" id="L278">            &quot;down&quot;, false</span>
+        ));
+
+ 
+<span class="nc" id="L282">        sched.schedule(</span>
+            () -&gt; {
+<span class="nc" id="L284">            }    </span>
+        , 0, TimeUnit.MILLISECONDS);
+        
+        // state image + button select 
+<span class="nc" id="L288">        this.filePathJson = Paths.get(FileHelper.getAssetsPath(), &quot;Search&quot;,  &quot;states.json&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L289">        this.stateArrayList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L290">        this.working = Paths.get(FileHelper.getAssetsPath() , IconBlock.STATELIST, &quot;icons&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L291">        this.setBorder(null);</span>
+   
+<span class="nc" id="L293">        this.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L294">        this.setupGrid();</span>
+<span class="nc" id="L295">        this.setVisible(true);</span>
+
+        // icons 
+<span class="nc" id="L298">        this.icons[0] =  (new IconBlock(this, IconBlock.HEART));</span>
+<span class="nc" id="L299">        this.icons[1] = new IconBlock(this, &quot;up&quot;);</span>
+<span class="nc" id="L300">        this.icons[2] = new IconBlock(this, &quot;down&quot;);</span>
+
+        //  label image 
+        try {
+
+<span class="nc" id="L305">            this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(this.filePathJson)))  );</span>
+<span class="nc" id="L306">            this.configJson.keys().forEachRemaining(stateArrayList::add); // add keys to array list </span>
+<span class="nc" id="L307">            Collections.sort(stateArrayList );</span>
+<span class="nc" id="L308">            fileNameImage = Paths.get(FileHelper.getAssetsPath() ,  IconBlock.STATELIST, &quot;imgs&quot;, stateArrayList.get(StateLabel.cnt) + &quot;.png&quot; ).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L309">            this.currImg = ImageIO.read(new File(fileNameImage)) ;      </span>
+<span class="nc" id="L310">            StateLabel.incrementCnt(StateLabel.cnt );</span>
+
+<span class="nc" id="L312">        } catch (JSONException | IOException e) {</span>
+            
+<span class="nc" id="L314">            e.printStackTrace();</span>
+
+<span class="nc" id="L316">        }</span>
+
+<span class="nc" id="L318">        this.loadImage(this.currImg);        </span>
+        
+        // loads metric module slot 
+<span class="nc" id="L321">        this.metrics = new StateListMetricsModuleWrapper(this);</span>
+<span class="nc" id="L322">        this.loadMetricGrid(this.metrics );</span>
+
+
+
+<span class="nc" id="L326">    }</span>
+
+    private void loadImage(Image img) {
+
+<span class="nc" id="L330">        JLabel labelImage = new JLabel(name) {</span>
+            
+            @Override 
+            protected void paintComponent(Graphics g) {
+<span class="nc" id="L334">                super.paintComponent(g);</span>
+<span class="nc" id="L335">                g.drawImage(img, 0,0, this.getWidth(), this.getHeight(), this);</span>
+<span class="nc" id="L336">                this.revalidate();</span>
+<span class="nc" id="L337">            }</span>
+        };
+
+<span class="nc" id="L340">        GridBagConstraints gbc = new GridBagConstraints();</span>
+
+<span class="nc" id="L342">        gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L343">        gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L344">        gbc .weightx = 1;</span>
+<span class="nc" id="L345">        gbc .weighty = 1;</span>
+<span class="nc" id="L346">        gbc.gridx = 0;</span>
+<span class="nc" id="L347">        gbc.gridy = 1;</span>
+<span class="nc" id="L348">        gbc.gridwidth = 27;</span>
+<span class="nc" id="L349">        gbc.gridheight = 45;</span>
+
+<span class="nc" id="L351">        this.add(labelImage, gbc);</span>
+<span class="nc" id="L352">        this.setComponentZOrder( labelImage , 2);</span>
+<span class="nc" id="L353">    }</span>
+
+    private void setupGrid() {
+
+<span class="nc bnc" id="L357" title="All 2 branches missed.">        for (int x = 0; x &lt; StateLabel.N; x++) {</span>
+
+<span class="nc bnc" id="L359" title="All 2 branches missed.">            for (int y = 0; y &lt; StateLabel.N ; y++) {</span>
+
+<span class="nc" id="L361">                GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L362">                gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L363">                gbc .weightx = 1;</span>
+<span class="nc" id="L364">                gbc .weighty = 1;</span>
+
+<span class="nc" id="L366">                gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L367">                gbc.gridx = x;</span>
+<span class="nc" id="L368">                gbc.gridy = y;</span>
+                
+<span class="nc" id="L370">                JPanel cell = new JPanel();</span>
+                // cell.setBorder(BorderFactory.createLineBorder(Color.PINK));
+<span class="nc" id="L372">                this.add(cell, gbc);</span>
+            }
+
+        }
+
+<span class="nc" id="L377">        this.validate();</span>
+        
+<span class="nc" id="L379">    }</span>
+
+
+    private void loadMetricGrid (StateListMetricsModuleWrapper jpanel) {
+<span class="nc" id="L383">        GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L384">        gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L385">        gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L386">        gbc.gridy = 3;</span>
+<span class="nc" id="L387">        gbc.gridx = 29; </span>
+<span class="nc" id="L388">        gbc.gridwidth = 25;</span>
+<span class="nc" id="L389">        gbc.gridheight = 48; </span>
+<span class="nc" id="L390">        this.add(jpanel , gbc);</span>
+<span class="nc" id="L391">        this.setComponentZOrder( jpanel , 3);</span>
+
+<span class="nc" id="L393">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

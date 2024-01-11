@@ -10,7 +10,7 @@ result=${result:-/}        # to correct for the case where PWD=/
 cd ../simply-apps-maven
 
 mvn clean -f pom.xml
-mvn install -f pom.xml
+mvn package -f pom.xml
 
 echo ${PWD}
 
@@ -18,4 +18,7 @@ echo ${PWD}
 cd target/
 
 # run java jar 
-java -cp simply-apps-maven-1.0-SNAPSHOT.jar htron.App 
+java -cp simply-apps-maven-1.0-SNAPSHOT.jar ../simply-apps-maven/target/classes/htron/htron.App 
+
+
+

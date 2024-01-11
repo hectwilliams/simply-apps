@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MyMouseListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">MyMouseListener.java</span></div><h1>MyMouseListener.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import htron.weatherinfo.*;
+
+public class MyMouseListener implements MouseListener {
+    WeatherInfo weatherInfo;
+<span class="nc" id="L10">    DebounceFirst&lt;Object&gt; debounce = null;</span>
+
+<span class="nc" id="L12">    public MyMouseListener(WeatherInfo weatherInfo) {</span>
+<span class="nc" id="L13">        this.weatherInfo = weatherInfo;</span>
+<span class="nc" id="L14">        this.debounce = new DebounceFirst&lt;Object&gt;(1400, (Object obj1, Object obj2) -&gt; {</span>
+<span class="nc" id="L15">            WeatherInfo winfo = (WeatherInfo) obj1;</span>
+            // Picture pic = (Picture) obj2;
+            // this.weatherInfo.weatherApi.getStateDayMeasurement(pic.getToolTipText() /*state*/, winfo);
+<span class="nc" id="L18">        });</span>
+<span class="nc" id="L19">    }</span>
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L23">        this.debounce.call(this.weatherInfo, (Picture)e.getSource());</span>
+<span class="nc" id="L24">    }</span>
+
+    @Override
+<span class="nc" id="L27">    public void mousePressed(MouseEvent e) {}</span>
+
+    @Override
+<span class="nc" id="L30">    public void mouseReleased(MouseEvent e) {}</span>
+
+    @Override
+<span class="nc" id="L33">    public void mouseEntered(MouseEvent e) {}</span>
+
+    @Override
+<span class="nc" id="L36">    public void mouseExited(MouseEvent e) {}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeatherMeasureIcon.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.weatherinfo</a> &gt; <span class="el_source">WeatherMeasureIcon.java</span></div><h1>WeatherMeasureIcon.java</h1><pre class="source lang-java linenums">package htron.weatherinfo;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+import htron.FileHelper;
+
+public class WeatherMeasureIcon extends JLabel{
+
+    Font myFont;
+<span class="nc" id="L22">    JLabel picIcon =  null; </span>
+<span class="nc" id="L23">    private String symbol = &quot;\u0000&quot;;</span>
+    private static final  String PERCENT_SYMBOL =  &quot; \u0025&quot;; 
+    private String value;
+    private static final String ASSETS = &quot;assets&quot;;
+    private static final String WEATHER = &quot;Weather&quot;;
+<span class="nc" id="L28">    private  String pathToAssetImg = null;</span>
+<span class="nc" id="L29">    public static final  Dimension DIMENSION = new Dimension(100, 12); </span>
+    private ImageIcon iconImage;
+    
+    private JButton tempFarenheitButton;
+    private JButton tempCelciusButton;
+<span class="nc" id="L34">    private final Dimension tempButtonDimension = new Dimension(10, 10);</span>
+<span class="nc" id="L35">    private final Font tempButtonFont = new Font(Font.SANS_SERIF, Font.PLAIN, 8); </span>
+
+    private String id;
+
+    private String tempFarenString; 
+
+    private JButton prevButton;
+<span class="nc" id="L42">    private Color darkGrey  = new Color(64  , 64, 64, 128 );</span>
+    
+    private Picture pic; 
+
+    private void setPic (Picture pic) {
+<span class="nc" id="L47">        this.pic = pic;</span>
+<span class="nc" id="L48">        this.pic.setPreferredSize(new Dimension(5, 5));</span>
+<span class="nc" id="L49">    }</span>
+
+    public final Picture getPic() {
+<span class="nc" id="L52">        return this.pic; </span>
+    }
+
+    public String getSymbol() {
+<span class="nc" id="L56">        return this.symbol;</span>
+    }
+    private void setValue(String s) {
+<span class="nc" id="L59">        this.value = s;</span>
+<span class="nc" id="L60">    }</span>
+
+    public String getValue() {
+<span class="nc" id="L63">        return this.value;</span>
+    }
+
+    private void setPrevButton (JButton button) {
+<span class="nc" id="L67">        this.prevButton = button;</span>
+<span class="nc" id="L68">        this.prevButton.setForeground(this.darkGrey);</span>
+<span class="nc" id="L69">    }</span>
+
+    private void setTempFarenString (String s) {
+<span class="nc" id="L72">        this.tempFarenString = s;</span>
+<span class="nc" id="L73">    }</span>
+
+    private String getTempFarenString () {
+<span class="nc" id="L76">        return this.tempFarenString;</span>
+    }
+
+    private void setIconImage(ImageIcon imgIcon) {
+<span class="nc" id="L80">        this.iconImage = imgIcon;</span>
+<span class="nc" id="L81">    }</span>
+
+     public final ImageIcon getIconImage() {
+<span class="nc" id="L84">        return this.iconImage;</span>
+    }
+    
+    private void setTempFarenheitButton(JButton button) {
+<span class="nc" id="L88">        this.tempFarenheitButton = button;</span>
+<span class="nc" id="L89">        this.tempFarenheitButton.setMinimumSize(tempButtonDimension);</span>
+<span class="nc" id="L90">        this.tempFarenheitButton.setFont(tempButtonFont);</span>
+<span class="nc" id="L91">    }</span>
+
+    public final JButton getTempFarenheitButton() {
+<span class="nc" id="L94">        return this.tempFarenheitButton;</span>
+    }
+    
+    private void setTempCelciusButton(JButton button) {
+<span class="nc" id="L98">        this.tempCelciusButton = button;</span>
+<span class="nc" id="L99">        this.tempCelciusButton.setMinimumSize(tempButtonDimension);</span>
+<span class="nc" id="L100">        this.tempCelciusButton.setFont(tempButtonFont);</span>
+<span class="nc" id="L101">    }</span>
+
+    public final JButton getTempCelciusButton() {
+<span class="nc" id="L104">        return this.tempCelciusButton;</span>
+    }
+
+
+<span class="nc" id="L108">    public WeatherMeasureIcon (String id) {</span>
+<span class="nc" id="L109">        int w = 20;</span>
+<span class="nc" id="L110">        int h = 15;</span>
+
+<span class="nc" id="L112">        this.myFont = new Font(Font.SANS_SERIF, Font.BOLD, 7);</span>
+<span class="nc" id="L113">        this.setFont(this.myFont);</span>
+<span class="nc" id="L114">        this.setPreferredSize(DIMENSION);</span>
+<span class="nc" id="L115">        this.setAlignmentX((SwingConstants.CENTER));</span>
+<span class="nc" id="L116">        this.id = id;</span>
+<span class="nc" id="L117">        this.setTempFarenString(&quot;0&quot;);</span>
+<span class="nc" id="L118">        this.pic = null;</span>
+
+
+<span class="nc bnc" id="L121" title="All 6 branches missed.">        switch (this.id ) {</span>
+
+            case &quot;temp&quot; : {
+<span class="nc" id="L124">                this.tempIconInit();    </span>
+<span class="nc" id="L125">                break;</span>
+            }
+            
+            
+            case &quot;humid&quot; : 
+            case &quot;percip&quot;:
+            case &quot;cloud&quot;: {
+<span class="nc" id="L132">                this.humidIconInit();</span>
+<span class="nc" id="L133">                break;</span>
+            }
+
+            case &quot;wind&quot;: {
+<span class="nc" id="L137">                this.windIconInit();</span>
+<span class="nc" id="L138">                break;</span>
+            }
+            
+            case &quot;pressure&quot;: {
+<span class="nc" id="L142">                this.pressureIconInit();</span>
+<span class="nc" id="L143">                break;</span>
+            }
+ 
+            case &quot;sunrise&quot;:
+            case &quot;sunset&quot;: {
+<span class="nc" id="L148">                this.sunIconInit();</span>
+<span class="nc" id="L149">                break;</span>
+            }
+            
+            default:
+                break;
+        }
+             try {
+<span class="nc" id="L156">                pathToAssetImg = Paths.get(FileHelper.getAssetsPath(), WEATHER, this.id + &quot;.png&quot; ).toAbsolutePath().normalize().toString() ;</span>
+<span class="nc" id="L157">                this.setIconImage(</span>
+<span class="nc" id="L158">                    new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) </span>
+                );
+
+<span class="nc" id="L161">                this.setPic(new Picture( pathToAssetImg) );</span>
+<span class="nc" id="L162">            } catch (IOException e) {</span>
+<span class="nc" id="L163">                e.printStackTrace();</span>
+<span class="nc" id="L164">            }</span>
+<span class="nc" id="L165">    }</span>
+
+    private  void tempIconInit() {
+<span class="nc" id="L168">        this.symbol = &quot;\u00B0F&quot;;</span>
+
+<span class="nc" id="L170">        this.setTempFarenheitButton(new JButton(&quot;F&quot; ));</span>
+<span class="nc" id="L171">        this.setTempCelciusButton(new JButton(&quot;C&quot; ));</span>
+<span class="nc" id="L172">         this.setPrevButton(this.getTempFarenheitButton());</span>
+  
+        
+        // this.tempFarenString = String.valueOf((int) (1.8 * ( Double.valueOf( weatherInfoClient.map.get(id))  -273)) + 32); // map.get(return Kevlin value)
+<span class="nc" id="L176">        this.updateLabelName( String.valueOf(this.getTempFarenString()) );</span>
+<span class="nc" id="L177">        this.setToolTipText(this.id);</span>
+
+<span class="nc" id="L179">        JButton [] arr = {this.getTempFarenheitButton(), this.tempCelciusButton};</span>
+        
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        for (JButton button :  arr ) {</span>
+            
+<span class="nc" id="L183">            button.addActionListener( e -&gt; {</span>
+                
+<span class="nc" id="L185">                JButton curr = ((JButton) e.getSource());</span>
+                
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                if (this.prevButton != curr) {</span>
+
+<span class="nc" id="L189">                    this.prevButton.setForeground(Color.BLACK);</span>
+                    
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                    if (  curr == this.getTempFarenheitButton())  {</span>
+<span class="nc" id="L192">                        this.updateLabelName(this.getTempFarenString());</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                    } else if ( curr == this.tempCelciusButton ) {</span>
+<span class="nc" id="L194">                        this.updateLabelName (   String.valueOf( ((( Integer.valueOf(this.getTempFarenString()) - 32) * 5) / 9))            ) ; </span>
+                    }
+<span class="nc" id="L196">                    curr.setForeground(this.darkGrey);</span>
+<span class="nc" id="L197">                    this.prevButton = curr;</span>
+                }
+                
+<span class="nc" id="L200">            });</span>
+        }
+<span class="nc" id="L202">    }</span>
+
+    private void humidIconInit() {
+<span class="nc" id="L205">        this.symbol = WeatherMeasureIcon.PERCENT_SYMBOL;</span>
+<span class="nc" id="L206">        this.updateLabelName(null);</span>
+<span class="nc" id="L207">    }</span>
+
+
+    private void windIconInit() {
+<span class="nc" id="L211">        this.symbol = &quot; m/s&quot;;</span>
+<span class="nc" id="L212">        this.updateLabelName(null );</span>
+<span class="nc" id="L213">    }</span>
+
+    private void pressureIconInit() {
+<span class="nc" id="L216">            this.symbol = &quot; hPa&quot;;</span>
+<span class="nc" id="L217">        this.updateLabelName(null );</span>
+<span class="nc" id="L218">    }</span>
+
+    private void sunIconInit() {
+<span class="nc" id="L221">        int w = 30;</span>
+<span class="nc" id="L222">        int h = 30;</span>
+
+        try {
+<span class="nc" id="L225">            this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));</span>
+<span class="nc" id="L226">            pathToAssetImg = Paths.get(FileHelper.getAssetsPath(), WEATHER, this.id + &quot;.png&quot; ).toAbsolutePath().normalize().toString() ;</span>
+<span class="nc" id="L227">            this.setIconImage(new ImageIcon(ImageIO.read(new File(  pathToAssetImg )  ).getScaledInstance(w, h, Image.SCALE_SMOOTH) ) );</span>
+<span class="nc" id="L228">        } catch (IOException e) {</span>
+<span class="nc" id="L229">            e.printStackTrace();</span>
+<span class="nc" id="L230">        }   </span>
+
+<span class="nc" id="L232">    }</span>
+
+
+    public void updateLabelName(String valueIn) {
+
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if (valueIn == null)  {</span>
+<span class="nc" id="L238">            valueIn = &quot;0&quot;;</span>
+        }
+
+<span class="nc" id="L241">        this.setValue(valueIn);</span>
+<span class="nc" id="L242">        this.setText(this.getValue() + this.symbol );</span>
+<span class="nc" id="L243">    }</span>
+
+    public void updateTempFaren(String value) {
+<span class="nc" id="L246">        this.setTempFarenString(value);</span>
+<span class="nc" id="L247">    }</span>
+
+    public String calculatedTime(long t ) {
+<span class="nc" id="L250">        return  String.format(&quot;%1$TI:%1$TM:%1$TS %1$Tp&quot;, t);</span>
+
+    // 'R'	Time formatted for the 24-hour clock as &quot;%tH:%tM&quot;
+    // 'T'	Time formatted for the 24-hour clock as &quot;%tH:%tM:%tS&quot;.
+    // 'r'	Time formatted for the 12-hour clock as &quot;%tI:%tM:%tS %Tp&quot;. The location of the morning or afternoon marker ('%Tp') may be locale-dependent.
+    // 'D'	Date formatted as &quot;%tm/%td/%ty&quot;.
+    // 'F'	ISO 8601 complete date formatted as &quot;%tY-%tm-%td&quot;.
+    // 'c'	Date and time formatted as &quot;%ta %tb %td %tT %tZ %tY&quot;, e.g. &quot;Sun Jul 20 16:17:00 EDT 1969&quot;.
+
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

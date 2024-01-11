@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateListMetricsModule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.statelist</a> &gt; <span class="el_source">StateListMetricsModule.java</span></div><h1>StateListMetricsModule.java</h1><pre class="source lang-java linenums">package htron.statelist;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+
+public class StateListMetricsModule extends JScrollPane {
+
+<span class="nc" id="L24">    private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+    private JPanel metricsPanel;
+    JPanel metricsPanelGrid;
+    JScrollPane testimonialList;
+    JPanel testimonialListClient;
+
+    Testimonial testimonial;
+    Graphy graphy;
+    StateLabel stateLabel; 
+
+<span class="nc" id="L34">    public StateListMetricsModule (StateLabel stateLabel) {</span>
+        
+<span class="nc" id="L36">        metricsPanel = new JPanel(new GridBagLayout());</span>
+<span class="nc" id="L37">        metricsPanelGrid = new JPanel(new GridBagLayout());</span>
+
+<span class="nc" id="L39">        this.metricsPanelGrid.setToolTipText(&quot;Metrics Canvas&quot;);</span>
+        
+<span class="nc" id="L41">        this.setViewportView(metricsPanel);</span>
+        
+<span class="nc" id="L43">        this.setBorder(  BorderFactory.createCompoundBorder ((BorderFactory.createLineBorder( new Color(255, 255, 255, 149) , 4)) ,BorderFactory.createMatteBorder(0,0,4,0,new Color(255, 255, 255, 149) )) ) ;</span>
+<span class="nc" id="L44">        this.stateLabel = stateLabel;   </span>
+                
+<span class="nc" id="L46">        this.loadButtons();</span>
+   
+<span class="nc" id="L48">        this.loadActiveGrid();</span>
+
+<span class="nc" id="L50">        sched.schedule(  () -&gt; {</span>
+<span class="nc" id="L51">            this.loadActiveMetricComp();</span>
+<span class="nc" id="L52">        }, 0, TimeUnit.MILLISECONDS);</span>
+        
+<span class="nc" id="L54">    }</span>
+
+    public final StateListMetricsModule getMetricPanel() {
+<span class="nc" id="L57">        return this;</span>
+    }
+
+    /*
+     * adds 'like' and 'testimonial' buttons to subpanel 
+     */
+    private void loadButtons( ) {
+<span class="nc" id="L64">        GridBagConstraints c = new GridBagConstraints();</span>
+<span class="nc" id="L65">        c.fill = GridBagConstraints.HORIZONTAL;</span>
+<span class="nc" id="L66">        c.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L67">        c.weightx = 1;</span>
+<span class="nc" id="L68">        c.weighty = 1;</span>
+<span class="nc" id="L69">        c.gridx = 0;</span>
+<span class="nc" id="L70">        c.gridy = 0;</span>
+<span class="nc" id="L71">        this.metricsPanel.add(new StateListMetricsButton(&quot;Like&quot;, this), c); </span>
+
+<span class="nc" id="L73">        c = new GridBagConstraints();</span>
+<span class="nc" id="L74">        c.fill = GridBagConstraints.HORIZONTAL;</span>
+<span class="nc" id="L75">        c.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L76">        c.weightx = 1;</span>
+<span class="nc" id="L77">        c.weighty = 1;</span>
+<span class="nc" id="L78">        c.gridx = 1;</span>
+<span class="nc" id="L79">        c.gridy = 0;</span>
+<span class="nc" id="L80">        this.metricsPanel.add(new StateListMetricsButton(&quot;Testimonial&quot;, this), c); </span>
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        for (Component button_: this.metricsPanel.getComponents()) {</span>
+<span class="nc" id="L83">            ((StateListMetricsButton) button_).setPreferredSize(new Dimension(4, 12));</span>
+        }
+
+        // default testimonial 
+<span class="nc" id="L87">        ((StateListMetricsButton)this.metricsPanel.getComponent(1)).setBackground( StateListMetricsButton.getActiveColor());</span>
+<span class="nc" id="L88">    }</span>
+
+    /*
+     * add support grid via gridbaglayout layout manager  
+     */
+    private void loadActiveGrid() {
+<span class="nc" id="L94">        GridBagConstraints c = new GridBagConstraints();</span>
+<span class="nc" id="L95">        GridBagConstraints cc = new GridBagConstraints();</span>
+
+<span class="nc" id="L97">        c.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L98">        c.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L99">        c.weightx = 1;</span>
+<span class="nc" id="L100">        c.weighty = 1;</span>
+<span class="nc" id="L101">        c.gridx = 0;</span>
+<span class="nc" id="L102">        c.gridy = 0;</span>
+<span class="nc" id="L103">        c.gridwidth = 2;</span>
+<span class="nc" id="L104">        c.gridheight = 3;</span>
+<span class="nc" id="L105">        c.insets = new Insets(14, 0, 0, 0);</span>
+        
+<span class="nc" id="L107">        this.metricsPanel.add( this.metricsPanelGrid, c);</span>
+
+        // setup grid
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        for (int i = 0; i &lt; 20; i++) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            for (int j = 0; j &lt; 20; j++) {</span>
+<span class="nc" id="L112">                cc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L113">                cc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L114">                cc.weightx = 1;</span>
+<span class="nc" id="L115">                cc.weighty = 1;</span>
+<span class="nc" id="L116">                cc.gridx = i;</span>
+<span class="nc" id="L117">                cc.gridy = j;</span>
+<span class="nc" id="L118">                JPanel p = new JPanel();</span>
+<span class="nc" id="L119">                p.setBorder(  (BorderFactory.createLineBorder( new Color(255, 255, 255, 0) , 1)) );</span>
+<span class="nc" id="L120">                this.metricsPanelGrid.add(p, cc);</span>
+            }
+        }
+<span class="nc" id="L123">        this.metricsPanelGrid.validate();</span>
+<span class="nc" id="L124">    }</span>
+
+    public void loadActiveMetricComp() {
+        JScrollBar scrollbar;
+
+        // load testomonial 
+<span class="nc" id="L130">        this.testimonialList = new JScrollPane();</span>
+
+        // make inner scrollbar thinner  
+<span class="nc" id="L133">        scrollbar =  this.testimonialList .getVerticalScrollBar();</span>
+<span class="nc" id="L134">        scrollbar.setPreferredSize(  new Dimension(  6 , 8 ) );</span>
+
+        // change scrllbar color        
+<span class="nc" id="L137">        this.testimonialList.getVerticalScrollBar().setUI(new  BasicScrollBarUI() {</span>
+            @Override
+            protected void configureScrollBarColors() {
+<span class="nc" id="L140">                this.thumbColor = new Color(178,190,181);</span>
+<span class="nc" id="L141">                this.maximumThumbSize = new Dimension(  9,40); </span>
+<span class="nc" id="L142">            }</span>
+               @Override
+            protected JButton createDecreaseButton(int orientation) {
+<span class="nc" id="L145">                JButton button = super.createDecreaseButton(orientation);</span>
+<span class="nc" id="L146">                button.setBackground(Color.LIGHT_GRAY);</span>
+<span class="nc" id="L147">                return button;</span>
+            }
+
+            @Override
+            protected JButton createIncreaseButton(int orientation) {
+<span class="nc" id="L152">                JButton button = super.createIncreaseButton(orientation);</span>
+<span class="nc" id="L153">                button.setBackground(Color.LIGHT_GRAY);</span>
+<span class="nc" id="L154">                return button;</span>
+            }
+        });
+
+<span class="nc" id="L158">        this.testimonialList.getVerticalScrollBar().setUnitIncrement(20);</span>
+<span class="nc" id="L159">        this.testimonialList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L160">        this.testimonialList.setPreferredSize(new Dimension(5, 5));</span>
+<span class="nc" id="L161">        this.testimonialList.setWheelScrollingEnabled(true);</span>
+<span class="nc" id="L162">        this.testimonialList.setBorder(null);</span>
+<span class="nc" id="L163">        this.testimonialListClient = new JPanel();</span>
+<span class="nc" id="L164">        this.testimonialListClient.setLayout(new BoxLayout(this.testimonialListClient, BoxLayout.PAGE_AXIS));</span>
+
+<span class="nc" id="L166">        this.testimonialList.setViewportView(testimonialListClient);</span>
+
+<span class="nc" id="L168">        GridBagConstraints c = new GridBagConstraints();</span>
+<span class="nc" id="L169">        c.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L170">        c.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L171">        c.weightx = 1;</span>
+<span class="nc" id="L172">        c.weighty = 1;</span>
+<span class="nc" id="L173">        c.gridx = 1;</span>
+<span class="nc" id="L174">        c.gridy = 0;</span>
+<span class="nc" id="L175">        c.gridheight = 19;</span>
+<span class="nc" id="L176">        c.gridwidth = 20;    </span>
+<span class="nc" id="L177">        c.insets = new Insets(0,0,0,10);</span>
+        
+        /* 
+         * placeholders, method to add testimonial string inputs
+         */
+<span class="nc" id="L182">        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );</span>
+<span class="nc" id="L183">        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );</span>
+<span class="nc" id="L184">        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );</span>
+<span class="nc" id="L185">        testimonialListClient.add( new Testimonial(true /*, user pic, username, user message,  */) );</span>
+        /*dummy testimonial needed for equal spacing of 'active' testimonial blocks  */
+<span class="nc" id="L187">        testimonialListClient.add( new Testimonial(false) );    </span>
+
+<span class="nc" id="L189">        this.metricsPanelGrid.add( this.testimonialList, c);</span>
+<span class="nc" id="L190">        this.metricsPanelGrid.setComponentZOrder(this.testimonialList, 3);</span>
+<span class="nc" id="L191">        this.metricsPanelGrid.validate();</span>
+
+        // load graphy 
+<span class="nc" id="L194">        this.graphy = new Graphy(this.stateLabel );</span>
+<span class="nc" id="L195">        this.graphy.setVisible(false);</span>
+<span class="nc" id="L196">        this.metricsPanelGrid.add( this.graphy, c);</span>
+<span class="nc" id="L197">        this.metricsPanelGrid.setComponentZOrder(this.graphy, 3);</span>
+<span class="nc" id="L198">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

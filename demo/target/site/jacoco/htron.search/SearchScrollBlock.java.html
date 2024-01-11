@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchScrollBlock.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">SearchScrollBlock.java</span></div><h1>SearchScrollBlock.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
+import htron.weatherinfo.Picture;
+
+public class SearchScrollBlock extends JScrollPane {
+    final public JPanel client;
+<span class="nc" id="L17">    GridBagLayout gridBagLayout = null;</span>
+
+
+<span class="nc" id="L20">    public SearchScrollBlock() {</span>
+<span class="nc" id="L21">        this.client = new JPanel ();</span>
+<span class="nc" id="L22">        this.client.setVisible(true);</span>
+<span class="nc" id="L23">        this.client.setLayout( new  BoxLayout(this.client, BoxLayout.Y_AXIS) );</span>
+<span class="nc" id="L24">        this.getVerticalScrollBar().setUnitIncrement(10);</span>
+<span class="nc" id="L25">        this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L26">        this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L27">        this.setWheelScrollingEnabled(true);</span>
+<span class="nc" id="L28">        this.setViewportView(this.client);  // set viewpointview </span>
+<span class="nc" id="L29">    }</span>
+
+    public void addChildToView (Picture pic) {
+
+<span class="nc" id="L33">        JPanel pp = new JPanel();</span>
+        
+        // pp.setVisible(false);
+        // pp.setPreferredSize(Picture.DIMENSION);
+        // pp.setMaximumSize(new Dimension( Picture.DIMENSION));
+
+<span class="nc" id="L39">        pp.setSize(100, 100);</span>
+<span class="nc" id="L40">        pp.setLayout( new GridBagLayout());</span>
+<span class="nc" id="L41">        pp.setBorder(new EmptyBorder(10, 10, 10, 10));</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        for (int i = 0 ; i &lt; 10; i++) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            for (int j = 0 ; j &lt; 10; j++) {</span>
+<span class="nc" id="L45">                GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L46">                gc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L47">                gc .weightx = 1;</span>
+<span class="nc" id="L48">                gc .weighty = 1;</span>
+<span class="nc" id="L49">                gc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L50">                gc.gridx = i;</span>
+<span class="nc" id="L51">                gc.gridy = j;</span>
+<span class="nc" id="L52">                gc.ipadx = 0;</span>
+<span class="nc" id="L53">                gc.ipady = 0;</span>
+<span class="nc" id="L54">                JPanel p = new JPanel();</span>
+<span class="nc" id="L55">                p.setBorder( BorderFactory.createLineBorder(new Color(255, 255, 255, 0  ) ) );</span>
+<span class="nc" id="L56">                p.setVisible(false);</span>
+<span class="nc" id="L57">                pp.add(p, gc);</span>
+            }
+        }
+
+<span class="nc" id="L61">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L62">        gc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L63">        gc .weightx = 1;</span>
+<span class="nc" id="L64">        gc .weighty = 1;</span>
+<span class="nc" id="L65">        gc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L66">        gc.gridheight = 10;</span>
+<span class="nc" id="L67">        gc.gridwidth =  8;</span>
+<span class="nc" id="L68">        gc.ipadx = 0;</span>
+<span class="nc" id="L69">        gc.ipady = 0;</span>
+        // write c to pp via GridBag
+<span class="nc" id="L71">        pp.add( pic, gc);</span>
+<span class="nc" id="L72">        this.client.add(pp);</span>
+<span class="nc" id="L73">    }</span>
+
+    public void clearView () {
+<span class="nc" id="L76">        this.client.removeAll(); </span>
+<span class="nc" id="L77">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

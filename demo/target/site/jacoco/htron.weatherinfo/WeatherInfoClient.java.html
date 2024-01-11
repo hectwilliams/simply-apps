@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WeatherInfoClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.weatherinfo</a> &gt; <span class="el_source">WeatherInfoClient.java</span></div><h1>WeatherInfoClient.java</h1><pre class="source lang-java linenums">package htron.weatherinfo;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+
+import htron.FileHelper;
+
+public class WeatherInfoClient {
+<span class="nc" id="L20">    public static final WeatherInfoClient weatherApi = null;</span>
+    private JSONObject configJson;
+    private JSONObject jsonStates;
+    private JSONObject jsonRcvdOpenApi;
+    private float longitude;
+    private float latitude; 
+<span class="nc" id="L26">    private ArrayList&lt;String[]&gt; routes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L27">    private static final Map&lt;String, String&gt; map = new HashMap&lt;&gt;() ;</span>
+    private static final  String RAIN = &quot;rain&quot;;
+    private static final String SPEED = &quot;speed&quot;;
+    private static final String ALL = &quot;all&quot;;
+    private static final String PRESSURE = &quot;pressure&quot;;
+    private static final String SUNRISE = &quot;sunrise&quot;;
+    private static final String SUNSET = &quot;sunset&quot;;
+    private static final String HUMIDITY = &quot;humidity&quot;;
+    private static final String TEMP = &quot;temp&quot;;
+
+<span class="nc" id="L37">    WeatherInfoClient() {</span>
+
+        String filePath ;
+        
+        try {
+
+<span class="nc" id="L43">            filePath = Paths.get(FileHelper.getConfigPath(),  &quot;config.json&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L44">            this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );</span>
+            
+<span class="nc" id="L46">            filePath = Paths.get(FileHelper.getAssetsPath(), &quot;Search&quot;,  &quot;states.json&quot;).toAbsolutePath().normalize().toString();</span>
+
+<span class="nc" id="L48">            this.jsonStates =  new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );</span>
+
+<span class="nc" id="L50">        } catch(IOException ioe) {</span>
+<span class="nc" id="L51">            ioe.printStackTrace();</span>
+<span class="nc" id="L52">        }</span>
+  
+<span class="nc" id="L54">    }</span>
+
+    private JSONObject requestWeather(String urlQuery) {
+        HttpURLConnection connection;
+        BufferedReader rd;
+        StringBuilder result;   
+        URL url;
+        String line;
+        JSONObject rcvd; 
+
+<span class="nc" id="L64">        result = new StringBuilder();</span>
+<span class="nc" id="L65">        rcvd = null; </span>
+
+        try {
+
+<span class="nc" id="L69">            url =  new URL(  urlQuery );</span>
+            
+<span class="nc" id="L71">            connection = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L72">            rd = new BufferedReader(new InputStreamReader (connection.getInputStream()));</span>
+            
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            while ((line = rd.readLine()) != null){</span>
+<span class="nc" id="L75">              result.append(line);</span>
+            }
+            
+<span class="nc" id="L78">            rcvd = new JSONObject(result.toString());</span>
+
+<span class="nc" id="L80">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L81">            e.printStackTrace();</span>
+<span class="nc" id="L82">        } catch(IOException ioe) {</span>
+<span class="nc" id="L83">            ioe.printStackTrace();</span>
+<span class="nc" id="L84">        } </span>
+        
+
+<span class="nc" id="L87">        return rcvd;</span>
+    }
+
+
+    private void setLongitude (float l) {
+<span class="nc" id="L92">        this.longitude = l;</span>
+<span class="nc" id="L93">    }</span>
+
+    private void setLatitude (float l) {
+<span class="nc" id="L96">        this.latitude = l;</span>
+<span class="nc" id="L97">    }</span>
+
+    public void updateDayInfo(WeatherInfo weatherInfo) {
+
+        // TEMP kelvin to farenheit
+<span class="nc" id="L102">        weatherInfo.getTemp().updateLabelName( String.valueOf(String.valueOf( (int) (1.8* ( Double.valueOf(WeatherInfoClient.map.get(TEMP))-273) + 32)   )   ));</span>
+    
+        //  HUMIDITY
+<span class="nc" id="L105">        weatherInfo.getHumid().updateLabelName( String.valueOf(Double.valueOf(WeatherInfoClient.map.get(HUMIDITY))));</span>
+
+        // RAIN  
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (WeatherInfoClient.map.get(RAIN) != null) {</span>
+<span class="nc" id="L109">            weatherInfo.getPercip().updateLabelName(  String.valueOf( (Integer.valueOf(WeatherInfoClient.map.get(RAIN)) )   ));</span>
+        } 
+
+        // // windw 
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (WeatherInfoClient.map.get(SPEED) != null) {</span>
+<span class="nc" id="L114">            weatherInfo.getWind().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(SPEED)) ));</span>
+        } 
+        
+        // // cloud
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (WeatherInfoClient.map.get(ALL) != null) {</span>
+<span class="nc" id="L119">            weatherInfo.getCloud().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(ALL)) ));</span>
+        } 
+
+          // // PRESSURE 
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (WeatherInfoClient.map.get(PRESSURE) != null) {</span>
+<span class="nc" id="L124">            weatherInfo.getPressure().updateLabelName(  String.valueOf(Double.valueOf(WeatherInfoClient.map.get(PRESSURE)) ));</span>
+        } 
+
+        // SUNRISE
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (WeatherInfoClient.map.get(SUNRISE) != null) {</span>
+<span class="nc" id="L129">            weatherInfo.getSunrise().updateLabelName(  String.valueOf( weatherInfo.getSunrise().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNRISE)  )))  );</span>
+        }  
+        
+         // SUNSET
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            if (WeatherInfoClient.map.get(SUNSET) != null) {</span>
+<span class="nc" id="L134">            weatherInfo.getSunset().updateLabelName(  String.valueOf( weatherInfo.getSunset().calculatedTime(Long.valueOf(WeatherInfoClient.map.get(SUNSET)    ))));</span>
+        } 
+
+<span class="nc" id="L137">    }</span>
+
+    private void getStateDayMeasurementQuery (float longitude, float latitude) {
+<span class="nc" id="L140">        String targetURL = &quot;https://api.openweathermap.org/data/2.5/weather&quot;;</span>
+<span class="nc" id="L141">        String query = &quot;lat=&quot;+latitude + &quot;&amp;&quot; + &quot;lon=&quot;+longitude + &quot;&amp;&quot; + &quot;appid=&quot; +this.configJson.get(&quot;key&quot;) ;</span>
+<span class="nc" id="L142">        String q = targetURL + &quot;?&quot; + query; </span>
+        
+<span class="nc" id="L144">        this.jsonRcvdOpenApi = this.requestWeather(q);</span>
+<span class="nc" id="L145">        this.longitude = longitude;</span>
+<span class="nc" id="L146">        this.latitude = latitude; </span>
+        
+<span class="nc" id="L148">        this.routes.clear();</span>
+<span class="nc" id="L149">        this.routes.add( new String[] {&quot;main&quot;, TEMP} ); //kelvin </span>
+<span class="nc" id="L150">        this.routes.add( new String[] {&quot;main&quot;, HUMIDITY} );</span>
+<span class="nc" id="L151">        this.routes.add( new String[] {&quot;RAIN&quot;} ); // volume for 1 hour, mm </span>
+<span class="nc" id="L152">        this.routes.add( new String[] {&quot;wind&quot;, SPEED} ); // meters /sec </span>
+<span class="nc" id="L153">        this.routes.add( new String[] {&quot;clouds&quot;, ALL} ); // percent </span>
+<span class="nc" id="L154">        this.routes.add( new String[] {&quot;main&quot;, PRESSURE} ); // percent hPa</span>
+<span class="nc" id="L155">        this.routes.add( new String[] {&quot;sys&quot;, SUNRISE} ); // UTC</span>
+<span class="nc" id="L156">        this.routes.add( new String[] {&quot;sys&quot;, SUNSET} ); // UTC</span>
+<span class="nc" id="L157">        this.routes.add( new String[] {&quot;timezone&quot;} ); // UTC</span>
+        
+<span class="nc" id="L159">        this.parseDataRequest(); // maps hashmap </span>
+        
+<span class="nc" id="L161">    }</span>
+
+    public void getStateDayMeasurement(String stateName, WeatherInfo weatherInfo) {
+
+<span class="nc" id="L165">        this.setLatitude((float) 0.0);</span>
+<span class="nc" id="L166">        this.setLongitude((float) 0.0);</span>
+
+<span class="nc" id="L168">        this.setLatitude(Float.valueOf(this.searchRoute( new String[] {stateName.toLowerCase(), &quot;capital&quot;, &quot;latitude&quot;}) )); </span>
+
+<span class="nc" id="L170">        this.setLongitude(Float.valueOf(this.searchRoute( new String[] {stateName.toLowerCase(), &quot;capital&quot;, &quot;longitude&quot;}) )); </span>
+
+<span class="nc" id="L172">        this.getStateDayMeasurementQuery(this.longitude, this.latitude); </span>
+
+<span class="nc" id="L174">        this.updateDayInfo(weatherInfo); // updates weather icon(i,e, buffer) objects parameters</span>
+
+        // update gui 
+<span class="nc" id="L177">        weatherInfo.updateGridUI();</span>
+
+<span class="nc" id="L179">    }</span>
+    
+    public void getState30DayMeasurementQuery( ) {
+<span class="nc" id="L182">        String q = &quot;api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&amp;lon=10.99&amp;cnt=7&amp;appid=&quot; + this.configJson.get(&quot;key&quot;) ;</span>
+<span class="nc" id="L183">        this.jsonRcvdOpenApi = this.requestWeather(q);</span>
+<span class="nc" id="L184">    }</span>
+    
+    private String searchRoute(String [] route) {
+        JSONObject jsonCurr; 
+        Object obj;
+<span class="nc" id="L189">        String value = &quot;&quot;;</span>
+        
+<span class="nc" id="L191">        jsonCurr =   this.jsonStates;</span>
+        
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        for (int i = 0; i &lt; route.length ; i++) {</span>
+
+<span class="nc bnc" id="L195" title="All 2 branches missed.">            if ( jsonCurr.has(route[i] ) ) {</span>
+                
+<span class="nc" id="L197">                obj = jsonCurr.get(route[i]);</span>
+                
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                if ( !(obj instanceof JSONObject)  )  {</span>
+<span class="nc" id="L200">                    value =  String.valueOf( obj );</span>
+                } else  {
+<span class="nc" id="L202">                        jsonCurr = (JSONObject) obj; </span>
+                }
+            }
+        } 
+
+<span class="nc" id="L207">        return value;</span>
+    }
+
+    private void parseDataRequest() {
+<span class="nc" id="L211">        String value = null;</span>
+        Object obj;
+        JSONObject jsonCurr; 
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        for (String[] route: this.routes ) {</span>
+            
+<span class="nc" id="L217">            value = null; </span>
+<span class="nc" id="L218">            jsonCurr = this.jsonRcvdOpenApi;</span>
+            
+<span class="nc bnc" id="L220" title="All 2 branches missed.">            for (int i = 0; i &lt; route.length ; i++) {</span>
+                
+<span class="nc bnc" id="L222" title="All 2 branches missed.">                if ( jsonCurr.has(route[i] ) ) {</span>
+                    
+<span class="nc" id="L224">                    obj = jsonCurr.get(route[i]);</span>
+                    
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                    if ( !(obj instanceof JSONObject)  )  {</span>
+<span class="nc" id="L227">                        value =  String.valueOf( obj );</span>
+                    } else  {
+<span class="nc" id="L229">                         jsonCurr = (JSONObject) obj ; </span>
+                    }
+                } 
+            }                
+            
+<span class="nc" id="L234">            WeatherInfoClient.map.put ( route[route.length - 1],   value )  ;</span>
+
+<span class="nc" id="L236">        }  </span>
+<span class="nc" id="L237">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

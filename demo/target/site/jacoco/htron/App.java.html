@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package htron;
+
+import java.nio.file.Files;
+
+// import java.io.IOException;
+// import java.nio.file.Files;
+// import java.nio.file.Paths;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
+import htron.search.StatesJsonAccessor;
+
+public class App {
+    
+<span class="nc" id="L16">    Windowise myWindow = null;</span>
+<span class="nc" id="L17">    JFrame frame = null; </span>
+    
+<span class="nc" id="L19">    public App() {</span>
+<span class="nc" id="L20">        frame = new JFrame(&quot;App Friendly&quot;);</span>
+<span class="nc" id="L21">        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L22">        frame.setVisible(true);</span>
+<span class="nc" id="L23">        this.myWindow = new Windowise(frame);</span>
+<span class="nc" id="L24">        frame.addFocusListener(new FocusListenerApp(this.myWindow));</span>
+<span class="nc" id="L25">        frame.addComponentListener(new ComponentListenerV2());</span>
+<span class="nc" id="L26">    } </span>
+
+    public static void main (String [] args) {
+<span class="nc" id="L29">        System.out.println(FileHelper.getAssetsPath());</span>
+<span class="nc" id="L30">        System.out.println(StatesJsonAccessor.get());</span>
+
+
+        
+        // System.out.println(&quot;hello world&quot;);
+        // System.out.println(FileHelper.getTestpath().toAbsolutePath().normalize().toString());
+        // System.out.println(Files.exists(FileHelper.getTestpath()) );
+
+<span class="nc" id="L38">        App app = new App();</span>
+        // System.out.println(&quot;hello world&quot;);
+        // System.out.println(App.class.getName());
+        
+        // System.out.println(FileHelper.ROOTPATH);
+        
+        // try {
+        //     JSONObject configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
+        //     System.out.println(configJson.get(&quot;name&quot;));
+        // } catch (JSONException | IOException e) {
+        //     e.printStackTrace();
+        // }
+        
+<span class="nc" id="L51">    } </span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

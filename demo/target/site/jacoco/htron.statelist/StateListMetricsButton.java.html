@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateListMetricsButton.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.statelist</a> &gt; <span class="el_source">StateListMetricsButton.java</span></div><h1>StateListMetricsButton.java</h1><pre class="source lang-java linenums">package htron.statelist;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JLabel;
+import javax.swing.JScrollBar;
+import javax.swing.SwingConstants;
+
+    public class StateListMetricsButton extends JLabel implements MouseListener {
+        
+<span class="nc" id="L20">        private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);;</span>
+<span class="nc" id="L21">        private static  Font boldfont = new Font(&quot;Dialog&quot;, Font.BOLD, 11);</span>
+<span class="nc" id="L22">        private static  Font defaultFont = new Font(&quot;Dialog&quot;, Font.PLAIN, 11);</span>
+<span class="nc" id="L23">        private static final float[] hsbSet = Color.RGBtoHSB(173,216,230,null); // sky blue</span>
+<span class="nc" id="L24">        private static final Color activeColor = Color.getHSBColor(hsbSet[0], hsbSet[1], hsbSet[2]);</span>
+        private JScrollBar scrollbar; 
+        
+        Color defaultBackgroundColor;
+        StateListMetricsModule metricPanel;
+
+        public final static Color getActiveColor () {
+<span class="nc" id="L31">            return StateListMetricsButton.activeColor;</span>
+        }
+
+        public StateListMetricsButton(String name , StateListMetricsModule metricPanel  )   {
+<span class="nc" id="L35">            super(name);</span>
+<span class="nc" id="L36">            this.addMouseListener(this);    // register listener to JButton </span>
+<span class="nc" id="L37">            this.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="nc" id="L38">            this.setOpaque(true);</span>
+<span class="nc" id="L39">            this.metricPanel = metricPanel.getMetricPanel();</span>
+<span class="nc" id="L40">            this.setFont(defaultFont); </span>
+<span class="nc" id="L41">        }</span>
+        
+        @Override
+        public void paintComponent(Graphics g) {
+<span class="nc" id="L45">            super.paintComponent(g);</span>
+<span class="nc" id="L46">            int width = this.getWidth();</span>
+<span class="nc" id="L47">            int height = this.getHeight();</span>
+<span class="nc" id="L48">            Dimension arcs = new Dimension(5,10);   //Border corners arcs {width,height}, change this to whatever you want</span>
+<span class="nc" id="L49">            Graphics2D graphics = (Graphics2D) g;</span>
+<span class="nc" id="L50">            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);</span>
+<span class="nc" id="L51">            graphics.drawRoundRect(0, 0, width-1, height-1, arcs.width, arcs.height);    //paint border</span>
+<span class="nc" id="L52">        }</span>
+        
+        @Override
+        public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L56">            sched.schedule(  () -&gt; {</span>
+<span class="nc" id="L57">                StateListMetricsButton tmp = (StateListMetricsButton) e.getSource();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (tmp.getBackground() != StateListMetricsButton.activeColor) {</span>
+                    
+<span class="nc" id="L60">                    tmp.setFont(StateListMetricsButton.boldfont);</span>
+                    
+<span class="nc" id="L62">                    sched.schedule(</span>
+                        
+                    () -&gt; {
+                        
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                        if (tmp.getText().equals( &quot;Like&quot;) ) {</span>
+<span class="nc" id="L67">                            System.out.println(&quot;change the like&quot;);</span>
+<span class="nc" id="L68">                            ((StateListMetricsButton)tmp.getParent().getComponent(0)).setBackground(StateListMetricsButton.activeColor);</span>
+<span class="nc" id="L69">                            ((StateListMetricsButton)tmp.getParent().getComponent(1)).setBackground(this.defaultBackgroundColor);</span>
+<span class="nc" id="L70">                            metricPanel.testimonialList.setVisible(false);</span>
+<span class="nc" id="L71">                            metricPanel.graphy.setVisible(true);</span>
+<span class="nc" id="L72">                            scrollbar = metricPanel.getVerticalScrollBar();</span>
+<span class="nc" id="L73">                            scrollbar.setValue(scrollbar.getMaximum());</span>
+<span class="nc" id="L74">                            metricPanel.setVerticalScrollBar(scrollbar);</span>
+
+                        } else {
+<span class="nc" id="L77">                            System.out.println(&quot;change the testimonial&quot;);</span>
+<span class="nc" id="L78">                            ((StateListMetricsButton)tmp.getParent().getComponent(1)).setBackground(StateListMetricsButton.activeColor);</span>
+<span class="nc" id="L79">                            ((StateListMetricsButton)tmp.getParent().getComponent(0)).setBackground(this.defaultBackgroundColor);</span>
+<span class="nc" id="L80">                            metricPanel.testimonialList.setVisible(true);</span>
+<span class="nc" id="L81">                            metricPanel.graphy.setVisible(false);</span>
+                        }
+                        
+<span class="nc" id="L84">                        tmp.setFont(StateListMetricsButton.defaultFont);</span>
+
+<span class="nc" id="L86">                    },100, TimeUnit.MILLISECONDS );</span>
+
+                }
+<span class="nc" id="L89">            }, 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L90">        }</span>
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            /*no op */
+<span class="nc" id="L95">        }</span>
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+<span class="nc" id="L99">            sched.schedule(  () -&gt; {</span>
+<span class="nc" id="L100">                StateListMetricsButton tmp = (StateListMetricsButton) e.getSource();</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                if (tmp.getBackground() != StateListMetricsButton.activeColor) {</span>
+<span class="nc" id="L102">                    ((StateListMetricsButton) e.getSource()).setFont(StateListMetricsButton.defaultFont);</span>
+                }
+<span class="nc" id="L104">            }, 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L105">        }</span>
+        
+        @Override
+        public void mouseEntered(MouseEvent e) {
+<span class="nc" id="L109">            sched.schedule(  () -&gt; {</span>
+<span class="nc" id="L110">                StateListMetricsButton tmp = (StateListMetricsButton) e.getSource();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">                if (tmp.getBackground() != StateListMetricsButton.activeColor) {</span>
+<span class="nc" id="L112">                    ((StateListMetricsButton) e.getSource()).setBackground( Color.LIGHT_GRAY );</span>
+                }
+<span class="nc" id="L114">            }, 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L115">        }</span>
+        
+        @Override
+        public void mouseExited(MouseEvent e) {
+<span class="nc" id="L119">            sched.schedule(  () -&gt; {</span>
+<span class="nc" id="L120">                  StateListMetricsButton tmp = (StateListMetricsButton) e.getSource();</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (tmp.getBackground() != StateListMetricsButton.activeColor) {</span>
+<span class="nc" id="L122">                    ((StateListMetricsButton) e.getSource()).setBackground( this.defaultBackgroundColor );</span>
+<span class="nc" id="L123">                    ((StateListMetricsButton) e.getSource()).setFont(StateListMetricsButton.defaultFont);</span>
+                }
+<span class="nc" id="L125">            }, 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L126">        }</span>
+        
+    }
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

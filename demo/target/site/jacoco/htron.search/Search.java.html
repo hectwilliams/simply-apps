@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Search.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">Search.java</span></div><h1>Search.java</h1><pre class="source lang-java linenums">package htron.search;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JPanel;
+
+import htron.Windowise;
+import htron.weatherinfo.*;
+
+public class Search extends JPanel{ //could extend panel
+
+    static final int N_SIZE = 100; 
+    static final int offset = 10; 
+
+<span class="nc" id="L20">    JPanel parentSubWindowPanel = null;</span>
+<span class="nc" id="L21">    GridBagConstraints gd = null;</span>
+    GridBagLayout layout;
+    public SearchTextArea textbox;
+    SearchIcon textboxIcon;
+    SearchResults searchlist;
+    WeatherInfo weatherinfo;
+    SearchClear searchClearButton;
+    Trie trie;
+    public SearchScrollBlock searchScrollView;
+    public Component[] componentActiveList;
+<span class="nc" id="L31">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+<span class="nc" id="L32">    Boolean canvasReady = false;</span>
+<span class="nc" id="L33">    Boolean trieBlockDone = false;</span>
+<span class="nc" id="L34">    int count = 0;</span>
+    Windowise w; 
+<span class="nc" id="L36">    public Boolean ready = false;</span>
+    // JPanel scrollPanel;
+
+    public Search(Windowise w, WeatherInfo weatherinfo) {
+<span class="nc" id="L40">        super(new GridBagLayout());</span>
+        
+<span class="nc" id="L42">        this.ready = false; </span>
+
+<span class="nc" id="L44">        this.setVisible(false);</span>
+        
+<span class="nc" id="L46">        this.w = w;</span>
+
+<span class="nc" id="L48">        this.weatherinfo = weatherinfo ;</span>
+
+<span class="nc" id="L50">        this.setParentGrid(w); </span>
+        
+<span class="nc" id="L52">        this.trie = new Trie();</span>
+        
+<span class="nc" id="L54">        this.textboxIcon = new SearchIcon();</span>
+        
+<span class="nc" id="L56">        this.searchScrollView = new SearchScrollBlock();</span>
+        
+<span class="nc" id="L58">        this.searchlist =  new SearchResults( this.trie, this.weatherinfo , this.searchScrollView);</span>
+        
+<span class="nc" id="L60">        this.textbox = new SearchTextArea(&quot;Search&quot;, this.searchlist, this.weatherinfo ) ;</span>
+        
+<span class="nc" id="L62">        this.searchClearButton = new SearchClear(this.textbox, this.searchlist);</span>
+        
+<span class="nc" id="L64">        count = 0;</span>
+
+<span class="nc" id="L66">        sched.schedule( () -&gt; {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            while (!this.searchScrollView.client.isVisible()){</span>
+                try {
+<span class="nc" id="L69">                    Thread.sleep(2);</span>
+<span class="nc" id="L70">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L71">                    e.printStackTrace();</span>
+<span class="nc" id="L72">                }</span>
+            }
+<span class="nc" id="L74">            System.out.println(&quot;ready to set search&quot;);</span>
+<span class="nc" id="L75">            this.trieBlockDone = true;</span>
+            // this.searchScrollView.repaint();
+            // this.searchScrollView.revalidate();
+<span class="nc" id="L78">            this.setSearchList();</span>
+<span class="nc" id="L79">            this.loadStatusCounter();</span>
+            
+<span class="nc" id="L81">        } , 0, TimeUnit.MILLISECONDS) ;   </span>
+
+        
+<span class="nc" id="L84">        sched.schedule( () -&gt; {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            while (!this.canvasReady){</span>
+                try {
+<span class="nc" id="L87">                    Thread.sleep(0);</span>
+<span class="nc" id="L88">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L89">                    e.printStackTrace();</span>
+<span class="nc" id="L90">                }</span>
+            }
+<span class="nc" id="L92">            this.setSearchBarIcon(); </span>
+<span class="nc" id="L93">            this.loadStatusCounter();</span>
+<span class="nc" id="L94">        } , 0, TimeUnit.MILLISECONDS) ;   </span>
+
+<span class="nc" id="L96">        sched.schedule( () -&gt; {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            while (!this.canvasReady){</span>
+                try {
+<span class="nc" id="L99">                    Thread.sleep(0);</span>
+<span class="nc" id="L100">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L101">                    e.printStackTrace();</span>
+<span class="nc" id="L102">                }</span>
+            }
+<span class="nc" id="L104">            this.setSearchBar(); </span>
+<span class="nc" id="L105">            this.loadStatusCounter();</span>
+<span class="nc" id="L106">        } , 0, TimeUnit.MILLISECONDS) ;   </span>
+
+<span class="nc" id="L108">        sched.schedule( () -&gt; {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            while (!this.canvasReady){</span>
+                try {
+<span class="nc" id="L111">                    Thread.sleep(0);</span>
+<span class="nc" id="L112">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L113">                    e.printStackTrace();</span>
+<span class="nc" id="L114">                }</span>
+            }
+<span class="nc" id="L116">            this.setSearchClearButton(); </span>
+<span class="nc" id="L117">            this.loadStatusCounter();</span>
+<span class="nc" id="L118">        } , 0, TimeUnit.MILLISECONDS) ;   </span>
+
+<span class="nc" id="L120">    }</span>
+
+    private void loadStatusCounter() {
+<span class="nc" id="L123">        this.count += 1; </span>
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (this.count == 4) {</span>
+<span class="nc" id="L126">            this.w.banner.enableButton(0);  // banner button for weather app</span>
+<span class="nc" id="L127">            this.ready = true; </span>
+<span class="nc" id="L128">            this.w.idlePage.waitIcon.searchStatusReady = true;</span>
+        }
+<span class="nc" id="L130">    }</span>
+
+    public void hideComponents() {
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        for (Component c: this.componentActiveList) {</span>
+<span class="nc" id="L134">            c.setVisible(false);</span>
+        }
+<span class="nc" id="L136">    }</span>
+
+    public void setParentGrid (Windowise w) {
+<span class="nc" id="L139">        Dimension d = new Dimension(10, 10);</span>
+<span class="nc" id="L140">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L141">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L142">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L143">        gc.weightx = 1;</span>
+<span class="nc" id="L144">        gc.weighty = 1;</span>
+<span class="nc" id="L145">        gc.gridx = 15;</span>
+<span class="nc" id="L146">        gc.gridy = 15;</span>
+<span class="nc" id="L147">        gc.gridwidth = 55;</span>
+<span class="nc" id="L148">        gc.gridheight = 40;</span>
+        
+        // sustains rigidity of window 
+        {
+<span class="nc" id="L152">            this.setMinimumSize(d);</span>
+<span class="nc" id="L153">            this.setMaximumSize(d);</span>
+<span class="nc" id="L154">            this.setPreferredSize(d);</span>
+        }
+        
+<span class="nc" id="L157">        w.add( this , gc);</span>
+<span class="nc" id="L158">        w.setComponentZOrder( this , 1);</span>
+
+        // load cells into parent object 
+<span class="nc bnc" id="L161" title="All 2 branches missed.">        for (int x = 0; x &lt; 50; x++) {</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">            for (int y = 0; y &lt; 50; y++) {</span>
+<span class="nc" id="L163">                GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L164">                gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L165">                gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L166">                gbc .weightx = 1;</span>
+<span class="nc" id="L167">                gbc .weighty = 1;</span>
+<span class="nc" id="L168">                gbc.gridx = x;</span>
+<span class="nc" id="L169">                gbc.gridy = y;</span>
+
+<span class="nc" id="L171">                JPanel cell = new JPanel();</span>
+<span class="nc" id="L172">                this.add(cell, gbc);</span>
+            }
+        }
+
+<span class="nc" id="L176">        this.canvasReady = true;</span>
+<span class="nc" id="L177">    }</span>
+    
+    public void setSearchList () {
+<span class="nc" id="L180">        GridBagConstraints gc = new GridBagConstraints();</span>
+
+<span class="nc" id="L182">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L183">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L184">        gc.weightx = 1;</span>
+<span class="nc" id="L185">        gc.weighty = 1;</span>
+<span class="nc" id="L186">        gc.gridx = 5;</span>
+<span class="nc" id="L187">        gc.gridy = 7;</span>
+<span class="nc" id="L188">        gc.gridwidth = 40;</span>
+<span class="nc" id="L189">        gc.gridheight = 40;</span>
+
+<span class="nc" id="L191">        this.add( this.searchScrollView, gc);</span>
+<span class="nc" id="L192">        this.setComponentZOrder( this.searchScrollView  , 1);</span>
+<span class="nc" id="L193">    }</span>
+
+    public void setSearchBar () {
+<span class="nc" id="L196">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L197">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L198">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L199">        gc.weightx = 1;</span>
+<span class="nc" id="L200">        gc.weighty = 1;</span>
+<span class="nc" id="L201">        gc.gridx = 18;</span>
+<span class="nc" id="L202">        gc.gridy = 5;</span>
+<span class="nc" id="L203">        gc.gridwidth = 9;</span>
+<span class="nc" id="L204">        gc.gridheight = 1;</span>
+<span class="nc" id="L205">        this.add( this.textbox , gc);</span>
+<span class="nc" id="L206">        this.setComponentZOrder( this.textbox , 1);</span>
+<span class="nc" id="L207">    }</span>
+
+    public void  setSearchBarIcon () {
+<span class="nc" id="L210">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L211">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L212">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L213">        gc.weightx = 1;</span>
+<span class="nc" id="L214">        gc.weighty = 1;</span>
+<span class="nc" id="L215">        gc.gridx = 6 + 11  ;</span>
+<span class="nc" id="L216">        gc.gridy = 5;</span>
+<span class="nc" id="L217">        gc.gridwidth =  2;</span>
+<span class="nc" id="L218">        gc.gridheight = 1;</span>
+<span class="nc" id="L219">        this.add( this.textboxIcon , gc);</span>
+<span class="nc" id="L220">        this.setComponentZOrder( this.textboxIcon , 1);</span>
+<span class="nc" id="L221">    }</span>
+
+
+    public void  setSearchClearButton () {
+<span class="nc" id="L225">        GridBagConstraints gc = new GridBagConstraints();</span>
+<span class="nc" id="L226">        gc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L227">        gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L228">        gc.weightx = 1;</span>
+<span class="nc" id="L229">        gc.weighty = 1;</span>
+<span class="nc" id="L230">        gc.gridx = 27;</span>
+<span class="nc" id="L231">        gc.gridy = 5;</span>
+<span class="nc" id="L232">        gc.gridwidth = 1;</span>
+<span class="nc" id="L233">        gc.gridheight = 1;</span>
+<span class="nc" id="L234">        this.add( this.searchClearButton , gc);</span>
+<span class="nc" id="L235">        this.setComponentZOrder( this.searchClearButton , 1);</span>
+<span class="nc" id="L236">    }</span>
+
+
+}  
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
