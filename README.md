@@ -8,7 +8,7 @@ Java apps created out of boredom
 ## Notes
 
 - Current GUI
-[![Gui State](/assets/Gui/dev03.png?raw=true)](https://youtu.be/BT-GBmJL8rQ) 
+[![Gui State](/demo/src/main/resources/assets/Gui/dev03.png?raw=true)](https://youtu.be/BT-GBmJL8rQ) 
 
 ## Backlog
 
