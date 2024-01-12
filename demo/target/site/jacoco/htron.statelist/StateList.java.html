@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.statelist</a> &gt; <span class="el_source">StateList.java</span></div><h1>StateList.java</h1><pre class="source lang-java linenums">package htron.statelist;
+
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+
+import htron.FileHelper;
+import htron.Windowise;
+
+public class StateList  extends JScrollPane {
+
+// INNER CLASS 
+    public class MouseListenerT implements MouseListener {
+        Windowise w; 
+        int count;
+
+<span class="nc" id="L28">        public MouseListenerT ( Windowise w) { </span>
+<span class="nc" id="L29">            this.w = w;</span>
+<span class="nc" id="L30">            this.count = 0;</span>
+
+<span class="nc" id="L32">        }</span>
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // StateList l = (StateList)e.getSource();
+            // sched.schedule(() -&gt; {
+            //     // this.w.stateList.requestFocusInWindow() ;
+            //     // this.handler(l );
+            // }, 0, TimeUnit.MILLISECONDS);
+<span class="nc" id="L41">        }</span>
+
+        @Override
+<span class="nc" id="L44">        public void mousePressed(MouseEvent e) {}</span>
+
+        @Override
+<span class="nc" id="L47">        public void mouseReleased(MouseEvent e) {}</span>
+
+        @Override
+<span class="nc" id="L50">        public void mouseEntered(MouseEvent e) {}</span>
+
+        @Override 
+<span class="nc" id="L53">        public void mouseExited(MouseEvent e) {}</span>
+
+        // private void handler(StateList obj) {
+        //     this.count += 1;
+        //     // if (this.count &gt; 3) {
+
+        //     //     try {
+
+        //     //         sched.schedule(() -&gt; {
+        //     //             this.w.stateList.extendListHeight(w);
+        //     //         }, 1000, TimeUnit.MILLISECONDS);
+
+        //     //         sched.wait();
+
+        //     //         System.out.println(&quot;list updated&quot;);
+
+        //     //     } catch (InterruptedException e) {
+        //     //         e.printStackTrace();
+        //     //     }
+        //     // }
+        //     // this.w.stateList.panelView.add(new StateLabel());
+        //     // this.w.stateList.panelView.validate();
+        //     // this.w.stateList.panelView.repaint();
+
+        //     // this.w.stateList.validate();
+        //     // this.w.stateList.repaint();
+            
+        //     // this.w.frame.pack();
+        // }
+
+    }
+
+// MAIN CLASS
+    private boolean ready;
+<span class="nc" id="L87">    private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+    public GridBagConstraints gc;
+    JPanel panelView;
+    String path50Images;
+
+    private void setReadyStatus(boolean state) {
+<span class="nc" id="L93">        this.ready = state;</span>
+<span class="nc" id="L94">    }</span>
+    public boolean getReadyStatus() {
+<span class="nc" id="L96">        return this.ready;</span>
+    }
+    public StateList (Windowise w) {
+        
+<span class="nc" id="L100">        super(); </span>
+        
+<span class="nc" id="L102">        this.panelView = new JPanel();</span>
+<span class="nc" id="L103">        this.panelView .setLayout(new BoxLayout(this.panelView, BoxLayout.PAGE_AXIS));</span>
+<span class="nc" id="L104">        this.getVerticalScrollBar().setUnitIncrement(10);</span>
+<span class="nc" id="L105">        this.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L106">        this.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L107">        this.setWheelScrollingEnabled(true);</span>
+        
+<span class="nc" id="L109">        this.setViewportView(this.panelView);</span>
+<span class="nc" id="L110">        this.setVisible(false);</span>
+<span class="nc" id="L111">        this.setReadyStatus(false);</span>
+<span class="nc" id="L112">        this.placeMeasureGrid(w);</span>
+<span class="nc" id="L113">        this .addMouseListener(new MouseListenerT(w));</span>
+<span class="nc" id="L114">        sched.schedule( ()-&gt; { this.listStates(w); }, 2, TimeUnit.MILLISECONDS);</span>
+    
+        
+<span class="nc" id="L117">        this.gc = new GridBagConstraints();</span>
+<span class="nc" id="L118">        Dimension d = new Dimension(50, 50);</span>
+
+        // force smallscrollpane size to show scroll bars 
+<span class="nc" id="L121">        this .setMaximumSize(d); this .setMinimumSize(d); this .setPreferredSize(d);</span>
+
+
+<span class="nc" id="L124">        path50Images = Paths.get(FileHelper.getAssetsPath(), &quot;Statelist&quot;, &quot;imgs&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L125">    }</span>
+
+    public void listStates (Windowise w) {
+    
+        // load 50 dummy state images (placeholder)
+
+<span class="nc" id="L131">        sched.schedule( ()-&gt; { </span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            for (int i =0; i &lt; new File(path50Images).listFiles().length; i++) {  </span>
+                        // System.out.println(&quot;state list&quot;);
+                        // TODO: change to 50 states 
+<span class="nc" id="L135">                        w.stateList.panelView.add(new StateLabel());</span>
+<span class="nc" id="L136">                        w.stateList.panelView.add(new JPanel());</span>
+                    }
+<span class="nc" id="L138">                    this.setReadyStatus(true);</span>
+<span class="nc" id="L139">                    w.banner.enableButton(1);</span>
+<span class="nc" id="L140">                }, 10, TimeUnit.MILLISECONDS);</span>
+     
+<span class="nc" id="L142">    }</span>
+
+    // state list jpanel dimensions 
+    public void placeMeasureGrid(Windowise w) {
+
+<span class="nc" id="L147">        this.gc = new GridBagConstraints();</span>
+<span class="nc" id="L148">        this.gc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L149">        this.gc.weightx = 1;</span>
+<span class="nc" id="L150">        this.gc.weighty = 1;</span>
+<span class="nc" id="L151">        this.gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L152">        this.gc.gridx = 1;</span>
+<span class="nc" id="L153">        this.gc.gridy = 11;</span>
+<span class="nc" id="L154">        this.gc.gridwidth = 100;</span>
+<span class="nc" id="L155">        this.gc.gridheight = 55;</span>
+<span class="nc" id="L156">        w.add( this  , this.gc);</span>
+<span class="nc" id="L157">        w.setComponentZOrder( this  , 2);</span>
+<span class="nc" id="L158">        this .validate();</span>
+<span class="nc" id="L159">    }</span>
+
+    public void extendListHeight(Windowise w) {
+<span class="nc" id="L162">        this.gc.gridheight += 30;</span>
+<span class="nc" id="L163">        this.gc = new GridBagConstraints();</span>
+<span class="nc" id="L164">        w.revalidate(); </span>
+<span class="nc" id="L165">        w.repaint();</span>
+<span class="nc" id="L166">        sched.notifyAll();</span>
+<span class="nc" id="L167">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

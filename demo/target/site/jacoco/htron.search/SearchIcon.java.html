@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchIcon.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">SearchIcon.java</span></div><h1>SearchIcon.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.border.EmptyBorder;
+import htron.FileHelper;
+
+public class SearchIcon extends JLabel{
+    
+<span class="nc" id="L18">    ImageIcon icon = null;</span>
+    String workingdir;
+    String imgPath;
+    Image img; 
+<span class="nc" id="L22">    int pixelsPerCellX = 10; </span>
+<span class="nc" id="L23">    int pixelsPerCellY = 10;</span>
+    
+<span class="nc" id="L25">    public SearchIcon() {</span>
+        
+<span class="nc" id="L27">        this.imgPath = Paths.get(FileHelper.getAssetsPath(), &quot;Search&quot;, &quot;search_icon.jpeg&quot;).toAbsolutePath().normalize().toString();</span>
+        
+<span class="nc" id="L29">        Dimension d = new Dimension(this.pixelsPerCellX, this.pixelsPerCellY);</span>
+<span class="nc" id="L30">        this.setMinimumSize(d);</span>
+<span class="nc" id="L31">        this.setMaximumSize(d);</span>
+<span class="nc" id="L32">        this.setPreferredSize(d);</span>
+
+        // read image and load into Jlabel component 
+        try {
+            
+<span class="nc" id="L37">            img = ImageIO.read(new File(  this.imgPath)  );</span>
+<span class="nc" id="L38">            img = img.getScaledInstance(10, 10, Image.SCALE_SMOOTH)    ;</span>
+<span class="nc" id="L39">            this.setIcon((new ImageIcon(img)));</span>
+<span class="nc" id="L40">            this.setBorder(new EmptyBorder(0, 0, 0, 0));</span>
+<span class="nc" id="L41">            this.setBackground(Color.white);</span>
+<span class="nc" id="L42">            this.setAlignmentY(TOP_ALIGNMENT);</span>
+
+<span class="nc" id="L44">        } catch (IOException ioe) {</span>
+            
+<span class="nc" id="L46">            ioe.printStackTrace();</span>
+            
+<span class="nc" id="L48">        }</span>
+
+<span class="nc" id="L50">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

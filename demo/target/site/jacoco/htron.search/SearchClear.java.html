@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchClear.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">SearchClear.java</span></div><h1>SearchClear.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import htron.FileHelper;
+
+public class SearchClear extends JPanel{
+    JButton button; 
+    String path; 
+    Image img;
+<span class="nc" id="L22">    int pixelsPerCellX = 5; </span>
+<span class="nc" id="L23">    int pixelsPerCellY = 8;</span>
+    SearchTextArea textbox;
+    SearchResults searchResults;
+    
+    public SearchClear (SearchTextArea textbox, SearchResults searchResults) {
+<span class="nc" id="L28">        super();</span>
+
+<span class="nc" id="L30">        Dimension d = new Dimension(this.pixelsPerCellX, this.pixelsPerCellY);</span>
+<span class="nc" id="L31">        this.setMinimumSize(d);</span>
+<span class="nc" id="L32">        this.setMaximumSize(d);</span>
+<span class="nc" id="L33">        this.setPreferredSize(d);</span>
+
+<span class="nc" id="L35">        this.path = Paths.get(FileHelper.getAssetsPath(), &quot;Search&quot;, &quot;click2.jpeg&quot;).toAbsolutePath().normalize().toString();</span>
+<span class="nc" id="L36">        this.textbox = textbox; </span>
+<span class="nc" id="L37">        this.searchResults = searchResults ;</span>
+        
+        try {
+<span class="nc" id="L40">            img = ImageIO.read(new File(  path)  ).getScaledInstance(7, 6, Image.SCALE_SMOOTH)    ;</span>
+<span class="nc" id="L41">        } catch (IOException ioe) {</span>
+<span class="nc" id="L42">            ioe.printStackTrace();</span>
+<span class="nc" id="L43">        }</span>
+        
+<span class="nc" id="L45">        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));</span>
+<span class="nc" id="L46">        JLabel label = new JLabel(new ImageIcon(img));</span>
+<span class="nc" id="L47">        label.setBackground(Color.white);</span>
+<span class="nc" id="L48">        label.setMinimumSize(new Dimension(this.pixelsPerCellX, this.pixelsPerCellY));</span>
+
+        // label.setBorder(
+        //     new CompoundBorder(
+        //         BorderFactory.createEmptyBorder(2, 7, 0, 0),
+        //         BorderFactory.createLineBorder(Color.BLACK)
+        //     )
+        // );
+        
+<span class="nc" id="L57">        this.setBackground((Color.WHITE));</span>
+<span class="nc" id="L58">        this.button = new JButton();</span>
+
+        // this.button.setBorder(new EmptyBorder(-1, 0, 0, 0));
+        // this.setBackground(Color.white);
+<span class="nc" id="L62">        this.button.setIcon(new ImageIcon(img));    </span>
+<span class="nc" id="L63">        this.button.setMinimumSize(new Dimension(this.pixelsPerCellX / 2, this.pixelsPerCellY / 2));</span>
+<span class="nc" id="L64">        this.button.addActionListener( new ActionListenerV2(textbox, searchResults));</span>
+<span class="nc" id="L65">        this.add(this.button);</span>
+        // this.revalidate();
+
+<span class="nc" id="L68">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

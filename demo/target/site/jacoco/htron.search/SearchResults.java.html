@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchResults.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">SearchResults.java</span></div><h1>SearchResults.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import htron.FileHelper;
+import htron.weatherinfo.*;
+
+public class SearchResults  extends JPanel{   // scrollable client 
+    BoxLayout layout;
+    JScrollPane scrollPane;
+    JLabel label;
+    JPanel scrollPaneClient, test;
+    String pathToImg;
+    Image img; 
+    Trie trie;
+    WeatherInfo weatherInfo;
+    GridBagConstraints gd; 
+<span class="nc" id="L33">    GridBagLayout gridBagLayout = null;</span>
+    SearchScrollBlock scrollBlockView;
+    Picture dummyPic;
+    String currString;
+
+
+    public SearchResults(Trie trie, WeatherInfo weatherInfo, SearchScrollBlock scrollBlockView) {
+<span class="nc" id="L40">        super();</span>
+<span class="nc" id="L41">        this.trie = trie;</span>
+<span class="nc" id="L42">        this.weatherInfo = weatherInfo;</span>
+<span class="nc" id="L43">        this.scrollBlockView = scrollBlockView;</span>
+<span class="nc" id="L44">        this.dummyPic = new Picture(null);</span>
+<span class="nc" id="L45">        this.currString = &quot;&quot;;</span>
+<span class="nc" id="L46">    }</span>
+
+    public void searchtree (String s) {
+<span class="nc" id="L49">        this.currString = s;</span>
+        
+<span class="nc" id="L51">        ArrayList&lt;String&gt; collection =  this.trie.findAll(s);</span>
+        
+<span class="nc" id="L53">        this.clearResults();</span>
+        
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        for ( String key: collection) {</span>
+            
+<span class="nc" id="L57">            this.pathToImg = Paths.get(FileHelper.getAssetsPath(), &quot;States&quot;, key + &quot;.jpeg&quot;).toAbsolutePath().normalize().toString();</span>
+
+            try {
+<span class="nc" id="L60">                img = ImageIO.read(new File(  this.pathToImg)  ).getScaledInstance(200, 200, Image.SCALE_SMOOTH) ;</span>
+<span class="nc" id="L61">            } catch (IOException e) {</span>
+<span class="nc" id="L62">                e.printStackTrace();</span>
+<span class="nc" id="L63">            }</span>
+            
+<span class="nc" id="L65">            Picture pic = new Picture(this.pathToImg);</span>
+<span class="nc" id="L66">            pic.addMouseListener(new MyMouseListener(this.weatherInfo)); // listener encorporates third party weather API</span>
+<span class="nc" id="L67">            pic.setToolTipText(key);</span>
+
+<span class="nc" id="L69">            JLabel jlabel = new JLabel(key);</span>
+<span class="nc" id="L70">            jlabel.setFont(new Font(&quot;Verdana&quot;,1,20));</span>
+            
+<span class="nc" id="L72">            pic.add(jlabel);</span>
+<span class="nc" id="L73">            jlabel.setAlignmentX(TOP_ALIGNMENT);</span>
+<span class="nc" id="L74">            jlabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));</span>
+<span class="nc" id="L75">            jlabel.setFont(new Font( &quot;Lucida Sans Unicode&quot;, Font.PLAIN, 8) );</span>
+<span class="nc" id="L76">            jlabel.setForeground(Color.black);</span>
+
+<span class="nc" id="L78">            this.scrollBlockView.addChildToView(pic);</span>
+            
+            // pic.setPreferredSize(new Dimension(400, 300));
+            // pic.setMinimumSize(new Dimension(400, 300));
+            // pic.setMaximumSize(new Dimension(400 , 300));
+            
+<span class="nc" id="L84">        }   </span>
+        
+        // add dummy components 
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (collection.size() == 1) {</span>
+<span class="nc" id="L88">            this.scrollBlockView.addChildToView(this.dummyPic);</span>
+        }   
+
+<span class="nc" id="L91">        this.scrollBlockView.client.revalidate();  // call after addition or removal of componenets s</span>
+<span class="nc" id="L92">        this.scrollBlockView.client.setVisible(true);</span>
+<span class="nc" id="L93">        this.scrollBlockView.revalidate();</span>
+            
+<span class="nc" id="L95">    }</span>
+
+    public void clearResults () {
+<span class="nc" id="L98">        this.scrollBlockView.client.removeAll();</span>
+<span class="nc" id="L99">        this.scrollBlockView.client.setVisible(false);</span>
+<span class="nc" id="L100">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

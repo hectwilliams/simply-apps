@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron</a> &gt; <span class="el_source">FileHelper.java</span></div><h1>FileHelper.java</h1><pre class="source lang-java linenums">package htron;
+
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.HashMap;
+
+public final class FileHelper {
+
+<span class="nc" id="L9">     private final Map&lt;String, String&gt; resourceMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L10">     public static final FileHelper filehelper = new FileHelper(); // singleton object</span>
+
+<span class="nc" id="L12">     private FileHelper() {</span>
+
+<span class="nc" id="L14">          String pathSuffix = &quot;target&quot;;</span>
+<span class="nc" id="L15">          String pathPrefix = &quot;file:&quot;;</span>
+          int i;
+          int e;
+<span class="nc" id="L18">          String childOfTargetDir = &quot;&quot;;</span>
+
+          // Initialize HashMap
+<span class="nc" id="L21">          this.resourceMap.put(&quot;/assets&quot;, &quot;&quot;);</span>
+<span class="nc" id="L22">          this.resourceMap.put(&quot;/config&quot;, &quot;&quot;);</span>
+<span class="nc" id="L23">          this.resourceMap.put(&quot;/log&quot;, &quot;&quot;);</span>
+
+          // parse, modify, and set value enttries in map to valid path names
+<span class="nc bnc" id="L26" title="All 2 branches missed.">          for (Map.Entry&lt;String, String&gt; entry : this.resourceMap.entrySet()) {</span>
+               // add resource path to value column in tables
+<span class="nc" id="L28">               this.resourceMap.put(entry.getKey(), this.getClass().getResource(entry.getKey()).getPath());</span>
+
+               // find suffix and prefix substrings of element in values column
+<span class="nc" id="L31">               i = this.resourceMap.get(entry.getKey()).indexOf(pathPrefix);</span>
+<span class="nc" id="L32">               e = this.resourceMap.get(entry.getKey()).lastIndexOf(pathSuffix);</span>
+
+<span class="nc bnc" id="L34" title="All 4 branches missed.">               if (i != -1 &amp;&amp; e != -1) {</span>
+                    // maven mutated path, clean it , update table
+<span class="nc" id="L36">                    this.resourceMap.put(</span>
+<span class="nc" id="L37">                              entry.getKey(),</span>
+<span class="nc" id="L38">                              this.resourceMap.get(entry.getKey()).substring(i + pathPrefix.length(),</span>
+<span class="nc" id="L39">                                        e + pathSuffix.length()));</span>
+<span class="nc" id="L40">                    childOfTargetDir = &quot;classes&quot;;</span>
+               }
+<span class="nc" id="L42">               this.resourceMap.put(entry.getKey(),</span>
+<span class="nc" id="L43">                         Paths.get(this.resourceMap.get(entry.getKey()), childOfTargetDir, entry.getKey()).toString());</span>
+
+<span class="nc" id="L45">          }</span>
+<span class="nc" id="L46">     }</span>
+
+     // getter (gets valid paths )
+     public static final String getAssetsPath() {
+<span class="nc" id="L50">          return filehelper.resourceMap.get(&quot;/assets&quot;);</span>
+     }
+
+     public static final String getConfigPath() {
+<span class="nc" id="L54">          return filehelper.resourceMap.get(&quot;/config&quot;);</span>
+     }
+
+     public static final String getLogPath() {
+<span class="nc" id="L58">          return filehelper.resourceMap.get(&quot;/log&quot;);</span>
+     }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

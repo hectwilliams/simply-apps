@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MouseListenerBanner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron</a> &gt; <span class="el_source">MouseListenerBanner.java</span></div><h1>MouseListenerBanner.java</h1><pre class="source lang-java linenums">package htron;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JLabel;
+
+import htron.Windowise;
+import htron.banner.Banner;
+
+public class MouseListenerBanner implements MouseListener{
+    
+    Banner banner; 
+<span class="nc" id="L18">    private final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+    Windowise w;    
+<span class="nc" id="L20">    Object lock = new Object();;</span>
+
+    public MouseListenerBanner(Windowise w) {
+<span class="nc" id="L23">        super();</span>
+<span class="nc" id="L24">        this.w = w;</span>
+<span class="nc" id="L25">    }</span>
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L29">        JLabel label = ((JLabel) e.getSource());</span>
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (  label.isEnabled()  ) {</span>
+
+<span class="nc" id="L33">            sched.schedule( () -&gt; {</span>
+<span class="nc" id="L34">                synchronized(this.lock) {</span>
+<span class="nc" id="L35">                    this.w.banner.currPageName = label.getText().toLowerCase();</span>
+                    
+<span class="nc bnc" id="L37" title="All 2 branches missed.">                    if (this.w.banner.prevPageName   != this.w.banner.currPageName) {</span>
+                        
+<span class="nc bnc" id="L39" title="All 3 branches missed.">                        switch(this.w.banner.prevPageName) {</span>
+                            case &quot;statelist&quot; :
+<span class="nc" id="L41">                                this.w.stateList.setVisible(false);</span>
+<span class="nc" id="L42">                                break;</span>
+                    
+                            case &quot;weather&quot; : 
+<span class="nc" id="L45">                                this.w.weatherinfo.setVisible(false); //  componentActiveList[0].setVisible(false);</span>
+<span class="nc" id="L46">                                this.w.search.setVisible(false);</span>
+                                break;
+                        }
+
+<span class="nc bnc" id="L50" title="All 3 branches missed.">                        switch(this.w.banner.currPageName) {</span>
+                            case &quot;statelist&quot; :
+<span class="nc" id="L52">                                this.w.stateList.setVisible(true);</span>
+<span class="nc" id="L53">                                this.w.stateList.requestFocus();</span>
+<span class="nc" id="L54">                                break;</span>
+                    
+                            case &quot;weather&quot; : 
+<span class="nc" id="L57">                                this.w.weatherinfo.setVisible(true); //  componentActiveList[0].setVisible(false);</span>
+<span class="nc" id="L58">                                this.w.search.setVisible(true);</span>
+                                break;
+                        }
+<span class="nc" id="L61">                        this.w.frame.pack();</span>
+<span class="nc" id="L62">                        this.w.banner.prevPageName =  this.w.banner.currPageName ;</span>
+                    }
+            
+<span class="nc" id="L65">                }</span>
+<span class="nc" id="L66">            }, (long) 0, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L68">    }</span>
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+<span class="nc" id="L72">        JLabel label = ((JLabel) e.getSource());</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (  label.isEnabled()  ) {</span>
+<span class="nc" id="L75">            sched.schedule(() -&gt; {</span>
+<span class="nc" id="L76">                label.setForeground(Color.LIGHT_GRAY);</span>
+<span class="nc" id="L77">            }, (long) 0, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L79">    }</span>
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+<span class="nc" id="L83">        JLabel label = ((JLabel) e.getSource());</span>
+
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (  label.isEnabled()  ) {</span>
+<span class="nc" id="L86">            sched.schedule(() -&gt; {</span>
+<span class="nc" id="L87">                label.setForeground(null);</span>
+<span class="nc" id="L88">            }, (long) 0, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L90">    }</span>
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+<span class="nc" id="L94">        JLabel label = ((JLabel) e.getSource());</span>
+        
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (  label.isEnabled()  ) {</span>
+<span class="nc" id="L97">            sched.schedule(() -&gt; {</span>
+<span class="nc" id="L98">                label.setFont((new Font(Font.SERIF, Font.BOLD, 13)));</span>
+<span class="nc" id="L99">            }, (long) 0, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+<span class="nc" id="L105">        JLabel label = ((JLabel) e.getSource());</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">        if (  label.isEnabled()  ) {</span>
+<span class="nc" id="L108">            sched.schedule(() -&gt; {</span>
+<span class="nc" id="L109">                label.setFont((new Font(Font.SERIF, Font.PLAIN, 13)));</span>
+<span class="nc" id="L110">            }, (long) 0, TimeUnit.MILLISECONDS);</span>
+        }
+<span class="nc" id="L112">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

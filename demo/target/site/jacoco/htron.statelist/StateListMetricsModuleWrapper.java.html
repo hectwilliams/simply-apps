@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StateListMetricsModuleWrapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.statelist</a> &gt; <span class="el_source">StateListMetricsModuleWrapper.java</span></div><h1>StateListMetricsModuleWrapper.java</h1><pre class="source lang-java linenums">package htron.statelist;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+// import htron.statelist.StateListMetricsModule;
+// import htron.statelist.StateList;
+
+public class StateListMetricsModuleWrapper extends JPanel {
+    static final int N = 25;
+    StateLabel stateLabel; 
+    StateListMetricsModule stateListMetricsModule; 
+
+<span class="nc" id="L19">    public StateListMetricsModuleWrapper (StateLabel stateLabel) {</span>
+<span class="nc" id="L20">        this.setLayout(new GridBagLayout());</span>
+        // this.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+<span class="nc" id="L22">        this.stateLabel = stateLabel;</span>
+        // Dimension d = new Dimension(30,30);  // Monitor Size needed here
+        // this.setMaximumSize(d);
+        // this.setPreferredSize(d);
+        // this.setMinimumSize(d);
+<span class="nc" id="L27">        this.stateListMetricsModule = new StateListMetricsModule(stateLabel);</span>
+
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (int r = 0; r &lt; StateListMetricsModuleWrapper.N ; r++) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            for (int c = 0; c &lt; StateListMetricsModuleWrapper.N; c++) { </span>
+<span class="nc" id="L31">                GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L32">                gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L33">                gbc .weightx = 1;</span>
+<span class="nc" id="L34">                gbc .weighty = 1;</span>
+<span class="nc" id="L35">                gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L36">                gbc.gridx = c;</span>
+<span class="nc" id="L37">                gbc.gridy = r;</span>
+<span class="nc" id="L38">                JPanel cell = new JPanel();</span>
+<span class="nc" id="L39">                cell.setBorder( (BorderFactory.createLineBorder(new Color(255, 255, 255, 0 )) ));</span>
+<span class="nc" id="L40">                this.add(cell, gbc);</span>
+            }
+        }
+
+<span class="nc" id="L44">        this.loadMetricsModule();</span>
+<span class="nc" id="L45">    }</span>
+
+    private void loadMetricsModule () {
+<span class="nc" id="L48">        GridBagConstraints c = new GridBagConstraints();</span>
+<span class="nc" id="L49">        c.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L50">        c .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L51">        c.gridx = 0;</span>
+<span class="nc" id="L52">        c.gridy = 0;</span>
+<span class="nc" id="L53">        c.gridwidth = 25;</span>
+<span class="nc" id="L54">        c.gridheight = 50;</span>
+<span class="nc" id="L55">        this.add(this.stateListMetricsModule, c); </span>
+<span class="nc" id="L56">        this.setComponentZOrder(this.stateListMetricsModule, 2);</span>
+<span class="nc" id="L57">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

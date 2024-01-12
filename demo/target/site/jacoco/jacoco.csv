@@ -1,0 +1,63 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Project Name,htron.idlescreen,IdlePage.WaitIcon,489,0,36,0,99,0,25,0,7,0
+Project Name,htron.idlescreen,IdlePage.MouseListenerT,11,0,0,0,6,0,6,0,6,0
+Project Name,htron.idlescreen,IdlePage,87,0,0,0,25,0,4,0,4,0
+Project Name,htron.weatherinfo,WeatherInfo,376,0,8,0,81,0,32,0,28,0
+Project Name,htron.weatherinfo,WeatherMeasure.LabelMeasurementMouseListener,84,0,0,0,20,0,9,0,9,0
+Project Name,htron.weatherinfo,WeatherMeasureIcon,451,0,16,0,109,0,35,0,25,0
+Project Name,htron.weatherinfo,Picture,183,0,10,0,44,0,10,0,5,0
+Project Name,htron.weatherinfo,WeatherMeasure.TimerTaskT,7,0,0,0,3,0,2,0,2,0
+Project Name,htron.weatherinfo,WeatherMeasure,299,0,4,0,69,0,10,0,8,0
+Project Name,htron.weatherinfo,WeatherInfoClient,525,0,28,0,87,0,25,0,11,0
+Project Name,htron.weatherinfo,WeatherMeasure.LabelMeasurementMouseListener.new WeatherMeasure.TimerTaskT() {...},27,0,0,0,3,0,2,0,2,0
+Project Name,htron,ComponentListenerV2,65,0,4,0,20,0,9,0,7,0
+Project Name,htron,FileHelper,157,0,6,0,26,0,8,0,5,0
+Project Name,htron,App,25,0,2,0,8,0,3,0,2,0
+Project Name,htron,Windowise,252,0,6,0,62,0,10,0,7,0
+Project Name,htron,MouseListenerBanner,217,0,18,0,51,0,21,0,11,0
+Project Name,htron,FocusListenerApp,16,0,0,0,7,0,3,0,3,0
+Project Name,htron.plot,Plot,232,0,6,0,39,0,7,0,4,0
+Project Name,htron.statelist,Testimonial.TextModule,32,0,0,0,8,0,1,0,1,0
+Project Name,htron.statelist,StateListMetricsButton,285,0,10,0,64,0,19,0,14,0
+Project Name,htron.statelist,Testimonial,237,0,4,0,63,0,7,0,5,0
+Project Name,htron.statelist,StateListMetricsModule.new BasicScrollBarUI() {...},40,0,0,0,10,0,4,0,4,0
+Project Name,htron.statelist,StateLabel.MouseOverIcon,41,0,0,0,14,0,7,0,7,0
+Project Name,htron.statelist,StateLabel.CircleIcon,218,0,24,0,30,0,14,0,2,0
+Project Name,htron.statelist,StateLabel.new JLabel() {...},28,0,0,0,5,0,2,0,2,0
+Project Name,htron.statelist,StateListMetricsModuleWrapper,106,0,4,0,28,0,4,0,2,0
+Project Name,htron.statelist,Testimonial.UserModule,28,0,0,0,6,0,1,0,1,0
+Project Name,htron.statelist,StateLabel,373,0,4,0,79,0,12,0,10,0
+Project Name,htron.statelist,StateListMetricsModule,458,0,6,0,95,0,9,0,6,0
+Project Name,htron.statelist,StateList,227,0,2,0,49,0,9,0,8,0
+Project Name,htron.statelist,Graphy,341,0,8,0,54,0,10,0,6,0
+Project Name,htron.statelist,StateLabel.IconBlock,193,0,6,0,48,0,9,0,5,0
+Project Name,htron.statelist,Testimonial.PhotoModule,122,0,0,0,24,0,4,0,4,0
+Project Name,htron.statelist,StateList.MouseListenerT,17,0,0,0,9,0,6,0,6,0
+Project Name,htron.loggy,streamHandler,3,0,0,0,1,0,1,0,1,0
+Project Name,htron.loggy,Loggy.new Formatter() {...},39,0,0,0,2,0,2,0,2,0
+Project Name,htron.loggy,Loggy.new StreamHandler() {...},16,0,0,0,7,0,4,0,4,0
+Project Name,htron.loggy,Loggy.new Filter() {...},14,0,2,0,2,0,3,0,2,0
+Project Name,htron.loggy,Loggy,99,0,0,0,23,0,3,0,3,0
+Project Name,htron.banner,Banner.new JLabel() {...},44,0,0,0,9,0,2,0,2,0
+Project Name,htron.banner,Banner,183,0,2,0,37,0,7,0,6,0
+Project Name,htron.banner,BannerPage,146,0,6,0,43,0,6,0,3,0
+Project Name,htron.search,SearchTextArea.SearchTextAreaField,96,0,0,0,19,0,2,0,2,0
+Project Name,htron.search,SearchScrollBlock,168,0,4,0,44,0,5,0,3,0
+Project Name,htron.search,SearchTextArea,71,0,0,0,18,0,3,0,3,0
+Project Name,htron.search,Trie.Node,17,0,0,0,5,0,1,0,1,0
+Project Name,htron.search,Trie.SearchNode,15,0,0,0,5,0,1,0,1,0
+Project Name,htron.search,SearchClear,136,0,0,0,25,0,1,0,1,0
+Project Name,htron.search,DebounceLast.TimerTask,20,0,0,0,8,0,2,0,2,0
+Project Name,htron.search,StatesJsonAccessor,96,0,0,0,21,0,6,0,6,0
+Project Name,htron.search,DebounceLast,43,0,2,0,12,0,4,0,3,0
+Project Name,htron.search,SearchTextArea.SearchTextAreaField.new MouseListener() {...},42,0,0,0,10,0,6,0,6,0
+Project Name,htron.search,ActionListenerV2,18,0,0,0,7,0,2,0,2,0
+Project Name,htron.search,SearchIcon,88,0,0,0,19,0,1,0,1,0
+Project Name,htron.search,DebounceFirst.TimerTask,25,0,0,0,9,0,2,0,2,0
+Project Name,htron.search,Search,502,0,16,0,144,0,20,0,12,0
+Project Name,htron.search,DocumentListenerV2,71,0,2,0,22,0,7,0,6,0
+Project Name,htron.search,MyMouseListener,46,0,0,0,16,0,8,0,8,0
+Project Name,htron.search,DebounceFirst,42,0,2,0,12,0,4,0,3,0
+Project Name,htron.search,CountdownTimer,88,0,4,0,28,0,8,0,6,0
+Project Name,htron.search,SearchResults,175,0,4,0,38,0,5,0,3,0
+Project Name,htron.search,Trie,298,0,38,0,63,0,24,0,5,0

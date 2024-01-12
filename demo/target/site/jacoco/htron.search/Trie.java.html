@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Trie.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.search</a> &gt; <span class="el_source">Trie.java</span></div><h1>Trie.java</h1><pre class="source lang-java linenums">package htron.search;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
+import htron.FileHelper;
+
+public class Trie {
+
+  
+     
+    public class Node {
+
+        char c;
+<span class="nc" id="L19">        ArrayList&lt;Node&gt; children = null;</span>
+
+<span class="nc" id="L21">        public Node(char c) {</span>
+<span class="nc" id="L22">            this.c = c; </span>
+<span class="nc" id="L23">            children = new ArrayList&lt;Node&gt;();</span>
+<span class="nc" id="L24">        }</span>
+
+    }
+
+      public class SearchNode {
+
+        public String s;
+<span class="nc" id="L31">        public Node node = null;</span>
+
+<span class="nc" id="L33">        public SearchNode(Node n, String s ) {</span>
+<span class="nc" id="L34">            this.s = s; </span>
+<span class="nc" id="L35">            this.node = n;</span>
+            
+<span class="nc" id="L37">        }</span>
+
+    }
+
+
+    Node trieNode;
+    JSONObject json;
+
+<span class="nc" id="L45">    public Trie() {</span>
+<span class="nc" id="L46">        this.trieNode = new Node(' ');</span>
+<span class="nc" id="L47">        this.initLoadStates();</span>
+<span class="nc" id="L48">        this.json = StatesJsonAccessor.getStatesJson(); </span>
+<span class="nc" id="L49">    }</span>
+
+    public void insert (String word) {
+<span class="nc" id="L52">        Node curr = this.trieNode;</span>
+        Node newNode;
+        char charInString; 
+<span class="nc" id="L55">        boolean charFound = false; </span>
+        
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        for ( int i = 0; i &lt; word.length(); i++) {</span>
+<span class="nc" id="L58">            charInString = word.charAt(i);</span>
+<span class="nc" id="L59">            charFound = false;</span>
+            
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            for (Node node: curr.children) {</span>
+
+                // char from word found in tree ( step into new node )
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                if (node.c == charInString) {</span>
+<span class="nc" id="L65">                    curr = node;</span>
+<span class="nc" id="L66">                    charFound = true;</span>
+<span class="nc" id="L67">                    break;</span>
+                } 
+
+<span class="nc" id="L70">            }</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (!charFound) {</span>
+
+<span class="nc" id="L74">                newNode =  new Node(charInString);</span>
+<span class="nc" id="L75">                curr.children.add(newNode);</span>
+<span class="nc" id="L76">                curr = newNode;</span>
+            }
+
+        }
+
+<span class="nc" id="L81">    }</span>
+
+    private void initLoadStates () {
+<span class="nc" id="L84">        String filePath = Paths.get(FileHelper.getAssetsPath(), &quot;Search&quot;,  &quot;states.json&quot;).toAbsolutePath().normalize().toString();</span>
+        String content;
+        
+        // try {
+            
+            // content = new String(Files.readAllBytes(Paths.get(filePath)));
+            
+            // System.out.println(content);
+
+            
+<span class="nc" id="L94">            this.json = StatesJsonAccessor.getStatesJson(); //  new JSONObject(content);</span>
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            for (String key : json.keySet()) {</span>
+<span class="nc" id="L97">                this.insert(key.toLowerCase());</span>
+<span class="nc" id="L98">            }</span>
+
+        // } catch (IOException e) {
+
+        //     e.printStackTrace();
+
+        // }
+
+<span class="nc" id="L106">    }</span>
+
+    public boolean contains(String s) {
+<span class="nc" id="L109">        Node curr = this.trieNode;</span>
+        char charInString; 
+<span class="nc" id="L111">        int targetCount = s.length();</span>
+<span class="nc" id="L112">        int count = 0;</span>
+        
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        for ( int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L115">            charInString = s.charAt(i);</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">            for (Node childNode: curr.children) {</span>
+
+                // char from word found in tree ( step into new node )
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if (childNode.c == charInString) {</span>
+<span class="nc" id="L121">                    count += 1; </span>
+<span class="nc" id="L122">                    curr = childNode;</span>
+<span class="nc" id="L123">                    break;</span>
+                } 
+
+<span class="nc" id="L126">            }</span>
+        }
+
+<span class="nc bnc" id="L129" title="All 4 branches missed.">        return count == targetCount &amp;&amp; s.length() &gt; 0;</span>
+    }
+
+    public ArrayList&lt;String&gt; findAll(String s) {
+<span class="nc" id="L133">        Node curr = this.trieNode;</span>
+        char currChar;
+<span class="nc" id="L135">        ArrayList&lt;String&gt; result = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L136">        String prevString = &quot;&quot;;</span>
+<span class="nc" id="L137">        ArrayList&lt;SearchNode&gt; queue_array = new ArrayList&lt;SearchNode&gt;();</span>
+        Node child; 
+        
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="nc" id="L141">            currChar = s.charAt(i);</span>
+            
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            for (Node childNode: curr.children) {</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">                if (childNode.c == currChar) {</span>
+<span class="nc" id="L145">                    prevString += currChar; </span>
+<span class="nc" id="L146">                    curr = childNode;</span>
+                }
+<span class="nc" id="L148">            }</span>
+        }
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (!curr.children.isEmpty() ) {  </span>
+
+            // // first breadth evaluation 
+<span class="nc" id="L154">            queue_array.add(new SearchNode(curr, prevString) );</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            while (queue_array.size() != 0) {</span>
+                
+<span class="nc" id="L158">                SearchNode searchNode = queue_array.remove(0);</span>
+                
+<span class="nc bnc" id="L160" title="All 4 branches missed.">                if (searchNode.node.children.isEmpty() &amp;&amp; searchNode.s.indexOf(s) == 0 ) {</span>
+<span class="nc" id="L161">                    result.add(searchNode.s);</span>
+                }  else {
+                    
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                    for (int i = 0 ; i&lt; searchNode.node.children.size(); i++) { // indexed loop certains order </span>
+<span class="nc" id="L165">                        child = searchNode.node.children.get(i);</span>
+<span class="nc" id="L166">                        queue_array.add (new SearchNode(searchNode.node.children.get(i), searchNode.s  + child.c ));</span>
+
+                    }
+                }
+                   
+<span class="nc" id="L171">            }</span>
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        } else if (s.compareTo(prevString)  == 0) {</span>
+<span class="nc" id="L174">            result.add (s);</span>
+        }
+
+<span class="nc" id="L177">        return result;</span>
+
+    }
+    
+    // public static void main (String [] args) {
+    // }
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Requirements #
+# - maven command line (mvn) 
+
+POMP=${PWD%%/scripts}/demo
+echo $POMP
+
+test=$POMP/pom.xml
+
+TARGETPATH=${POMP}/target
+
+mvn clean -f $POMP/pom.xml
+
+mvn package -f $POMP/pom.xml
+
+# jar file bundled dependencies 
+java -cp  $TARGETPATH/demo-1.0-SNAPSHOT.jar htron.App 
+
