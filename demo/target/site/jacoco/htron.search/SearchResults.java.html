@@ -28,7 +28,7 @@ public class SearchResults  extends JPanel{   // scrollable client
     String pathToImg;
     Image img; 
     Trie trie;
-    WeatherInfo weatherinfo;
+    WeatherInfo weatherInfo;
     GridBagConstraints gd; 
 <span class="nc" id="L33">    GridBagLayout gridBagLayout = null;</span>
     SearchScrollBlock scrollBlockView;
@@ -36,10 +36,10 @@ public class SearchResults  extends JPanel{   // scrollable client
     String currString;
 
 
-    public SearchResults(Trie trie, WeatherInfo weatherinfo, SearchScrollBlock scrollBlockView) {
+    public SearchResults(Trie trie, WeatherInfo weatherInfo, SearchScrollBlock scrollBlockView) {
 <span class="nc" id="L40">        super();</span>
 <span class="nc" id="L41">        this.trie = trie;</span>
-<span class="nc" id="L42">        this.weatherinfo = weatherinfo;</span>
+<span class="nc" id="L42">        this.weatherInfo = weatherInfo;</span>
 <span class="nc" id="L43">        this.scrollBlockView = scrollBlockView;</span>
 <span class="nc" id="L44">        this.dummyPic = new Picture(null);</span>
 <span class="nc" id="L45">        this.currString = &quot;&quot;;</span>
@@ -63,7 +63,7 @@ public class SearchResults  extends JPanel{   // scrollable client
 <span class="nc" id="L63">            }</span>
             
 <span class="nc" id="L65">            Picture pic = new Picture(this.pathToImg);</span>
-<span class="nc" id="L66">            pic.addMouseListener(new MyMouseListener(this.weatherinfo));</span>
+<span class="nc" id="L66">            pic.addMouseListener(new MyMouseListener(this.weatherInfo)); // listener encorporates third party weather API</span>
 <span class="nc" id="L67">            pic.setToolTipText(key);</span>
 
 <span class="nc" id="L69">            JLabel jlabel = new JLabel(key);</span>

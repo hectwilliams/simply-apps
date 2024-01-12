@@ -45,7 +45,7 @@ public class Trie {
 <span class="nc" id="L45">    public Trie() {</span>
 <span class="nc" id="L46">        this.trieNode = new Node(' ');</span>
 <span class="nc" id="L47">        this.initLoadStates();</span>
-<span class="nc" id="L48">        this.json = StatesJsonAccessor.get(); </span>
+<span class="nc" id="L48">        this.json = StatesJsonAccessor.getStatesJson(); </span>
 <span class="nc" id="L49">    }</span>
 
     public void insert (String word) {
@@ -91,7 +91,7 @@ public class Trie {
             // System.out.println(content);
 
             
-<span class="nc" id="L94">            this.json = StatesJsonAccessor.get(); //  new JSONObject(content);</span>
+<span class="nc" id="L94">            this.json = StatesJsonAccessor.getStatesJson(); //  new JSONObject(content);</span>
 
 <span class="nc bnc" id="L96" title="All 2 branches missed.">            for (String key : json.keySet()) {</span>
 <span class="nc" id="L97">                this.insert(key.toLowerCase());</span>

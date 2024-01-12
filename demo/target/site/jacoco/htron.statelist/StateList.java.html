@@ -134,40 +134,37 @@ public class StateList  extends JScrollPane {
                         // TODO: change to 50 states 
 <span class="nc" id="L135">                        w.stateList.panelView.add(new StateLabel());</span>
 <span class="nc" id="L136">                        w.stateList.panelView.add(new JPanel());</span>
-
-<span class="nc" id="L138">                        w.stateList.revalidate();</span>
-<span class="nc" id="L139">                        w.stateList.repaint();</span>
                     }
-
-<span class="nc" id="L142">                    this.setReadyStatus(true);</span>
-<span class="nc" id="L143">                    w.banner.enableButton(1);</span>
-<span class="nc" id="L144">                }, 10, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L138">                    this.setReadyStatus(true);</span>
+<span class="nc" id="L139">                    w.banner.enableButton(1);</span>
+<span class="nc" id="L140">                }, 10, TimeUnit.MILLISECONDS);</span>
      
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L142">    }</span>
 
+    // state list jpanel dimensions 
     public void placeMeasureGrid(Windowise w) {
 
-<span class="nc" id="L150">        this.gc = new GridBagConstraints();</span>
-<span class="nc" id="L151">        this.gc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
-<span class="nc" id="L152">        this.gc.weightx = 1;</span>
-<span class="nc" id="L153">        this.gc.weighty = 1;</span>
-<span class="nc" id="L154">        this.gc.fill = GridBagConstraints.BOTH;</span>
-<span class="nc" id="L155">        this.gc.gridx = 1;</span>
-<span class="nc" id="L156">        this.gc.gridy = 11;</span>
-<span class="nc" id="L157">        this.gc.gridwidth = 120;</span>
-<span class="nc" id="L158">        this.gc.gridheight = 55;</span>
-<span class="nc" id="L159">        w.add( this  , this.gc);</span>
-<span class="nc" id="L160">        w.setComponentZOrder( this  , 2);</span>
-<span class="nc" id="L161">        this .validate();</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L147">        this.gc = new GridBagConstraints();</span>
+<span class="nc" id="L148">        this.gc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L149">        this.gc.weightx = 1;</span>
+<span class="nc" id="L150">        this.gc.weighty = 1;</span>
+<span class="nc" id="L151">        this.gc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L152">        this.gc.gridx = 1;</span>
+<span class="nc" id="L153">        this.gc.gridy = 11;</span>
+<span class="nc" id="L154">        this.gc.gridwidth = 100;</span>
+<span class="nc" id="L155">        this.gc.gridheight = 55;</span>
+<span class="nc" id="L156">        w.add( this  , this.gc);</span>
+<span class="nc" id="L157">        w.setComponentZOrder( this  , 2);</span>
+<span class="nc" id="L158">        this .validate();</span>
+<span class="nc" id="L159">    }</span>
 
     public void extendListHeight(Windowise w) {
-<span class="nc" id="L165">        this.gc.gridheight += 30;</span>
-<span class="nc" id="L166">        this.gc = new GridBagConstraints();</span>
-<span class="nc" id="L167">        w.revalidate(); </span>
-<span class="nc" id="L168">        w.repaint();</span>
-<span class="nc" id="L169">        sched.notifyAll();</span>
-<span class="nc" id="L170">    }</span>
+<span class="nc" id="L162">        this.gc.gridheight += 30;</span>
+<span class="nc" id="L163">        this.gc = new GridBagConstraints();</span>
+<span class="nc" id="L164">        w.revalidate(); </span>
+<span class="nc" id="L165">        w.repaint();</span>
+<span class="nc" id="L166">        sched.notifyAll();</span>
+<span class="nc" id="L167">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

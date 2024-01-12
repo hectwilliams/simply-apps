@@ -29,6 +29,7 @@ public class Windowise extends JPanel {
     static final int N_SIZE = 150;
     GridBagLayout gridBagLayout = null;
     GridBagConstraints gdConstraints = null;
+    boolean ready = false;
     public JPanel gridPanel = null;
     public JFrame frame;
     public Search search;
@@ -37,7 +38,6 @@ public class Windowise extends JPanel {
     public BannerPage bannerPage;
     public ArrayList<Component> activeComponents;
     public StateList stateList;
-    public boolean ready = false;
     public Banner banner;
     public IdlePage idlePage;
     public long time_start;
@@ -48,18 +48,20 @@ public class Windowise extends JPanel {
     public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
 
     public Windowise(JFrame frame) {
+        
         this.time_start = System.currentTimeMillis();
-
+        
         this.frame = frame;
-
-        this.ready = false;
-
+        
         this.activeComponents = new ArrayList<>();
-
+        
         this.setFrameScrollable();
-        this.setWindowFrameGrid(); // sychronous
 
+        
+        this.setWindowFrameGrid(); // sychronous
+        
         idlePage = new IdlePage(this); 
+
 
         this.stateList = new StateList(this);
 
@@ -113,8 +115,16 @@ public class Windowise extends JPanel {
             }
         }
 
-        this.ready = true;
+        this.setReady(true);
         this.validate();
+    }
+    
+    private final void setReady(boolean state) {
+        this.ready = state;
+    }
+    
+    public final boolean getReadyState() {
+        return this.ready;
     }
 
     private final  void wakeSearchWindow() {

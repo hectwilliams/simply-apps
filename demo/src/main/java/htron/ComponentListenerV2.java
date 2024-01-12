@@ -60,7 +60,7 @@ public class ComponentListenerV2  implements ComponentListener {
             
                 this.frame.setSize(this.dm.getWidth(), this.dm.getHeight());    
                 
-            }), 1000, TimeUnit.MILLISECONDS);
+            }), 0, TimeUnit.MILLISECONDS);
         }
 
     }

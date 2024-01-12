@@ -5,24 +5,25 @@ import java.awt.event.FocusListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+
 public class FocusListenerApp implements FocusListener {
 
-<span class="nc" id="L10">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+<span class="nc" id="L11">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
     Windowise w;
 
-<span class="nc" id="L13">    public FocusListenerApp(Windowise w) {</span>
-<span class="nc" id="L14">        this.w = w;</span>
-<span class="nc" id="L15">    }</span>
+<span class="nc" id="L14">    public FocusListenerApp(Windowise w) {</span>
+<span class="nc" id="L15">        this.w = w;</span>
+<span class="nc" id="L16">    }</span>
 
     @Override
     public void focusGained(FocusEvent e) {
-<span class="nc" id="L19">        w.frame.pack();</span>
-<span class="nc" id="L20">    }</span>
+<span class="nc" id="L20">        w.frame.pack();</span>
+<span class="nc" id="L21">    }</span>
 
     @Override
     public void focusLost(FocusEvent e) {
         // nothing
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L26">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

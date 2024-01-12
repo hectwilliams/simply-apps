@@ -31,6 +31,8 @@
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/Windowise.java
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/search/DebounceLast.java
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/search/Trie.java
+/Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/loggy/streamHandler.java
+/Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/loggy/Loggy.java
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/statelist/StateListMetricsButton.java
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/statelist/StateListMetricsModuleWrapper.java
 /Users/hectorwilliams/Dev/simply-apps/demo/src/main/java/htron/plot/Plot.java

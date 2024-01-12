@@ -28,7 +28,7 @@ public class SearchResults  extends JPanel{   // scrollable client
     String pathToImg;
     Image img; 
     Trie trie;
-    WeatherInfo weatherinfo;
+    WeatherInfo weatherInfo;
     GridBagConstraints gd; 
     GridBagLayout gridBagLayout = null;
     SearchScrollBlock scrollBlockView;
@@ -36,10 +36,10 @@ public class SearchResults  extends JPanel{   // scrollable client
     String currString;
 
 
-    public SearchResults(Trie trie, WeatherInfo weatherinfo, SearchScrollBlock scrollBlockView) {
+    public SearchResults(Trie trie, WeatherInfo weatherInfo, SearchScrollBlock scrollBlockView) {
         super();
         this.trie = trie;
-        this.weatherinfo = weatherinfo;
+        this.weatherInfo = weatherInfo;
         this.scrollBlockView = scrollBlockView;
         this.dummyPic = new Picture(null);
         this.currString = "";
@@ -63,7 +63,7 @@ public class SearchResults  extends JPanel{   // scrollable client
             }
             
             Picture pic = new Picture(this.pathToImg);
-            pic.addMouseListener(new MyMouseListener(this.weatherinfo));
+            pic.addMouseListener(new MyMouseListener(this.weatherInfo)); // listener encorporates third party weather API
             pic.setToolTipText(key);
 
             JLabel jlabel = new JLabel(key);

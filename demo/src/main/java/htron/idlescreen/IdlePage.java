@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import htron.Windowise;
+import htron.search.StatesJsonAccessor;
 
 public class IdlePage extends JLabel {
 
@@ -71,7 +72,7 @@ public class IdlePage extends JLabel {
             this.setObject(w);
             this.g = null;
             this.w = w; 
-            this.buffer = new ArrayList<Double>();
+            this.buffer = new ArrayList<>();
             this.ready = true;
             this.searchStatusReady = false;
             this.index = 1;
@@ -79,9 +80,10 @@ public class IdlePage extends JLabel {
             this.workerRun();
         }
 
+        @Override
         protected void paintComponent(Graphics g) {
             this.g = g;
-
+            System.out.println("paint int");
             if (this.centerX == null) {
                 this.width = this.getWidth();
                 this.height = this.getHeight();
@@ -94,7 +96,7 @@ public class IdlePage extends JLabel {
                 this.index = 1;
             }
             
-            if (!this.future.isDone()) {
+            if (!this.future.isDone())  {
                 this.runWaitIcon(g, centerX, centerY, r,this.index, Color.GRAY);
             }
 
@@ -128,7 +130,8 @@ public class IdlePage extends JLabel {
 
         private void runWaitIcon(Graphics g, double centerX, double centerY, double r, int quandrant, Color color) {
 
-            if (this.w.search != null) {
+            // shutdown wait thread iff search and json accessor modules are ready
+            if (this.w.search != null && StatesJsonAccessor.getReadyStatus())  {
 
                 if (this.w.search.ready ) {
 
@@ -136,7 +139,7 @@ public class IdlePage extends JLabel {
 
                     while (!this.w.banner.isEnabled()) {} // wait for banner 
 
-                    this.future.cancel(true);
+                    this.future.cancel(true); // shutdown scheduled fixed rate thread
                     this.buffer.clear();
 
                     this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -1, this.buffer, Color.RED);
@@ -232,7 +235,7 @@ public class IdlePage extends JLabel {
             this.setGrid(w);
             this.waitIcon = new WaitIcon(w);
         }
-        , 0, TimeUnit.MILLISECONDS);
+        , 200, TimeUnit.MILLISECONDS);
 
     }
 

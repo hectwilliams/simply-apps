@@ -19,204 +19,207 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import htron.Windowise;
+import htron.search.StatesJsonAccessor;
 
 public class IdlePage extends JLabel {
 
-<span class="nc" id="L25">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
+<span class="nc" id="L26">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
     
-<span class="nc" id="L27">    class MouseListenerT implements MouseListener {</span>
+<span class="nc" id="L28">    class MouseListenerT implements MouseListener {</span>
 
         @Override
         public void mouseClicked(MouseEvent e) {
-<span class="nc" id="L31">        }</span>
+<span class="nc" id="L32">        }</span>
 
         @Override
         public void mousePressed(MouseEvent e) {
-<span class="nc" id="L35">        }</span>
+<span class="nc" id="L36">        }</span>
 
         @Override
         public void mouseReleased(MouseEvent e) {
-<span class="nc" id="L39">        }</span>
+<span class="nc" id="L40">        }</span>
 
         @Override
         public void mouseEntered(MouseEvent e) {
-<span class="nc" id="L43">        }</span>
+<span class="nc" id="L44">        }</span>
 
         @Override
         public void mouseExited(MouseEvent e) {
-<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">        }</span>
         
     }
 
     public class WaitIcon extends JPanel {
-<span class="nc" id="L52">        public boolean ready = false;</span>
+<span class="nc" id="L53">        public boolean ready = false;</span>
         private ArrayList&lt;Double&gt; buffer;
         Windowise w; 
         Graphics g; 
         ScheduledFuture&lt;?&gt; future;
  
         int index; 
-<span class="nc" id="L59">        boolean enablePaint = false; </span>
+<span class="nc" id="L60">        boolean enablePaint = false; </span>
         Double centerX, centerY;
         int width, height; 
         double r; 
-<span class="nc" id="L63">        int count = 0;</span>
+<span class="nc" id="L64">        int count = 0;</span>
 
         double xx,yy, xpos, factorY, factorX, x, y; 
-<span class="nc" id="L66">        public boolean searchStatusReady = false;</span>
+<span class="nc" id="L67">        public boolean searchStatusReady = false;</span>
 
-<span class="nc" id="L68">        public WaitIcon(Windowise w) {</span>
-<span class="nc" id="L69">            this.setLayout(new GridBagLayout());</span>
-<span class="nc" id="L70">            this.setOpaque(true);</span>
-<span class="nc" id="L71">            this.setObject(w);</span>
-<span class="nc" id="L72">            this.g = null;</span>
-<span class="nc" id="L73">            this.w = w; </span>
-<span class="nc" id="L74">            this.buffer = new ArrayList&lt;Double&gt;();</span>
-<span class="nc" id="L75">            this.ready = true;</span>
-<span class="nc" id="L76">            this.searchStatusReady = false;</span>
-<span class="nc" id="L77">            this.index = 1;</span>
-<span class="nc" id="L78">            this.centerX = null; </span>
-<span class="nc" id="L79">            this.workerRun();</span>
-<span class="nc" id="L80">        }</span>
+<span class="nc" id="L69">        public WaitIcon(Windowise w) {</span>
+<span class="nc" id="L70">            this.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L71">            this.setOpaque(true);</span>
+<span class="nc" id="L72">            this.setObject(w);</span>
+<span class="nc" id="L73">            this.g = null;</span>
+<span class="nc" id="L74">            this.w = w; </span>
+<span class="nc" id="L75">            this.buffer = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L76">            this.ready = true;</span>
+<span class="nc" id="L77">            this.searchStatusReady = false;</span>
+<span class="nc" id="L78">            this.index = 1;</span>
+<span class="nc" id="L79">            this.centerX = null; </span>
+<span class="nc" id="L80">            this.workerRun();</span>
+<span class="nc" id="L81">        }</span>
 
+        @Override
         protected void paintComponent(Graphics g) {
-<span class="nc" id="L83">            this.g = g;</span>
-
-<span class="nc bnc" id="L85" title="All 2 branches missed.">            if (this.centerX == null) {</span>
-<span class="nc" id="L86">                this.width = this.getWidth();</span>
-<span class="nc" id="L87">                this.height = this.getHeight();</span>
-<span class="nc" id="L88">                this.r = 10.0; </span>
-<span class="nc" id="L89">                this.centerX = width / 2.0 ;</span>
-<span class="nc" id="L90">                this.centerY = height / 2.0 ;</span>
+<span class="nc" id="L85">            this.g = g;</span>
+<span class="nc" id="L86">            System.out.println(&quot;paint int&quot;);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if (this.centerX == null) {</span>
+<span class="nc" id="L88">                this.width = this.getWidth();</span>
+<span class="nc" id="L89">                this.height = this.getHeight();</span>
+<span class="nc" id="L90">                this.r = 10.0; </span>
+<span class="nc" id="L91">                this.centerX = width / 2.0 ;</span>
+<span class="nc" id="L92">                this.centerY = height / 2.0 ;</span>
             }
 
-<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (this.index == 5) {</span>
-<span class="nc" id="L94">                this.index = 1;</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (this.index == 5) {</span>
+<span class="nc" id="L96">                this.index = 1;</span>
             }
             
-<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (!this.future.isDone()) {</span>
-<span class="nc" id="L98">                this.runWaitIcon(g, centerX, centerY, r,this.index, Color.GRAY);</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (!this.future.isDone())  {</span>
+<span class="nc" id="L100">                this.runWaitIcon(g, centerX, centerY, r,this.index, Color.GRAY);</span>
             }
 
-<span class="nc" id="L101">            this.index++;</span>
+<span class="nc" id="L103">            this.index++;</span>
 
-<span class="nc" id="L103">        }</span>
+<span class="nc" id="L105">        }</span>
 
         private void workerRun() {
 
-<span class="nc" id="L107">            this.future = sched.scheduleAtFixedRate( </span>
+<span class="nc" id="L109">            this.future = sched.scheduleAtFixedRate( </span>
                 () -&gt; {
-<span class="nc" id="L109">                    this.repaint();</span>
-<span class="nc" id="L110">                }</span>
+<span class="nc" id="L111">                    this.repaint();</span>
+<span class="nc" id="L112">                }</span>
             , 500, 250, TimeUnit.MILLISECONDS);
 
-<span class="nc" id="L113">        }</span>
+<span class="nc" id="L115">        }</span>
 
         private void setObject(Windowise w) {
-<span class="nc" id="L116">            GridBagConstraints gbc = new GridBagConstraints();</span>
-<span class="nc" id="L117">            gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
-<span class="nc" id="L118">            gbc .weightx = 1;</span>
-<span class="nc" id="L119">            gbc .weighty = 1;</span>
-<span class="nc" id="L120">            gbc .fill = GridBagConstraints.BOTH;</span>
-<span class="nc" id="L121">            gbc.gridx = 50;</span>
-<span class="nc" id="L122">            gbc.gridy = 25;</span>
-<span class="nc" id="L123">            gbc.gridheight = 10;</span>
-<span class="nc" id="L124">            gbc.gridwidth= 10 ;</span>
-<span class="nc" id="L125">            w.add(this, gbc);</span>
-<span class="nc" id="L126">            w.setComponentZOrder(this, 1);</span>
-<span class="nc" id="L127">        }</span>
+<span class="nc" id="L118">            GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L119">            gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L120">            gbc .weightx = 1;</span>
+<span class="nc" id="L121">            gbc .weighty = 1;</span>
+<span class="nc" id="L122">            gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L123">            gbc.gridx = 50;</span>
+<span class="nc" id="L124">            gbc.gridy = 25;</span>
+<span class="nc" id="L125">            gbc.gridheight = 10;</span>
+<span class="nc" id="L126">            gbc.gridwidth= 10 ;</span>
+<span class="nc" id="L127">            w.add(this, gbc);</span>
+<span class="nc" id="L128">            w.setComponentZOrder(this, 1);</span>
+<span class="nc" id="L129">        }</span>
 
         private void runWaitIcon(Graphics g, double centerX, double centerY, double r, int quandrant, Color color) {
 
-<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (this.w.search != null) {</span>
+            // shutdown wait thread iff search and json accessor modules are ready
+<span class="nc bnc" id="L134" title="All 4 branches missed.">            if (this.w.search != null &amp;&amp; StatesJsonAccessor.getReadyStatus())  {</span>
 
-<span class="nc bnc" id="L133" title="All 2 branches missed.">                if (this.w.search.ready ) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                if (this.w.search.ready ) {</span>
 
-<span class="nc" id="L135">                    this.w.banner.setVisible(true);</span>
+<span class="nc" id="L138">                    this.w.banner.setVisible(true);</span>
 
-<span class="nc bnc" id="L137" title="All 2 branches missed.">                    while (!this.w.banner.isEnabled()) {} // wait for banner </span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                    while (!this.w.banner.isEnabled()) {} // wait for banner </span>
 
-<span class="nc" id="L139">                    this.future.cancel(true);</span>
-<span class="nc" id="L140">                    this.buffer.clear();</span>
+<span class="nc" id="L142">                    this.future.cancel(true); // shutdown scheduled fixed rate thread</span>
+<span class="nc" id="L143">                    this.buffer.clear();</span>
 
-<span class="nc" id="L142">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -1, this.buffer, Color.RED);</span>
-<span class="nc" id="L143">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -2, this.buffer, Color.GREEN);</span>
-<span class="nc" id="L144">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -3, this.buffer, new Color(255, 215, 0));</span>
-<span class="nc" id="L145">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -4, this.buffer, Color.MAGENTA);</span>
+<span class="nc" id="L145">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -1, this.buffer, Color.RED);</span>
+<span class="nc" id="L146">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -2, this.buffer, Color.GREEN);</span>
+<span class="nc" id="L147">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -3, this.buffer, new Color(255, 215, 0));</span>
+<span class="nc" id="L148">                    this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, -4, this.buffer, Color.MAGENTA);</span>
 
                     // make weather UI components visible 
-<span class="nc" id="L148">                    this.w.search.setVisible(true);</span>
-<span class="nc" id="L149">                    this.w.weatherinfo.setVisible(true);</span>
+<span class="nc" id="L151">                    this.w.search.setVisible(true);</span>
+<span class="nc" id="L152">                    this.w.weatherinfo.setVisible(true);</span>
                 }
                 
             } else {
 
-<span class="nc" id="L154">                this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, quandrant, this.buffer, color);</span>
+<span class="nc" id="L157">                this.drawQuadrant( (Graphics2D) g.create(), r, centerX, centerY, quandrant, this.buffer, color);</span>
             }
-<span class="nc" id="L156">        }</span>
+<span class="nc" id="L159">        }</span>
 
         private void drawQuadrant(Graphics2D graphic2D, double r, double centerX, double centerY, int quadrant, ArrayList&lt;Double&gt; buffer, Color color) { 
         
             // clear painted x,y buffer 
-<span class="nc" id="L161">                this.x = 0.0;</span>
-<span class="nc" id="L162">                this.y = 0.0;</span>
-<span class="nc" id="L163">                this.factorY = 0; </span>
-<span class="nc" id="L164">                this.factorX = 0; </span>
-<span class="nc" id="L165">                this.xpos  = 0;</span>
+<span class="nc" id="L164">                this.x = 0.0;</span>
+<span class="nc" id="L165">                this.y = 0.0;</span>
+<span class="nc" id="L166">                this.factorY = 0; </span>
+<span class="nc" id="L167">                this.factorX = 0; </span>
+<span class="nc" id="L168">                this.xpos  = 0;</span>
 
-<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (quadrant &gt; 1 ) {</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                if (quadrant &gt; 1 ) {</span>
                     
-<span class="nc" id="L169">                    graphic2D = (Graphics2D) graphic2D.create();</span>
-<span class="nc" id="L170">                    graphic2D.setPaint(Color.LIGHT_GRAY); </span>
+<span class="nc" id="L172">                    graphic2D = (Graphics2D) graphic2D.create();</span>
+<span class="nc" id="L173">                    graphic2D.setPaint(Color.LIGHT_GRAY); </span>
 
-<span class="nc bnc" id="L172" title="All 2 branches missed.">                    while(buffer.size() != 0) {</span>
-<span class="nc" id="L173">                        xx = buffer.remove(0);</span>
-<span class="nc" id="L174">                        yy = buffer.remove(0);</span>
-<span class="nc" id="L175">                        graphic2D.fill(new Ellipse2D.Double( xx, yy ,2, 2));  // center </span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                    while(buffer.size() != 0) {</span>
+<span class="nc" id="L176">                        xx = buffer.remove(0);</span>
+<span class="nc" id="L177">                        yy = buffer.remove(0);</span>
+<span class="nc" id="L178">                        graphic2D.fill(new Ellipse2D.Double( xx, yy ,2, 2));  // center </span>
                     }
 
                 } 
                 
                 
-<span class="nc" id="L181">                graphic2D = (Graphics2D) graphic2D.create();</span>
-<span class="nc" id="L182">                graphic2D.setPaint(color);</span>
+<span class="nc" id="L184">                graphic2D = (Graphics2D) graphic2D.create();</span>
+<span class="nc" id="L185">                graphic2D.setPaint(color);</span>
                 
-<span class="nc" id="L184">                quadrant = Math.abs(quadrant);</span>
+<span class="nc" id="L187">                quadrant = Math.abs(quadrant);</span>
 
-<span class="nc bnc" id="L186" title="All 2 branches missed.">                if (quadrant == 1) {</span>
-<span class="nc" id="L187">                    factorX = 1;</span>
-<span class="nc" id="L188">                    factorY = -1;</span>
-<span class="nc" id="L189">                    xpos = centerX + r;</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                if (quadrant == 1) {</span>
+<span class="nc" id="L190">                    factorX = 1;</span>
+<span class="nc" id="L191">                    factorY = -1;</span>
+<span class="nc" id="L192">                    xpos = centerX + r;</span>
                 }
                 
-<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (quadrant == 2) {</span>
-<span class="nc" id="L193">                    factorX = -1;</span>
-<span class="nc" id="L194">                    factorY = -1;</span>
-<span class="nc" id="L195">                    xpos = centerX - r;</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                if (quadrant == 2) {</span>
+<span class="nc" id="L196">                    factorX = -1;</span>
+<span class="nc" id="L197">                    factorY = -1;</span>
+<span class="nc" id="L198">                    xpos = centerX - r;</span>
                 }
                 
-<span class="nc bnc" id="L198" title="All 2 branches missed.">                if (quadrant == 4) {</span>
-<span class="nc" id="L199">                    factorX = 1;</span>
-<span class="nc" id="L200">                    factorY = 1;</span>
-<span class="nc" id="L201">                    xpos = centerX + r;</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                if (quadrant == 4) {</span>
+<span class="nc" id="L202">                    factorX = 1;</span>
+<span class="nc" id="L203">                    factorY = 1;</span>
+<span class="nc" id="L204">                    xpos = centerX + r;</span>
                 }
                 
-<span class="nc bnc" id="L204" title="All 2 branches missed.">                if (quadrant == 3) {</span>
-<span class="nc" id="L205">                    factorX = -1;</span>
-<span class="nc" id="L206">                    factorY = 1;</span>
-<span class="nc" id="L207">                    xpos = centerX - r;</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (quadrant == 3) {</span>
+<span class="nc" id="L208">                    factorX = -1;</span>
+<span class="nc" id="L209">                    factorY = 1;</span>
+<span class="nc" id="L210">                    xpos = centerX - r;</span>
                 }
                 
-<span class="nc bnc" id="L210" title="All 10 branches missed.">                for (Double x_ = 0.0; (quadrant == 4 || quadrant == 1) ? x &lt; xpos :x == 0 || x &gt; xpos ; x_+= 1e-3 ) {</span>
-<span class="nc" id="L211">                    x = (centerX + factorX * x_) * 1.00;</span>
-<span class="nc" id="L212">                    y = centerY + factorY * Math.sqrt( Math.pow(r,2.0) - Math.pow(x - centerX, 2.0) ) ;</span>
-<span class="nc" id="L213">                    buffer.add(x);</span>
-<span class="nc" id="L214">                    buffer.add(y);</span>
-<span class="nc" id="L215">                    graphic2D.fill(new Ellipse2D.Double( x , y  ,2, 2));  </span>
+<span class="nc bnc" id="L213" title="All 10 branches missed.">                for (Double x_ = 0.0; (quadrant == 4 || quadrant == 1) ? x &lt; xpos :x == 0 || x &gt; xpos ; x_+= 1e-3 ) {</span>
+<span class="nc" id="L214">                    x = (centerX + factorX * x_) * 1.00;</span>
+<span class="nc" id="L215">                    y = centerY + factorY * Math.sqrt( Math.pow(r,2.0) - Math.pow(x - centerX, 2.0) ) ;</span>
+<span class="nc" id="L216">                    buffer.add(x);</span>
+<span class="nc" id="L217">                    buffer.add(y);</span>
+<span class="nc" id="L218">                    graphic2D.fill(new Ellipse2D.Double( x , y  ,2, 2));  </span>
                 }   
         
             
-<span class="nc" id="L219">        }</span>
+<span class="nc" id="L222">        }</span>
 
     }
     
@@ -224,38 +227,38 @@ public class IdlePage extends JLabel {
     public WaitIcon waitIcon;
     Image img ;
 
-<span class="nc" id="L227">    public IdlePage( Windowise w) {</span>
-<span class="nc" id="L228">        this.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L230">    public IdlePage( Windowise w) {</span>
+<span class="nc" id="L231">        this.setLayout(new GridBagLayout());</span>
         // imgUrl = Paths.get(FileHelper.getWorkingDirectoryPath(), &quot;IdleScreen&quot;, &quot;space.png&quot;).toAbsolutePath().normalize().toString();
-<span class="nc" id="L230">        this.setOpaque(true);</span>
-<span class="nc" id="L231">        sched.schedule(()-&gt; {</span>
-<span class="nc" id="L232">            this.setGrid(w);</span>
-<span class="nc" id="L233">            this.waitIcon = new WaitIcon(w);</span>
-<span class="nc" id="L234">        }</span>
-        , 0, TimeUnit.MILLISECONDS);
+<span class="nc" id="L233">        this.setOpaque(true);</span>
+<span class="nc" id="L234">        sched.schedule(()-&gt; {</span>
+<span class="nc" id="L235">            this.setGrid(w);</span>
+<span class="nc" id="L236">            this.waitIcon = new WaitIcon(w);</span>
+<span class="nc" id="L237">        }</span>
+        , 200, TimeUnit.MILLISECONDS);
 
-<span class="nc" id="L237">    }</span>
+<span class="nc" id="L240">    }</span>
 
 
     public void paintComponent (Graphics g) {
-<span class="nc" id="L241">        g.drawImage(this.img, 0, 0, null);</span>
-<span class="nc" id="L242">    }</span>
+<span class="nc" id="L244">        g.drawImage(this.img, 0, 0, null);</span>
+<span class="nc" id="L245">    }</span>
 
     private void setGrid(Windowise w) {
-<span class="nc" id="L245">        GridBagConstraints gbc = new GridBagConstraints();</span>
-<span class="nc" id="L246">        gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
-<span class="nc" id="L247">        gbc .weightx = 1;</span>
-<span class="nc" id="L248">        gbc .weighty = 1;</span>
-<span class="nc" id="L249">        gbc .fill = GridBagConstraints.BOTH;</span>
-<span class="nc" id="L250">        gbc.gridx = 0;</span>
-<span class="nc" id="L251">        gbc.gridy = 0;</span>
-<span class="nc" id="L252">        gbc.gridheight = 75;</span>
-<span class="nc" id="L253">        gbc.gridwidth= 150;</span>
-<span class="nc" id="L254">        gbc.ipadx = 0;</span>
-<span class="nc" id="L255">        gbc.ipady = 0;</span>
-<span class="nc" id="L256">        w.add(this, gbc);</span>
-<span class="nc" id="L257">        w.setComponentZOrder(this, 0);</span>
-<span class="nc" id="L258">    }</span>
+<span class="nc" id="L248">        GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L249">        gbc .anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L250">        gbc .weightx = 1;</span>
+<span class="nc" id="L251">        gbc .weighty = 1;</span>
+<span class="nc" id="L252">        gbc .fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L253">        gbc.gridx = 0;</span>
+<span class="nc" id="L254">        gbc.gridy = 0;</span>
+<span class="nc" id="L255">        gbc.gridheight = 75;</span>
+<span class="nc" id="L256">        gbc.gridwidth= 150;</span>
+<span class="nc" id="L257">        gbc.ipadx = 0;</span>
+<span class="nc" id="L258">        gbc.ipady = 0;</span>
+<span class="nc" id="L259">        w.add(this, gbc);</span>
+<span class="nc" id="L260">        w.setComponentZOrder(this, 0);</span>
+<span class="nc" id="L261">    }</span>
 
   
 

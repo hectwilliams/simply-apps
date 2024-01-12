@@ -60,7 +60,7 @@ public class Banner extends JPanel{
         gc.gridy = 8;
         gc.ipadx = 0;
         gc.ipady = 0;
-        gc.gridwidth = 200;
+        gc.gridwidth = 100;
         gc.gridheight = 2;
         w.add( this , gc);
         w.setComponentZOrder( this , 0);

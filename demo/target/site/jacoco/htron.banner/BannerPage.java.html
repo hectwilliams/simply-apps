@@ -24,7 +24,7 @@ public class BannerPage extends JPanel {
 <span class="nc" id="L24">        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));</span>
 <span class="nc" id="L25">        this.w = w;</span>
 
-<span class="nc bnc" id="L27" title="All 2 branches missed.">        while (!this.w.ready) {</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        while (!this.w.getReadyState()) {</span>
             try {
 <span class="nc" id="L29">                Thread.sleep(100);</span>
 <span class="nc" id="L30">            } catch (InterruptedException e) {</span>

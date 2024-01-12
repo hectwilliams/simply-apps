@@ -45,7 +45,7 @@ public class Trie {
     public Trie() {
         this.trieNode = new Node(' ');
         this.initLoadStates();
-        this.json = StatesJsonAccessor.get(); 
+        this.json = StatesJsonAccessor.getStatesJson(); 
     }
 
     public void insert (String word) {
@@ -91,7 +91,7 @@ public class Trie {
             // System.out.println(content);
 
             
-            this.json = StatesJsonAccessor.get(); //  new JSONObject(content);
+            this.json = StatesJsonAccessor.getStatesJson(); //  new JSONObject(content);
 
             for (String key : json.keySet()) {
                 this.insert(key.toLowerCase());

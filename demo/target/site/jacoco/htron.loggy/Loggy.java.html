@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Loggy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Project Name</a> &gt; <a href="index.source.html" class="el_package">htron.loggy</a> &gt; <span class="el_source">Loggy.java</span></div><h1>Loggy.java</h1><pre class="source lang-java linenums">package htron.loggy;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Filter;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
+import java.util.logging.LogRecord;
+
+import htron.FileHelper;
+
+public final class Loggy {
+
+<span class="nc" id="L23">    public static final Loggy loggy = new Loggy();</span>
+    private final Logger logger;
+    
+<span class="nc" id="L26">    private Loggy () {</span>
+<span class="nc" id="L27">        this.logger = Logger.getLogger(this.getClass().getName());</span>
+        
+        // filter 
+<span class="nc" id="L30">        Filter filterHandler = new Filter() {</span>
+            @Override
+            public boolean isLoggable(LogRecord log) {
+                // DO NOT log CONFIG  LEVEL 
+<span class="nc bnc" id="L34" title="All 2 branches missed.">                return log.getLevel() != Level.CONFIG; </span>
+            }
+        };
+
+        //  add Stream Handler to send logging to streams (i.e.) sys.stdout or any file like object 
+<span class="nc" id="L39">        StreamHandler streamhandler = new StreamHandler(){</span>
+            @Override
+            public synchronized  void publish (LogRecord recordData) {
+<span class="nc" id="L42">                super.publish(recordData);</span>
+<span class="nc" id="L43">            }</span>
+            @Override 
+            public synchronized void flush() {
+<span class="nc" id="L46">                super.flush();</span>
+<span class="nc" id="L47">            }</span>
+            @Override 
+            public synchronized void close() throws SecurityException {
+<span class="nc" id="L50">                super.close();</span>
+<span class="nc" id="L51">            }</span>
+        };
+
+        // format handled message 
+<span class="nc" id="L55">        Formatter formatterHandler = new Formatter() {</span>
+            @Override
+            public String format(LogRecord recordData) {
+<span class="nc" id="L58">                return  recordData.getLongThreadID() + &quot;\t&quot; +recordData.getSourceClassName() + &quot;\t&quot; + recordData.getSourceMethodName() + &quot;\t&quot; + new Date(recordData.getMillis()) + &quot;\t&quot; + recordData.getMessage() + &quot;\n&quot;;                 </span>
+            }
+        };
+
+        // console handler 
+<span class="nc" id="L63">        ConsoleHandler consoleHandler = new ConsoleHandler();</span>
+
+        // read configuration file 
+        try {
+            // convert paths: string -&gt; path -&gt; inputstream
+<span class="nc" id="L68">            LogManager.getLogManager().readConfiguration(  new FileInputStream(Paths.get( FileHelper.getLogPath() , &quot;logging.properties&quot;).toFile())  );</span>
+<span class="nc" id="L69">        } catch (SecurityException | IOException e) {</span>
+<span class="nc" id="L70">            e.printStackTrace();</span>
+<span class="nc" id="L71">        }</span>
+  
+        
+        try {
+<span class="nc" id="L75">            Handler filehandler = new FileHandler(  Paths.get( FileHelper.getLogPath(), &quot;tmp&quot;, &quot;logger.log&quot;).toString() , 2000, 5);</span>
+
+            // filter directives
+<span class="nc" id="L78">            filehandler.setFilter(filterHandler);</span>
+
+            // file format directives
+<span class="nc" id="L81">            filehandler.setFormatter(formatterHandler);</span>
+
+            // set level
+<span class="nc" id="L84">            this.logger.setLevel(Level.FINE);</span>
+
+            // console handler
+<span class="nc" id="L87">            this.logger.addHandler(consoleHandler);</span>
+
+            // stream handler 
+<span class="nc" id="L90">            this.logger.addHandler(streamhandler);</span>
+
+            // file logger 
+<span class="nc" id="L93">            this.logger.addHandler(filehandler);</span>
+
+<span class="nc" id="L95">        } catch (SecurityException | IOException e) {</span>
+<span class="nc" id="L96">            e.printStackTrace();</span>
+<span class="nc" id="L97">        }</span>
+
+<span class="nc" id="L99">    }</span>
+
+    public static final Logger get () {
+<span class="nc" id="L102">        return loggy.logger;</span>
+    }
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

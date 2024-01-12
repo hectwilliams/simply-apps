@@ -1,52 +1,40 @@
 package htron;
 
-import java.nio.file.Files;
 
-// import java.io.IOException;
-// import java.nio.file.Files;
-// import java.nio.file.Paths;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import htron.search.StatesJsonAccessor;
+import htron.loggy.Loggy;
+
 
 public class App {
     
     Windowise myWindow = null;
     JFrame frame = null; 
+    // protected static final Logger logger = Logger.getLogger(null)
     
     public App() {
-        frame = new JFrame("App Friendly");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        this.myWindow = new Windowise(frame);
-        frame.addFocusListener(new FocusListenerApp(this.myWindow));
-        frame.addComponentListener(new ComponentListenerV2());
+        // frame = new JFrame("App Friendly");
+        // frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // frame.addComponentListener(new ComponentListenerV2());
+        // frame.setVisible(true);
+        // this.myWindow = new Windowise(frame);
+        // frame.addFocusListener(new FocusListenerApp(this.myWindow));
+        
     } 
 
     public static void main (String [] args) {
-        System.out.println(FileHelper.getAssetsPath());
-        // System.out.println(StatesJsonAccessor.get());
-
-
         
-        // System.out.println("hello world");
-        // System.out.println(FileHelper.getTestpath().toAbsolutePath().normalize().toString());
-        // System.out.println(Files.exists(FileHelper.getTestpath()) );
+        // new App();
 
-        App app = new App();
-        // System.out.println("hello world");
-        // System.out.println(App.class.getName());
-        
-        // System.out.println(FileHelper.ROOTPATH);
-        
-        // try {
-        //     JSONObject configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
-        //     System.out.println(configJson.get("name"));
-        // } catch (JSONException | IOException e) {
-        //     e.printStackTrace();
-        // }
+        //logging messages
+        for(int i=0; i<1000; i++){
+            Loggy.get().log(Level.INFO, "Config data");
+        }
+        Loggy.get().log(Level.CONFIG, "Config data");
+
         
     } 
 

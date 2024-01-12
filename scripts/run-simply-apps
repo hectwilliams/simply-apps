@@ -3,11 +3,16 @@
 # Requirements #
 # - maven command line (mvn) 
 
-SCRIPTPATH=${PWD%%/scripts}/demo
-TARGETPATH=${SCRIPTPATH}/target
+POMP=${PWD%%/scripts}/demo
+echo $POMP
 
-mv clean -f ${SCRIPTPATH}/pom.xml
-mvn package -f ${SCRIPTPATH}/pom.xml
+test=$POMP/pom.xml
+
+TARGETPATH=${POMP}/target
+
+mvn clean -f $POMP/pom.xml
+
+mvn package -f $POMP/pom.xml
 
 # jar file bundled dependencies 
 java -cp  $TARGETPATH/demo-1.0-SNAPSHOT.jar htron.App 

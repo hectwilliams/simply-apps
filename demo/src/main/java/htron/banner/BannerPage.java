@@ -24,7 +24,7 @@ public class BannerPage extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
         this.w = w;
 
-        while (!this.w.ready) {
+        while (!this.w.getReadyState()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

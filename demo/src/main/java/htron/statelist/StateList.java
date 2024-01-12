@@ -134,17 +134,14 @@ public class StateList  extends JScrollPane {
                         // TODO: change to 50 states 
                         w.stateList.panelView.add(new StateLabel());
                         w.stateList.panelView.add(new JPanel());
-
-                        w.stateList.revalidate();
-                        w.stateList.repaint();
                     }
-
                     this.setReadyStatus(true);
                     w.banner.enableButton(1);
                 }, 10, TimeUnit.MILLISECONDS);
      
     }
 
+    // state list jpanel dimensions 
     public void placeMeasureGrid(Windowise w) {
 
         this.gc = new GridBagConstraints();
@@ -154,7 +151,7 @@ public class StateList  extends JScrollPane {
         this.gc.fill = GridBagConstraints.BOTH;
         this.gc.gridx = 1;
         this.gc.gridy = 11;
-        this.gc.gridwidth = 120;
+        this.gc.gridwidth = 100;
         this.gc.gridheight = 55;
         w.add( this  , this.gc);
         w.setComponentZOrder( this  , 2);

@@ -11,15 +11,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.json.JSONObject;
-
 import htron.FileHelper;
+import htron.search.StatesJsonAccessor;
 
 public class WeatherInfoClient {
-    public static final WeatherInfoClient weatherApi = null;
-    private JSONObject configJson;
-    private JSONObject jsonStates;
     private JSONObject jsonRcvdOpenApi;
     private float longitude;
     private float latitude; 
@@ -34,24 +30,7 @@ public class WeatherInfoClient {
     private static final String HUMIDITY = "humidity";
     private static final String TEMP = "temp";
 
-    WeatherInfoClient() {
-
-        String filePath ;
-        
-        try {
-
-            filePath = Paths.get(FileHelper.getConfigPath(),  "config.json").toAbsolutePath().normalize().toString();
-            this.configJson = new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
-            
-            filePath = Paths.get(FileHelper.getAssetsPath(), "Search",  "states.json").toAbsolutePath().normalize().toString();
-
-            this.jsonStates =  new JSONObject(  new String(Files.readAllBytes(Paths.get(filePath)))  );
-
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
-        }
-  
-    }
+    public WeatherInfoClient() {}
 
     private JSONObject requestWeather(String urlQuery) {
         HttpURLConnection connection;
@@ -138,7 +117,7 @@ public class WeatherInfoClient {
 
     private void getStateDayMeasurementQuery (float longitude, float latitude) {
         String targetURL = "https://api.openweathermap.org/data/2.5/weather";
-        String query = "lat="+latitude + "&" + "lon="+longitude + "&" + "appid=" +this.configJson.get("key") ;
+        String query = "lat="+latitude + "&" + "lon="+longitude + "&" + "appid=" +StatesJsonAccessor.getConfigJson().get("key") ;
         String q = targetURL + "?" + query; 
         
         this.jsonRcvdOpenApi = this.requestWeather(q);
@@ -179,7 +158,7 @@ public class WeatherInfoClient {
     }
     
     public void getState30DayMeasurementQuery( ) {
-        String q = "api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&lon=10.99&cnt=7&appid=" + this.configJson.get("key") ;
+        String q = "api.openweathermap.org/data/2.5/forecast/daily?lat=44.34&lon=10.99&cnt=7&appid=" + StatesJsonAccessor.getConfigJson().get("key") ;
         this.jsonRcvdOpenApi = this.requestWeather(q);
     }
     
@@ -188,7 +167,7 @@ public class WeatherInfoClient {
         Object obj;
         String value = "";
         
-        jsonCurr =   this.jsonStates;
+        jsonCurr =  StatesJsonAccessor.getStatesJson() ;
         
         for (int i = 0; i < route.length ; i++) {
 

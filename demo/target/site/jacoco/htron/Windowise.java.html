@@ -29,7 +29,8 @@ public class Windowise extends JPanel {
     static final int N_SIZE = 150;
 <span class="nc" id="L30">    GridBagLayout gridBagLayout = null;</span>
 <span class="nc" id="L31">    GridBagConstraints gdConstraints = null;</span>
-<span class="nc" id="L32">    public JPanel gridPanel = null;</span>
+<span class="nc" id="L32">    boolean ready = false;</span>
+<span class="nc" id="L33">    public JPanel gridPanel = null;</span>
     public JFrame frame;
     public Search search;
     public WeatherInfo weatherinfo;
@@ -37,7 +38,6 @@ public class Windowise extends JPanel {
     public BannerPage bannerPage;
     public ArrayList&lt;Component&gt; activeComponents;
     public StateList stateList;
-<span class="nc" id="L40">    public boolean ready = false;</span>
     public Banner banner;
     public IdlePage idlePage;
     public long time_start;
@@ -48,98 +48,108 @@ public class Windowise extends JPanel {
 <span class="nc" id="L48">    public final ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);</span>
 
 <span class="nc" id="L50">    public Windowise(JFrame frame) {</span>
-<span class="nc" id="L51">        this.time_start = System.currentTimeMillis();</span>
+        
+<span class="nc" id="L52">        this.time_start = System.currentTimeMillis();</span>
+        
+<span class="nc" id="L54">        this.frame = frame;</span>
+        
+<span class="nc" id="L56">        this.activeComponents = new ArrayList&lt;&gt;();</span>
+        
+<span class="nc" id="L58">        this.setFrameScrollable();</span>
 
-<span class="nc" id="L53">        this.frame = frame;</span>
+        
+<span class="nc" id="L61">        this.setWindowFrameGrid(); // sychronous</span>
+        
+<span class="nc" id="L63">        idlePage = new IdlePage(this); </span>
 
-<span class="nc" id="L55">        this.ready = false;</span>
 
-<span class="nc" id="L57">        this.activeComponents = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L66">        this.stateList = new StateList(this);</span>
 
-<span class="nc" id="L59">        this.setFrameScrollable();</span>
-<span class="nc" id="L60">        this.setWindowFrameGrid(); // sychronous</span>
-
-<span class="nc" id="L62">        idlePage = new IdlePage(this); </span>
-
-<span class="nc" id="L64">        this.stateList = new StateList(this);</span>
-
-<span class="nc" id="L66">        this.banner = new Banner(this, this.stateList); // sychronous + async</span>
+<span class="nc" id="L68">        this.banner = new Banner(this, this.stateList); // sychronous + async</span>
 
         // app1
-<span class="nc" id="L69">        this.weatherinfo = new WeatherInfo(this); // sychronous + async</span>
-<span class="nc" id="L70">        this.search = new Search(this, this.weatherinfo); // sychronous + async</span>
+<span class="nc" id="L71">        this.weatherinfo = new WeatherInfo(this); // sychronous + async</span>
+<span class="nc" id="L72">        this.search = new Search(this, this.weatherinfo); // sychronous + async</span>
 
         // s
 
-<span class="nc" id="L74">        sched.schedule(() -&gt; {</span>
-<span class="nc" id="L75">            this.wakeSearchWindow();</span>
-<span class="nc" id="L76">            this.frame.pack();</span>
-<span class="nc" id="L77">        }, 0, TimeUnit.MILLISECONDS);</span>
+<span class="nc" id="L76">        sched.schedule(() -&gt; {</span>
+<span class="nc" id="L77">            this.wakeSearchWindow();</span>
+<span class="nc" id="L78">            this.frame.pack();</span>
+<span class="nc" id="L79">        }, 0, TimeUnit.MILLISECONDS);</span>
 
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L81">    }</span>
 
     private void setFrameScrollable() {
-<span class="nc" id="L82">        this.scrollPane = new JScrollPane();</span>
-<span class="nc" id="L83">        this.scrollPane.setViewportView(this);</span>
-<span class="nc" id="L84">        this.scrollPane.getVerticalScrollBar().setUnitIncrement(10);</span>
-<span class="nc" id="L85">        this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
-<span class="nc" id="L86">        this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
-<span class="nc" id="L87">        this.frame.getContentPane().add(this.scrollPane);</span>
+<span class="nc" id="L84">        this.scrollPane = new JScrollPane();</span>
+<span class="nc" id="L85">        this.scrollPane.setViewportView(this);</span>
+<span class="nc" id="L86">        this.scrollPane.getVerticalScrollBar().setUnitIncrement(10);</span>
+<span class="nc" id="L87">        this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L88">        this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+<span class="nc" id="L89">        this.frame.getContentPane().add(this.scrollPane);</span>
 
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L91">    }</span>
 
     private void setWindowFrameGrid() {
 
-<span class="nc" id="L93">        this.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L95">        this.setLayout(new GridBagLayout());</span>
 
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        for (int x = 0; x &lt; Windowise.N_SIZE; x++) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        for (int x = 0; x &lt; Windowise.N_SIZE; x++) {</span>
 
-<span class="nc bnc" id="L97" title="All 2 branches missed.">            for (int y = 0; y &lt; Windowise.N_SIZE / 2; y++) {</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for (int y = 0; y &lt; Windowise.N_SIZE / 2; y++) {</span>
 
-<span class="nc" id="L99">                GridBagConstraints gbc = new GridBagConstraints();</span>
-<span class="nc" id="L100">                gbc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
-<span class="nc" id="L101">                gbc.weightx = 1;</span>
-<span class="nc" id="L102">                gbc.weighty = 1;</span>
-<span class="nc" id="L103">                gbc.fill = GridBagConstraints.BOTH;</span>
-<span class="nc" id="L104">                gbc.gridx = x;</span>
-<span class="nc" id="L105">                gbc.gridy = y;</span>
-<span class="nc" id="L106">                gbc.ipadx = 0;</span>
-<span class="nc" id="L107">                gbc.ipady = 0;</span>
+<span class="nc" id="L101">                GridBagConstraints gbc = new GridBagConstraints();</span>
+<span class="nc" id="L102">                gbc.anchor = GridBagConstraints.FIRST_LINE_START;</span>
+<span class="nc" id="L103">                gbc.weightx = 1;</span>
+<span class="nc" id="L104">                gbc.weighty = 1;</span>
+<span class="nc" id="L105">                gbc.fill = GridBagConstraints.BOTH;</span>
+<span class="nc" id="L106">                gbc.gridx = x;</span>
+<span class="nc" id="L107">                gbc.gridy = y;</span>
+<span class="nc" id="L108">                gbc.ipadx = 0;</span>
+<span class="nc" id="L109">                gbc.ipady = 0;</span>
 
-<span class="nc" id="L109">                JPanel cell = new JPanel();</span>
-<span class="nc" id="L110">                cell.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50), 1));</span>
-<span class="nc" id="L111">                this.add(cell, gbc);</span>
-<span class="nc" id="L112">                this.setComponentZOrder(cell, 0);</span>
+<span class="nc" id="L111">                JPanel cell = new JPanel();</span>
+<span class="nc" id="L112">                cell.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 50), 1));</span>
+<span class="nc" id="L113">                this.add(cell, gbc);</span>
+<span class="nc" id="L114">                this.setComponentZOrder(cell, 0);</span>
             }
         }
 
-<span class="nc" id="L116">        this.ready = true;</span>
-<span class="nc" id="L117">        this.validate();</span>
-<span class="nc" id="L118">    }</span>
+<span class="nc" id="L118">        this.setReady(true);</span>
+<span class="nc" id="L119">        this.validate();</span>
+<span class="nc" id="L120">    }</span>
+    
+    private final void setReady(boolean state) {
+<span class="nc" id="L123">        this.ready = state;</span>
+<span class="nc" id="L124">    }</span>
+    
+    public final boolean getReadyState() {
+<span class="nc" id="L127">        return this.ready;</span>
+    }
 
     private final  void wakeSearchWindow() {
         JLabel label;
 
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        while (!this.search.searchScrollView.isVisible()) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        while (!this.search.searchScrollView.isVisible()) {</span>
             try {
-<span class="nc" id="L125">                Thread.sleep(0);</span>
-<span class="nc" id="L126">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L127">                e.printStackTrace();</span>
-<span class="nc" id="L128">            }</span>
+<span class="nc" id="L135">                Thread.sleep(0);</span>
+<span class="nc" id="L136">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L137">                e.printStackTrace();</span>
+<span class="nc" id="L138">            }</span>
         }
-<span class="nc" id="L130">        this.frame.toFront();</span>
-<span class="nc" id="L131">        this.frame.requestFocus();</span>
+<span class="nc" id="L140">        this.frame.toFront();</span>
+<span class="nc" id="L141">        this.frame.requestFocus();</span>
 
         // arbitrarily event required to show viewport :( -- To Be Determined
-<span class="nc" id="L134">        label = ((WeatherMeasure) this.weatherinfo.getComponent(0)).getLabelMeasurement();</span>
-<span class="nc" id="L135">        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),</span>
+<span class="nc" id="L144">        label = ((WeatherMeasure) this.weatherinfo.getComponent(0)).getLabelMeasurement();</span>
+<span class="nc" id="L145">        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_ENTERED, System.currentTimeMillis(),</span>
                 MouseEvent.NOBUTTON, 0, 0, 1, false));
-<span class="nc" id="L137">        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,</span>
+<span class="nc" id="L147">        label.dispatchEvent(new MouseEvent(label, MouseEvent.MOUSE_EXITED, System.currentTimeMillis() + 100,</span>
                 MouseEvent.NOBUTTON, 0, 0, 1, false));
 
-<span class="nc" id="L140">        sched.shutdown();</span>
+<span class="nc" id="L150">        sched.shutdown();</span>
 
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L152">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
