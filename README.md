@@ -19,4 +19,3 @@ Java apps created out of boredom
     - create footer 
     - fix 'green' active indicator 
 
-## Backlog
